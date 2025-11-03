@@ -10,6 +10,7 @@ Welcome to the Doctor App! This documentation will help both developers and end 
 - [API Reference](#api-reference)
 - [UI Guide](#ui-guide)
 - [Contributing](#contributing)
+- [Testing & Coverage](#testing--coverage)
 - [FAQ](#faq)
 
 ---
@@ -34,7 +35,7 @@ A modern Next.js app for browsing, booking, and managing doctor appointments. Su
    npm install
    ```
 2. **Configure environment:**
-   - Copy `.env.dist` to `.env` and set API endpoints and credentials.
+   - Copy `.env.example` to `.env` and set API endpoints and credentials.
 3. **Run the app:**
    ```bash
    npm run dev
@@ -78,10 +79,21 @@ src/
 - **Default Image:** Used if doctor avatar is missing.
 - **Theme:** Toggle dark/light mode in your OS or browser.
 
+## Testing & Coverage
+Run all tests:
+```bash
+npm test
+```
+Run coverage report:
+```bash
+npm run test:coverage
+```
+Coverage report is generated in the `coverage/` folder. Open `coverage/lcov-report/index.html` for details.
+
 ## Contributing
-- Fork the repo and create a feature branch.
-- Follow code style and add tests for new features.
-- Submit a pull request with a clear description.
+Fork the repo and create a feature branch.
+Follow code style and add tests for new features.
+Submit a pull request with a clear description.
 
 ## FAQ
 **Q: How do I add a new doctor?**
