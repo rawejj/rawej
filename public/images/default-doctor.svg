@@ -1,0 +1,25 @@
+<svg width="80" height="80" viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg"><svg width="80" height="80" viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+
+  <rect width="80" height="80" rx="40" fill="#F3F4F6"/>  <rect width="80" height="80" rx="40" fill="#F3F4F6"/>
+
+  <circle cx="40" cy="32" r="16" fill="#E0E7FF"/>  <circle cx="40" cy="32" r="16" fill="#E0E7FF"/>
+
+  <ellipse cx="40" cy="60" rx="22" ry="12" fill="#C7D2FE"/>  <ellipse cx="40" cy="60" rx="22" ry="12" fill="#C7D2FE"/>
+
+  <circle cx="40" cy="32" r="12" fill="#A5B4FC"/>  <circle cx="40" cy="32" r="12" fill="#A5B4FC"/>
+
+  <!-- Doctor coat -->  <rect x="32" y="50" width="16" height="6" rx="3" fill="#6366F1"/>
+
+  <rect x="28" y="44" width="24" height="18" rx="8" fill="#fff" stroke="#A5B4FC" stroke-width="2"/>  <rect x="36" y="38" width="8" height="8" rx="4" fill="#6366F1"/>
+
+  <!-- Stethoscope -->  <rect x="38" y="40" width="4" height="4" rx="2" fill="#F3F4F6"/>
+
+  <path d="M40 54c0 4 4 4 4 0" stroke="#6366F1" stroke-width="2" fill="none"/></svg>
+
+  <circle cx="44" cy="54" r="2" fill="#6366F1"/>
+  <path d="M40 54c0 4-4 4-4 0" stroke="#6366F1" stroke-width="2" fill="none"/>
+  <circle cx="36" cy="54" r="2" fill="#6366F1"/>
+  <!-- Neutral face -->
+  <ellipse cx="40" cy="36" rx="2.5" ry="2" fill="#fff"/>
+  <rect x="37" y="40" width="6" height="2" rx="1" fill="#6366F1"/>
+</svg>
