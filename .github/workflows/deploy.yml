@@ -1,0 +1,42 @@
+name: Deploy to Hetzner VPS (Docker)
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build-and-deploy:
+    name: Build and Deploy
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - run: npm ci
+      - run: npm run build
+      - name: Build Docker image
+        run: docker build -t doctor-app .
+      - name: Save Docker image as tar
+        run: docker save doctor-app -o doctor-app.tar
+      - name: Copy Docker image to VPS
+        uses: appleboy/scp-action@v0.1.7
+        with:
+          host: ${{ secrets.VPS_HOST }}
+          username: ${{ secrets.VPS_USER }}
+          key: ${{ secrets.VPS_SSH_KEY }}
+          source: doctor-app.tar
+          target: ${{ secrets.VPS_PATH }}
+      - name: Load & run Docker image on VPS
+        uses: appleboy/ssh-action@v0.1.10
+        with:
+          host: ${{ secrets.VPS_HOST }}
+          username: ${{ secrets.VPS_USER }}
+          key: ${{ secrets.VPS_SSH_KEY }}
+          script: |
+            cd ${{ secrets.VPS_PATH }}
+            docker load -i doctor-app.tar
+            docker stop doctor-app || true
+            docker rm doctor-app || true
+            docker run -d --name doctor-app -p 3000:3000 doctor-app
