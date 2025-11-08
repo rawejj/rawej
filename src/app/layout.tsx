@@ -1,5 +1,8 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
+import ThemeClientProvider from "@/providers/ThemeClientProvider";
+import { ThemeSwitcher } from "@/components/ThemeSwitcher";
+
 import "./globals.css";
 
 const geistSans = Geist({
@@ -23,11 +26,30 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-      >
-        {children}
+    <html lang="en" suppressHydrationWarning>
+      <head>
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+              (function() {
+                const getSystemTheme = () => window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+                const stored = localStorage.getItem('theme');
+                const theme = stored || 'system';
+                const resolved = theme === 'system' ? getSystemTheme() : theme;
+                document.documentElement.classList.remove('light', 'dark');
+                document.documentElement.classList.add(resolved);
+              })();
+            `,
+          }}
+        />
+      </head>
+      <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
+        <ThemeClientProvider>
+          <div style={{ position: "fixed", top: 16, right: 16, zIndex: 1000 }}>
+            <ThemeSwitcher />
+          </div>
+          {children}
+        </ThemeClientProvider>
       </body>
     </html>
   );
