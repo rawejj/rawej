@@ -8,7 +8,7 @@
     "start": "next start",
     "lint": "eslint",
     "test": "vitest",
-    "test:coverage": "vitest run --coverage"
+    "coverage": "vitest run --coverage"
   },
   "dependencies": {
     "next": "16.0.1",
@@ -29,6 +29,7 @@
     "eslint": "^9",
     "eslint-config-next": "16.0.1",
     "jsdom": "^27.1.0",
+    "standard-version": "^9.5.0",
     "tailwindcss": "^4",
     "typescript": "^5",
     "vitest": "^4.0.6"
