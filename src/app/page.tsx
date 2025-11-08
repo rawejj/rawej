@@ -1,4 +1,3 @@
-import Header from "@/components/Header";
 import ErrorMessage from "@/components/ErrorMessage";
 import Footer from "@/components/Footer";
 
@@ -42,7 +41,6 @@ export default async function Home() {
   }
   return (
     <div className="min-h-screen flex flex-col bg-linear-to-br from-blue-100 via-purple-100 to-pink-100 dark:from-zinc-900 dark:via-zinc-800 dark:to-zinc-700 font-sans">
-      <Header />
       <main className="flex-1">
         {error ? (
           <ErrorMessage error={error} />
