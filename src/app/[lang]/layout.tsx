@@ -3,7 +3,6 @@ import { DEFAULT_LANGUAGE } from "@/lib/constants";
 import { ReactNode } from "react";
 import { loadTranslations } from "@/lib/translations";
 import { TranslationsProvider } from "@/providers/TranslationsProvider";
-import { LocalizationClientProvider } from "@/providers/LocalizationClientProvider";
 import Header from "@/components/Header";
 
 export default async function LangLayout({
