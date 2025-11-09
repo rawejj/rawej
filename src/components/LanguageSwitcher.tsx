@@ -139,18 +139,21 @@ export const LanguageSwitcher = () => {
               aria-label={`Switch to ${lang.label}`}
             >
               <span>{lang.label}</span>
-              <span style={{ fontSize: '0.75rem', opacity: 0.7, marginLeft: 'auto' }}>
+              <span style={currentLang.direction === 'rtl'
+                ? { fontSize: '0.75rem', opacity: 0.7, marginRight: 'auto' }
+                : { fontSize: '0.75rem', opacity: 0.7, marginLeft: 'auto' }
+              }>
                 {lang.direction.toUpperCase()}
               </span>
               {isActive && (
-                <svg 
-                  width="14" 
-                  height="14" 
-                  viewBox="0 0 24 24" 
-                  fill="none" 
-                  stroke="currentColor" 
-                  strokeWidth="3" 
-                  strokeLinecap="round" 
+                <svg
+                  width="14"
+                  height="14"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="3"
+                  strokeLinecap="round"
                   strokeLinejoin="round"
                 >
                   <polyline points="20 6 9 17 4 12"/>

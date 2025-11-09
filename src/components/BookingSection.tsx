@@ -36,7 +36,7 @@ const times = [
   "15:00", "15:30", "16:00", "16:30"
 ];
 
-export default function BookingSection({ doctors: initialDoctors, translations, locale }: { doctors: Doctor[]; translations?: Record<string,string>; locale?: string }) {
+export default function BookingSection({ doctors: initialDoctors, translations, locale, hasMore: hasMoreProp }: { doctors: Doctor[]; translations?: Record<string,string>; locale?: string; hasMore?: boolean }) {
   const [showModal, setShowModal] = useState(false);
   const [selectedDoctor, setSelectedDoctor] = useState<Doctor | null>(null);
   const getNext7DaysFormatted = () => {
@@ -62,7 +62,9 @@ export default function BookingSection({ doctors: initialDoctors, translations, 
   // Infinite scroll state
   const [doctors, setDoctors] = useState<Doctor[]>(initialDoctors);
   const [page, setPage] = useState(1);
-  const [hasMore, setHasMore] = useState(true);
+  const [hasMore, setHasMore] = useState(
+    typeof hasMoreProp === 'boolean' ? hasMoreProp : true
+  );
   const [loading, setLoading] = useState(false);
   const observerRef = useRef<HTMLDivElement | null>(null);
 
