@@ -48,12 +48,12 @@ Auto-generated robots.txt at `/robots.txt` includes:
 ### Environment Variables
 Create a `.env.local` file with:
 ```bash
-NEXT_PUBLIC_SITE_URL=https://yourdomain.com
+NEXT_PUBLIC_APP_URL=https://yourdomain.com
 ```
 
 For local development:
 ```bash
-NEXT_PUBLIC_SITE_URL=http://localhost:3000
+NEXT_PUBLIC_APP_URL=http://localhost:3000
 ```
 
 ## Translation Structure

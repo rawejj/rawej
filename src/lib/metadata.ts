@@ -24,7 +24,7 @@ export async function getTranslations(lang: string): Promise<TranslationsType> {
 
 export async function generateMetadata(lang: LanguageKey): Promise<Metadata> {
   const translations = await getTranslations(lang);
-  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000';
+  const baseUrl = process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000';
 
   // Build alternate languages dynamically
   const alternateLanguages = SUPPORTED_LANGUAGES.reduce((acc, language) => {
