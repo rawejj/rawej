@@ -1,7 +1,25 @@
 
 import { render, screen } from '@testing-library/react';
 import DoctorGrid from './DoctorGrid';
+import { TranslationsProvider } from '@/providers/TranslationsProvider';
 import type { Doctor } from '@/app/page';
+
+const mockTranslations = {
+  "book appointment": "Book Appointment",
+  "theme": {
+    "light": "Light",
+    "dark": "Dark",
+    "system": "Auto"
+  }
+};
+
+const renderWithTranslations = (component: React.ReactElement) => {
+  return render(
+    <TranslationsProvider translations={mockTranslations}>
+      {component}
+    </TranslationsProvider>
+  );
+};
 
 describe('DoctorGrid', () => {
   const doctors: Doctor[] = [
@@ -26,13 +44,13 @@ describe('DoctorGrid', () => {
   ];
 
   it('renders doctor cards when not loading', () => {
-    render(<DoctorGrid doctors={doctors} onBook={() => {}} loading={false} />);
+    renderWithTranslations(<DoctorGrid doctors={doctors} onBook={() => {}} loading={false} />);
     expect(screen.getByText('Dr. Alice Smith')).toBeInTheDocument();
     expect(screen.getByText('Dr. Bob Jones')).toBeInTheDocument();
   });
 
   it('renders skeletons when loading', () => {
-    render(<DoctorGrid doctors={[]} onBook={() => {}} loading={true} />);
+    renderWithTranslations(<DoctorGrid doctors={[]} onBook={() => {}} loading={true} />);
     // Should render at least one skeleton
     expect(screen.getAllByText((content, element) => {
       return element?.className.includes('animate-pulse') || false;

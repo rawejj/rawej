@@ -3,6 +3,14 @@ import { LocalizationClientProvider } from './LocalizationClientProvider';
 import { useLocalization } from './useLocalization';
 import { languages } from './LocalizationProvider';
 import { fireEvent } from '@testing-library/react';
+import { vi } from 'vitest';
+
+vi.mock('next/navigation', () => ({
+  usePathname: () => '/en',
+  useRouter: () => ({
+    push: vi.fn(),
+  }),
+}));
 
 describe('LocalizationProvider', () => {
   function TestComponent() {

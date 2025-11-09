@@ -1,15 +1,31 @@
 import { render, screen, fireEvent } from '@testing-library/react';
 import { ThemeContext } from '@/providers/ThemeContext';
+import { TranslationsProvider } from '@/providers/TranslationsProvider';
 import { vi } from 'vitest';
 import { ThemeSwitcher } from './ThemeSwitcher';
 
+const mockTranslations = {
+  "book appointment": "Book Appointment",
+  "theme": {
+    "light": "Light",
+    "dark": "Dark",
+    "system": "Auto"
+  }
+};
+
+const renderWithProviders = (component: React.ReactElement, themeValue = { theme: 'light', setTheme: () => {} }) => {
+  return render(
+    <ThemeContext.Provider value={themeValue}>
+      <TranslationsProvider translations={mockTranslations}>
+        {component}
+      </TranslationsProvider>
+    </ThemeContext.Provider>
+  );
+};
+
 describe('ThemeSwitcher', () => {
   it('renders current theme and options', () => {
-    render(
-      <ThemeContext.Provider value={{ theme: 'light', setTheme: () => {} }}>
-        <ThemeSwitcher />
-      </ThemeContext.Provider>
-    );
+    renderWithProviders(<ThemeSwitcher />);
     // Only Light is visible before opening dropdown
     expect(screen.getByText('Light')).toBeInTheDocument();
     // Open dropdown
@@ -20,11 +36,7 @@ describe('ThemeSwitcher', () => {
 
   it('calls setTheme when option clicked', () => {
     const setTheme = vi.fn();
-    render(
-      <ThemeContext.Provider value={{ theme: 'light', setTheme }}>
-        <ThemeSwitcher />
-      </ThemeContext.Provider>
-    );
+    renderWithProviders(<ThemeSwitcher />, { theme: 'light', setTheme });
 
     // Open dropdown
     fireEvent.click(screen.getByLabelText('Theme selector'));
@@ -41,11 +53,7 @@ describe('ThemeSwitcher', () => {
   });
 
   it('closes dropdown when backdrop is clicked', () => {
-    render(
-      <ThemeContext.Provider value={{ theme: 'light', setTheme: () => {} }}>
-        <ThemeSwitcher />
-      </ThemeContext.Provider>
-    );
+    renderWithProviders(<ThemeSwitcher />);
     // Open dropdown
     fireEvent.click(screen.getByLabelText('Theme selector'));
     // Backdrop should be present
@@ -59,11 +67,7 @@ describe('ThemeSwitcher', () => {
   });
 
   it('dropdown has slideIn animation style', () => {
-    render(
-      <ThemeContext.Provider value={{ theme: 'light', setTheme: () => {} }}>
-        <ThemeSwitcher />
-      </ThemeContext.Provider>
-    );
+    renderWithProviders(<ThemeSwitcher />);
     fireEvent.click(screen.getByLabelText('Theme selector'));
     // Find dropdown by role or style
     const dropdown = screen.getByRole('menu', { hidden: true });
@@ -71,11 +75,7 @@ describe('ThemeSwitcher', () => {
   });
 
   it('applies hover effects on theme selector button', () => {
-    render(
-      <ThemeContext.Provider value={{ theme: 'light', setTheme: () => {} }}>
-        <ThemeSwitcher />
-      </ThemeContext.Provider>
-    );
+    renderWithProviders(<ThemeSwitcher />);
     const button = screen.getByLabelText('Theme selector');
     // Simulate mouse enter
     fireEvent.mouseEnter(button);
@@ -88,11 +88,7 @@ describe('ThemeSwitcher', () => {
   });
 
   it('applies hover effects on dropdown menu items', () => {
-    render(
-      <ThemeContext.Provider value={{ theme: 'light', setTheme: () => {} }}>
-        <ThemeSwitcher />
-      </ThemeContext.Provider>
-    );
+    renderWithProviders(<ThemeSwitcher />);
     fireEvent.click(screen.getByLabelText('Theme selector'));
     const darkButton = screen.getByRole('button', { name: 'Switch to Dark theme' });
     // Simulate mouse enter on non-active item
@@ -104,11 +100,7 @@ describe('ThemeSwitcher', () => {
   });
 
   it('does not change background on hover for active menu item', () => {
-    render(
-      <ThemeContext.Provider value={{ theme: 'light', setTheme: () => {} }}>
-        <ThemeSwitcher />
-      </ThemeContext.Provider>
-    );
+    renderWithProviders(<ThemeSwitcher />);
     fireEvent.click(screen.getByLabelText('Theme selector'));
     const lightButton = screen.getByRole('button', { name: 'Switch to Light theme' });
     const initialBackground = lightButton.style.background;
@@ -119,11 +111,7 @@ describe('ThemeSwitcher', () => {
   });
 
   it('uses CSS variables for system theme', () => {
-    render(
-      <ThemeContext.Provider value={{ theme: 'system', setTheme: () => {} }}>
-        <ThemeSwitcher />
-      </ThemeContext.Provider>
-    );
+    renderWithProviders(<ThemeSwitcher />, { theme: 'system', setTheme: () => {} });
     const button = screen.getByLabelText('Theme selector');
     // System theme should use CSS variables
     expect(button).toHaveStyle('background: var(--background)');
@@ -131,11 +119,7 @@ describe('ThemeSwitcher', () => {
   });
 
   it('renders dropdown with system theme using CSS variables', () => {
-    render(
-      <ThemeContext.Provider value={{ theme: 'system', setTheme: () => {} }}>
-        <ThemeSwitcher />
-      </ThemeContext.Provider>
-    );
+    renderWithProviders(<ThemeSwitcher />, { theme: 'system', setTheme: () => {} });
     // Open dropdown to trigger getBg() and getFg() calls in dropdown
     fireEvent.click(screen.getByLabelText('Theme selector'));
     const dropdown = screen.getByRole('menu', { hidden: true });
@@ -144,11 +128,7 @@ describe('ThemeSwitcher', () => {
   });
 
   it('handles mouse events on toggle button for dark theme', () => {
-    render(
-      <ThemeContext.Provider value={{ theme: 'dark', setTheme: () => {} }}>
-        <ThemeSwitcher />
-      </ThemeContext.Provider>
-    );
+    renderWithProviders(<ThemeSwitcher />, { theme: 'dark', setTheme: () => {} });
     const button = screen.getByLabelText('Theme selector');
     // Simulate mouse enter for dark theme
     fireEvent.mouseEnter(button);
@@ -161,11 +141,7 @@ describe('ThemeSwitcher', () => {
   });
 
   it('handles mouse events on dropdown items for dark theme', () => {
-    render(
-      <ThemeContext.Provider value={{ theme: 'dark', setTheme: () => {} }}>
-        <ThemeSwitcher />
-      </ThemeContext.Provider>
-    );
+    renderWithProviders(<ThemeSwitcher />, { theme: 'dark', setTheme: () => {} });
     fireEvent.click(screen.getByLabelText('Theme selector'));
     const lightButton = screen.getByRole('button', { name: 'Switch to Light theme' });
     // Simulate mouse enter on non-active item in dark theme

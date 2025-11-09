@@ -2,6 +2,29 @@ import type { Doctor } from '@/components/BookingSection';
 import { render, screen, fireEvent } from '@testing-library/react';
 import { vi } from 'vitest';
 import DoctorCard from './DoctorCard';
+import { TranslationsProvider } from '@/providers/TranslationsProvider';
+
+const mockTranslations = {
+  "book appointment": "Book Appointment",
+  "theme": {
+    "light": "Light",
+    "dark": "Dark",
+    "system": "Auto"
+  },
+  "callTypes": {
+    "phone": "Phone",
+    "video": "Video",
+    "voice": "Voice"
+  }
+};
+
+const renderWithTranslations = (component: React.ReactElement) => {
+  return render(
+    <TranslationsProvider translations={mockTranslations}>
+      {component}
+    </TranslationsProvider>
+  );
+};
 
 describe('DoctorCard', () => {
   const doctor: Doctor = {
@@ -15,33 +38,33 @@ describe('DoctorCard', () => {
   };
 
   it('renders default doctor image if image is missing', () => {
-    render(<DoctorCard doctor={{ ...baseDoctor, image: '' }} onBook={() => {}} />);
+    renderWithTranslations(<DoctorCard doctor={{ ...baseDoctor, image: '' }} onBook={() => {}} />);
     const img = screen.getByRole('img');
     expect(img).toHaveAttribute('src', expect.stringContaining('default-doctor.svg'));
   });
 
   it('renders doctor name, specialty, and bio', () => {
-    render(<DoctorCard doctor={doctor} onBook={() => {}} />);
+    renderWithTranslations(<DoctorCard doctor={doctor} onBook={() => {}} />);
     expect(screen.getByText('Dr. Alice Smith')).toBeInTheDocument();
     expect(screen.getByText('Cardiology')).toBeInTheDocument();
     expect(screen.getByText('Expert in heart health.')).toBeInTheDocument();
   });
 
   it('shows call type badges at top right', () => {
-    render(<DoctorCard doctor={doctor} onBook={() => {}} />);
+    renderWithTranslations(<DoctorCard doctor={doctor} onBook={() => {}} />);
     expect(screen.getByText('Phone')).toBeInTheDocument();
     expect(screen.getByText('Video')).toBeInTheDocument();
     expect(screen.getByText('Voice')).toBeInTheDocument();
   });
 
   it('renders Book Appointment button', () => {
-    render(<DoctorCard doctor={doctor} onBook={() => {}} />);
+    renderWithTranslations(<DoctorCard doctor={doctor} onBook={() => {}} />);
     expect(screen.getByRole('button', { name: /book appointment/i })).toBeInTheDocument();
   });
 
   it('calls onBook when Book Appointment button is clicked', () => {
     const onBookMock = vi.fn();
-    render(<DoctorCard doctor={doctor} onBook={onBookMock} />);
+    renderWithTranslations(<DoctorCard doctor={doctor} onBook={onBookMock} />);
     const button = screen.getByRole('button', { name: /book appointment/i });
     button.click();
     expect(onBookMock).toHaveBeenCalledWith(doctor);
@@ -56,7 +79,7 @@ describe('DoctorCard', () => {
       image: '/doctor2.jpg',
       bio: 'Skin care specialist.',
     };
-    render(<DoctorCard doctor={doctorNoCall} onBook={() => {}} />);
+    renderWithTranslations(<DoctorCard doctor={doctorNoCall} onBook={() => {}} />);
     expect(screen.queryByText('Phone')).not.toBeInTheDocument();
     expect(screen.queryByText('Video')).not.toBeInTheDocument();
     expect(screen.queryByText('Voice')).not.toBeInTheDocument();
@@ -72,7 +95,7 @@ describe('DoctorCard', () => {
       bio: 'Brain and nerves specialist.',
       callTypes: [],
     };
-    render(<DoctorCard doctor={doctorEmptyCall} onBook={() => {}} />);
+    renderWithTranslations(<DoctorCard doctor={doctorEmptyCall} onBook={() => {}} />);
     expect(screen.queryByText('Phone')).not.toBeInTheDocument();
     expect(screen.queryByText('Video')).not.toBeInTheDocument();
     expect(screen.queryByText('Voice')).not.toBeInTheDocument();
@@ -89,14 +112,14 @@ describe('DoctorCard', () => {
   };
 
   it('renders correctly with only one callType', () => {
-    render(<DoctorCard doctor={{ ...baseDoctor, callTypes: ['phone'] }} onBook={() => {}} />);
+    renderWithTranslations(<DoctorCard doctor={{ ...baseDoctor, callTypes: ['phone'] }} onBook={() => {}} />);
     expect(screen.getByText('Phone')).toBeInTheDocument();
     expect(screen.queryByText('Video')).not.toBeInTheDocument();
     expect(screen.queryByText('Voice')).not.toBeInTheDocument();
   });
 
   it('renders correctly with no bio', () => {
-    render(<DoctorCard doctor={{ ...baseDoctor, bio: '' }} onBook={() => {}} />);
+    renderWithTranslations(<DoctorCard doctor={{ ...baseDoctor, bio: '' }} onBook={() => {}} />);
     // Should still render the card, but bio is empty
     expect(screen.getByText('Dr. Test')).toBeInTheDocument();
     expect(screen.getByText('Cardiology')).toBeInTheDocument();
@@ -105,7 +128,7 @@ describe('DoctorCard', () => {
 
   it('renders default doctor image if image is undefined', () => {
     const doctorNoImage: Doctor = { ...baseDoctor, image: undefined };
-    render(<DoctorCard doctor={doctorNoImage} onBook={() => {}} />);
+    renderWithTranslations(<DoctorCard doctor={doctorNoImage} onBook={() => {}} />);
     const img = screen.getByRole('img');
     expect(img).toHaveAttribute('src', expect.stringContaining('default-doctor.svg'));
   });
@@ -113,13 +136,13 @@ describe('DoctorCard', () => {
   it('renders default doctor image if image is missing from object', () => {
     const doctorNoImage = { ...baseDoctor };
     delete doctorNoImage.image;
-    render(<DoctorCard doctor={doctorNoImage} onBook={() => {}} />);
+    renderWithTranslations(<DoctorCard doctor={doctorNoImage} onBook={() => {}} />);
     const img = screen.getByRole('img');
     expect(img).toHaveAttribute('src', expect.stringContaining('default-doctor.svg'));
   });
 
   it('falls back to default image on image load error', () => {
-    render(<DoctorCard doctor={baseDoctor} onBook={() => {}} />);
+    renderWithTranslations(<DoctorCard doctor={baseDoctor} onBook={() => {}} />);
     const img = screen.getByRole('img');
     fireEvent.error(img);
     expect(img).toHaveAttribute('src', '/images/default-doctor.svg');
