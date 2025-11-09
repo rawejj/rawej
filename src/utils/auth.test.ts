@@ -56,7 +56,7 @@ describe('Auth Utils', () => {
     it('returns false if accessToken is not a string', () => {
       const result = isTokenValid({
         ...mockTokenData,
-        accessToken: null as any,
+        accessToken: null as unknown as string,
       });
       expect(result).toBe(false);
     });

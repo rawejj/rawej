@@ -468,21 +468,24 @@ describe('ThemeContext', () => {
 
   describe('context persistence', () => {
     it('context maintains state across renders', () => {
-      const renderCounts: Record<string, number> = { consumer1: 0, consumer2: 0 };
-
       const mockValue: ThemeContextProps = {
         theme: 'light',
         setTheme: () => {},
       };
 
+      const consumer1RenderCount = React.createRef<number>();
+      consumer1RenderCount.current = 0;
+      const consumer2RenderCount = React.createRef<number>();
+      consumer2RenderCount.current = 0;
+
       const Consumer1 = () => {
-        renderCounts.consumer1++;
+        consumer1RenderCount.current!++;
         const context = useContext(ThemeContext);
         return <span data-testid="consumer1">{context.theme}</span>;
       };
 
       const Consumer2 = () => {
-        renderCounts.consumer2++;
+        consumer2RenderCount.current!++;
         const context = useContext(ThemeContext);
         return <span data-testid="consumer2">{context.theme}</span>;
       };
@@ -494,8 +497,8 @@ describe('ThemeContext', () => {
         </ThemeContext.Provider>
       );
 
-      const initialCount1 = renderCounts.consumer1;
-      const initialCount2 = renderCounts.consumer2;
+      const initialCount1 = consumer1RenderCount.current;
+      const initialCount2 = consumer2RenderCount.current;
 
       rerender(
         <ThemeContext.Provider value={mockValue}>
@@ -504,8 +507,8 @@ describe('ThemeContext', () => {
         </ThemeContext.Provider>
       );
 
-      expect(renderCounts.consumer1).toBeGreaterThanOrEqual(initialCount1);
-      expect(renderCounts.consumer2).toBeGreaterThanOrEqual(initialCount2);
+      expect(consumer1RenderCount.current).toBeGreaterThanOrEqual(initialCount1);
+      expect(consumer2RenderCount.current).toBeGreaterThanOrEqual(initialCount2);
     });
   });
 });

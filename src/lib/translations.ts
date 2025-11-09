@@ -1,5 +1,3 @@
-import 'server-only';
-
 import { LanguageKey } from '@/providers/LocalizationProvider';
 import { readFile } from 'fs/promises';
 import { join } from 'path';

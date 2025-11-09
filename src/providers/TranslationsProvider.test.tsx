@@ -1,6 +1,5 @@
 import { describe, it, expect, vi } from 'vitest';
 import { render, screen } from '@testing-library/react';
-import React, { useContext } from 'react';
 import { TranslationsProvider, useTranslations } from './TranslationsProvider';
 import type { Translations } from '@/lib/translationHelpers';
 
@@ -211,7 +210,7 @@ describe('TranslationsProvider', () => {
     });
 
     it('returns fresh t function instance', () => {
-      let tFunctions: Array<(key: string) => string> = [];
+      const tFunctions: Array<(key: string) => string> = [];
 
       const TestComponent = () => {
         const { t } = useTranslations();

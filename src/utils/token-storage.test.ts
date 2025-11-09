@@ -1,6 +1,5 @@
 import { describe, it, expect, beforeEach, vi } from 'vitest';
 import fs from 'fs';
-import path from 'path';
 import { saveToken, loadToken, clearToken, type TokenData } from './token-storage';
 
 vi.mock('fs', () => {

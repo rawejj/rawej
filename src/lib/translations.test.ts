@@ -1,22 +1,33 @@
-import { describe, it, expect, beforeEach, vi } from 'vitest';
+import { describe, it, expect, beforeEach, vi, type Mock } from 'vitest';
 import { loadTranslations } from './translations';
 import type { LanguageKey } from '@/providers/LocalizationProvider';
 import * as fsPromises from 'fs/promises';
 
-vi.mock('fs/promises', () => ({
-  readFile: vi.fn(),
-}));
+vi.mock('fs/promises', async (importOriginal) => {
+  const actual = await importOriginal();
+  const mockedReadFile = vi.fn().mockResolvedValue('mocked file content');
+  return {
+    ...(typeof actual === 'object' && actual !== null ? actual : {}),
+    readFile: mockedReadFile,
+    default: { readFile: mockedReadFile },
+  };
+});
 
-vi.mock('path', () => ({
-  join: vi.fn((...args) => args.join('/')),
-}));
+vi.mock('path', async (importOriginal) => {
+  const actual = await importOriginal();
+  return {
+    ...(typeof actual === 'object' && actual !== null ? actual : {}),
+    join: vi.fn((...args) => args.join('/')),
+    default: { join: vi.fn((...args) => args.join('/')) }, // <-- add this line
+  };
+});
 
 describe('loadTranslations', () => {
-  let mockReadFile: any;
+  let mockReadFile: Mock;
 
   beforeEach(() => {
     vi.clearAllMocks();
-    mockReadFile = fsPromises.readFile;
+    mockReadFile = fsPromises.readFile as unknown as Mock;
   });
 
   const mockTranslationData = {

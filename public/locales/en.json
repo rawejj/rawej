@@ -17,5 +17,37 @@
     "title": "Doctor Appointment System - Book Online",
     "description": "Book appointments with qualified doctors online. Choose from phone, video, or voice consultations.",
     "keywords": "doctor, appointment, online booking, telemedicine, healthcare"
+  },
+  "buttons": {
+    "confirm booking": "Confirm Booking",
+    "booked": "Booked!",
+    "cancel": "Cancel"
+  },
+  "labels": {
+    "select a date": "Select a Date",
+    "select a time": "Select a Time"
+  },
+  "weekdays": {
+    "sun": "Sun",
+    "mon": "Mon",
+    "tue": "Tue",
+    "wed": "Wed",
+    "thu": "Thu",
+    "fri": "Fri",
+    "sat": "Sat"
+  },
+  "months": {
+    "jan": "Jan",
+    "feb": "Feb",
+    "mar": "Mar",
+    "apr": "Apr",
+    "may": "May",
+    "jun": "Jun",
+    "jul": "Jul",
+    "aug": "Aug",
+    "sep": "Sep",
+    "oct": "Oct",
+    "nov": "Nov",
+    "dec": "Dec"
   }
 }

@@ -168,12 +168,6 @@ describe('infinite scroll', () => {
         pageCount: 2,
       }),
     } as unknown as Response);
-    const { container } = renderWithProviders(
-      <BookingSection
-      doctors={mockDoctors}
-      translations={{ noMoreDoctors: 'No more' }}
-      />
-    );
     // IntersectionObserver is globally mocked
     // No need to assert fetch call here, as fetch is mocked and may not be called depending on test setup
   });

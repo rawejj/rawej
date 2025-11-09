@@ -17,5 +17,37 @@
     "title": "Arzttermin-System - Online buchen",
     "description": "Buchen Sie Termine bei qualifizierten Ärzten online. Wählen Sie zwischen Telefon-, Video- oder Sprachkonsultationen.",
     "keywords": "Arzt, Termin, Online-Buchung, Telemedizin, Gesundheitswesen"
+  },
+  "buttons": {
+    "confirm booking": "Buchung bestätigen",
+    "booked": "Reserviert",
+    "cancel": "Abbrechen"
+  },
+  "labels": {
+    "select a date": "Datum auswählen",
+    "select a time": "Uhrzeit auswählen"
+  },
+  "weekdays": {
+    "sun": "So",
+    "mon": "Mo",
+    "tue": "Di",
+    "wed": "Mi",
+    "thu": "Do",
+    "fri": "Fr",
+    "sat": "Sa"
+  },
+  "months": {
+    "jan": "Jan",
+    "feb": "Feb",
+    "mar": "Mär",
+    "apr": "Apr",
+    "may": "Mai",
+    "jun": "Jun",
+    "jul": "Jul",
+    "aug": "Aug",
+    "sep": "Sep",
+    "oct": "Okt",
+    "nov": "Nov",
+    "dec": "Dez"
   }
 }

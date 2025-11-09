@@ -17,5 +17,37 @@
     "title": "Pergala Nobeta Doktor - Onlîne rezerve bike",
     "description": "Bi doktorên pispor re onlîne nobeyê bigire. Ji têlefon, vîdyo, an rêzikên dengî hilbijêre.",
     "keywords": "doktor, nobet, rezervekirina onlîne, telemedicine, tenduristî"
+  },
+  "buttons": {
+    "confirm booking": "Bixweberê pejirandinê",
+    "booked": "Reservasyon kirin",
+    "cancel": "Bişkojkê"
+  },
+  "labels": {
+    "select a date": "Dîrokê hilbijêre",
+    "select a time": "Demê hilbijêre"
+  },
+  "weekdays": {
+    "sun": "Yekşem",
+    "mon": "Duşem",
+    "tue": "Sêşem",
+    "wed": "Çarşem",
+    "thu": "Pêncşem",
+    "fri": "În",
+    "sat": "Şemî"
+  },
+  "months": {
+    "jan": "Çileya Pêşîn",
+    "feb": "Çileya Paşîn",
+    "mar": "Adar",
+    "apr": "Avrêl",
+    "may": "Gulan",
+    "jun": "Hezîran",
+    "jul": "Tîrmeh",
+    "aug": "Tebax",
+    "sep": "Îlon",
+    "oct": "Cotmeh",
+    "nov": "Mijdar",
+    "dec": "Kanûn"
   }
 }

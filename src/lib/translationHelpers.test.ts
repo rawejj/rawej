@@ -78,12 +78,12 @@ describe('Translation Helpers', () => {
 
   describe('getTranslation - edge cases', () => {
     it('returns key if translation object is null', () => {
-      const result = getTranslation(null as any, 'key');
+      const result = getTranslation(null as unknown as Translations, 'key');
       expect(result).toBe('key');
     });
 
     it('returns key if translation object is undefined', () => {
-      const result = getTranslation(undefined as any, 'key');
+      const result = getTranslation(undefined as unknown as Translations, 'key');
       expect(result).toBe('key');
     });
 

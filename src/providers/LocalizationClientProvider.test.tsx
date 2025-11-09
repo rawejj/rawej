@@ -31,7 +31,7 @@ describe('LocalizationClientProvider', () => {
       push: vi.fn(),
       replace: vi.fn(),
       prefetch: vi.fn(),
-    } as ReturnType<typeof useRouter>);
+    } as unknown as ReturnType<typeof useRouter>);
     mockUsePathname.mockReturnValue('/en');
   });
 
@@ -97,7 +97,7 @@ describe('LocalizationClientProvider', () => {
         push: mockPush,
         replace: vi.fn(),
         prefetch: vi.fn(),
-      } as any);
+      } as unknown as ReturnType<typeof useRouter>);
 
       render(
         <LocalizationClientProvider>
@@ -120,7 +120,7 @@ describe('LocalizationClientProvider', () => {
         push: mockPush,
         replace: vi.fn(),
         prefetch: vi.fn(),
-      } as any);
+      } as unknown as ReturnType<typeof useRouter>);
 
       render(
         <LocalizationClientProvider>
@@ -143,7 +143,7 @@ describe('LocalizationClientProvider', () => {
         push: mockPush,
         replace: vi.fn(),
         prefetch: vi.fn(),
-      } as any);
+      } as unknown as ReturnType<typeof useRouter>);
 
       render(
         <LocalizationClientProvider>
@@ -194,7 +194,7 @@ describe('LocalizationClientProvider', () => {
         push: mockPush,
         replace: vi.fn(),
         prefetch: vi.fn(),
-      } as any);
+      } as unknown as ReturnType<typeof useRouter>);
 
       render(
         <LocalizationClientProvider>
@@ -222,7 +222,7 @@ describe('LocalizationClientProvider', () => {
 
       expect(screen.getByTestId('language')).toBeInTheDocument();
       expect(screen.getByTestId('direction')).toBeInTheDocument();
-  expect(screen.getByRole('button', { name: 'Switch to Persian' })).toBeInTheDocument();
+      expect(screen.getByRole('button', { name: 'Switch to Persian' })).toBeInTheDocument();
     });
 
     it('provides correct config for language', async () => {
@@ -258,7 +258,7 @@ describe('LocalizationClientProvider', () => {
         push: mockPush,
         replace: vi.fn(),
         prefetch: vi.fn(),
-      } as any);
+      } as unknown as ReturnType<typeof useRouter>);
 
       render(
         <LocalizationClientProvider>
@@ -294,7 +294,7 @@ describe('LocalizationClientProvider', () => {
         push: mockPush,
         replace: vi.fn(),
         prefetch: vi.fn(),
-      } as any);
+      } as unknown as ReturnType<typeof useRouter>);
 
       render(
         <LocalizationClientProvider>
