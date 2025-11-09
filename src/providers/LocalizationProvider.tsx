@@ -1,6 +1,6 @@
 "use client";
 
-import { createContext, useContext, useState, useMemo, ReactNode } from 'react';
+import { createContext, useContext, ReactNode } from 'react';
 
 export type LanguageKey = 'en' | 'de' | 'fr' | 'ku-sor' | 'ku-kmr' | 'fa';
 
@@ -48,7 +48,7 @@ export const languages: Record<LanguageKey, LanguageConfig> = {
     dateFormat: 'YYYY/MM/DD',
     timezone: 'Asia/Tehran',
   },
-};
+}
 
 export interface LocalizationContextValue {
   language: LanguageKey;
@@ -56,16 +56,20 @@ export interface LocalizationContextValue {
   setLanguage: (lang: LanguageKey) => void;
 }
 
-const LocalizationContext = createContext<LocalizationContextValue | undefined>(undefined);
+export const LocalizationContext = createContext<LocalizationContextValue | undefined>(undefined);
 
-export const LocalizationProvider = ({ children }: { children: ReactNode }) => {
-  const [language, setLanguage] = useState<LanguageKey>('en');
-  const config = useMemo(() => languages[language], [language]);
+interface LocalizationProviderProps {
+  children: ReactNode;
+  initialLanguage?: LanguageKey;
+}
 
+export const LocalizationProvider = ({ children, initialLanguage }: LocalizationProviderProps) => {
+  // Use initialLanguage if provided, else default to 'en'
+  const lang = initialLanguage || 'en';
   const value: LocalizationContextValue = {
-    language,
-    config,
-    setLanguage,
+    language: lang,
+    config: languages[lang],
+    setLanguage: () => {},
   };
 
   return (
@@ -77,6 +81,9 @@ export const LocalizationProvider = ({ children }: { children: ReactNode }) => {
 
 export function useLocalization() {
   const ctx = useContext(LocalizationContext);
-  if (!ctx) throw new Error('useLocalization must be used within LocalizationProvider');
+  if (!ctx) {
+    throw new Error('useLocalization must be used within LocalizationProvider');
+  }
+  
   return ctx;
 }

@@ -36,13 +36,13 @@ const times = [
   "15:00", "15:30", "16:00", "16:30"
 ];
 
-export default function BookingSection({ doctors: initialDoctors }: { doctors: Doctor[] }) {
+export default function BookingSection({ doctors: initialDoctors, translations, locale }: { doctors: Doctor[]; translations?: Record<string,string>; locale?: string }) {
   const [showModal, setShowModal] = useState(false);
   const [selectedDoctor, setSelectedDoctor] = useState<Doctor | null>(null);
   const getNext7DaysFormatted = () => {
     return getNext7DaysRaw().map(day => ({
       ...day,
-      label: new Date(day.value).toLocaleDateString(undefined, { weekday: "short", month: "short", day: "numeric" })
+      label: new Date(day.value).toLocaleDateString(locale || undefined, { weekday: "short", month: "short", day: "numeric" })
     }));
   };
   const [days] = useState(getNext7DaysFormatted());
@@ -147,7 +147,7 @@ export default function BookingSection({ doctors: initialDoctors }: { doctors: D
         {/* Sentinel for infinite scroll */}
         <div ref={observerRef} style={{ height: 1 }} />
         {!hasMore && (
-          <div className="text-center text-gray-400 py-4">No more doctors to load.</div>
+          <div className="text-center text-gray-400 py-4">{translations?.noMoreDoctors ?? 'No more doctors to load.'}</div>
         )}
       </main>
       <BookingModal

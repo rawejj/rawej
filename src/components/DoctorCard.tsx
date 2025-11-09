@@ -1,6 +1,7 @@
 import Image from "next/image";
 import React from "react";
 import type { Doctor } from "@/components/BookingSection";
+import { t } from "i18next";
 
 interface DoctorCardProps {
   doctor: Doctor;
@@ -45,7 +46,7 @@ const DoctorCard: React.FC<DoctorCardProps> = ({ doctor, onBook }) => (
       className="w-full py-2 px-4 rounded-full bg-linear-to-r from-purple-500 to-pink-400 text-white font-bold shadow-md hover:from-pink-400 hover:to-purple-500 transition-colors"
       onClick={() => onBook(doctor)}
     >
-      Book Appointment
+      {t('book appointment')}
     </button>
   </div>
 );

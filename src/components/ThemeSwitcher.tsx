@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useContext, useState } from 'react';
+import React, { useContext, useState, useSyncExternalStore } from 'react';
 import { ThemeContext, Theme } from '@/providers/ThemeProvider';
 
 const themes: Theme[] = ['light', 'dark', 'system'];
@@ -57,6 +57,12 @@ export const ThemeSwitcher: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
   const CurrentIcon = icons[theme];
 
+  // Use useSyncExternalStore to safely handle client-only rendering
+  const mounted = useSyncExternalStore(
+    () => () => {},
+    () => true,
+    () => false
+  );
 
   // Use CSS variables for background/foreground
   const getBg = () => {
@@ -71,10 +77,11 @@ export const ThemeSwitcher: React.FC = () => {
   };
 
   return (
-    <div style={{ position: 'relative' }}>
+    <div style={{ position: 'relative' }} suppressHydrationWarning>
       {/* Toggle Button */}
       <button
         onClick={() => setIsOpen(!isOpen)}
+        suppressHydrationWarning
         style={{
           display: 'flex',
           alignItems: 'center',
@@ -104,7 +111,7 @@ export const ThemeSwitcher: React.FC = () => {
         aria-expanded={isOpen}
       >
         <CurrentIcon />
-        <span>{labels[theme]}</span>
+        <span suppressHydrationWarning>{mounted ? labels[theme] : 'Auto'}</span>
         <ChevronIcon />
       </button>
 

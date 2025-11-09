@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useContext } from 'react';
+import { useState, useContext, useSyncExternalStore } from 'react';
 import { useLocalization, languages, LanguageKey } from '@/providers/LocalizationProvider';
 import { ThemeContext } from '@/providers/ThemeProvider';
 
@@ -23,6 +23,13 @@ export const LanguageSwitcher = () => {
   const { language, setLanguage } = useLocalization();
   const { theme } = useContext(ThemeContext);
   const [isOpen, setIsOpen] = useState(false);
+  
+  // Use useSyncExternalStore to safely handle client-only rendering
+  const mounted = useSyncExternalStore(
+    () => () => {},
+    () => true,
+    () => false
+  );
 
   const getBg = () => {
     if (theme === 'dark') return 'rgba(30, 30, 40, 0.98)';
@@ -39,10 +46,10 @@ export const LanguageSwitcher = () => {
   const currentLang = languages[language];
 
   return (
-    <div style={{ position: 'relative' }}>
-      {/* Toggle Button */}
+    <div style={{ position: 'relative' }} suppressHydrationWarning>
       <button
         onClick={() => setIsOpen(!isOpen)}
+        suppressHydrationWarning
         style={{
           display: 'flex',
           alignItems: 'center',
@@ -72,7 +79,7 @@ export const LanguageSwitcher = () => {
         aria-expanded={isOpen}
       >
         <GlobeIcon />
-        <span>{currentLang.label}</span>
+        <span suppressHydrationWarning>{mounted ? currentLang.label : 'English'}</span>
         <ChevronIcon />
       </button>
 
