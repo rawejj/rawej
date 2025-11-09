@@ -1,0 +1,21 @@
+{
+  "book appointment": "Termin buchen",
+  "theme": {
+    "light": "Hell",
+    "dark": "Dunkel",
+    "system": "Auto"
+  },
+  "callTypes": {
+    "phone": "Telefon",
+    "video": "Video",
+    "voice": "Sprache"
+  },
+  "header": {
+    "title": "Arzttermin-System"
+  },
+  "meta": {
+    "title": "Arzttermin-System - Online buchen",
+    "description": "Buchen Sie Termine bei qualifizierten Ärzten online. Wählen Sie zwischen Telefon-, Video- oder Sprachkonsultationen.",
+    "keywords": "Arzt, Termin, Online-Buchung, Telemedizin, Gesundheitswesen"
+  }
+}

@@ -1,0 +1,21 @@
+{
+  "book appointment": "Prendre rendez-vous",
+  "theme": {
+    "light": "Clair",
+    "dark": "Sombre",
+    "system": "Auto"
+  },
+  "callTypes": {
+    "phone": "Téléphone",
+    "video": "Vidéo",
+    "voice": "Voix"
+  },
+  "header": {
+    "title": "Système de rendez-vous médical"
+  },
+  "meta": {
+    "title": "Système de rendez-vous médical - Réserver en ligne",
+    "description": "Prenez rendez-vous avec des médecins qualifiés en ligne. Choisissez parmi les consultations par téléphone, vidéo ou voix.",
+    "keywords": "médecin, rendez-vous, réservation en ligne, télémédecine, santé"
+  }
+}

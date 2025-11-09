@@ -1,5 +1,7 @@
 import { render, screen } from '@testing-library/react';
-import { LocalizationProvider, useLocalization, languages } from './LocalizationProvider';
+import { LocalizationClientProvider } from './LocalizationClientProvider';
+import { useLocalization } from './useLocalization';
+import { languages } from './LocalizationProvider';
 import { fireEvent } from '@testing-library/react';
 
 describe('LocalizationProvider', () => {
@@ -18,9 +20,9 @@ describe('LocalizationProvider', () => {
 
   it('provides default English config', () => {
     render(
-      <LocalizationProvider>
+      <LocalizationClientProvider>
         <TestComponent />
-      </LocalizationProvider>
+      </LocalizationClientProvider>
     );
     expect(screen.getByTestId('lang').textContent).toBe('en');
     expect(screen.getByTestId('dir').textContent).toBe('ltr');
@@ -30,9 +32,9 @@ describe('LocalizationProvider', () => {
 
   it('switches to Persian and updates config', () => {
     render(
-      <LocalizationProvider>
+      <LocalizationClientProvider>
         <TestComponent />
-      </LocalizationProvider>
+      </LocalizationClientProvider>
     );
     fireEvent.click(screen.getByText('Switch to Persian'));
     expect(screen.getByTestId('lang').textContent).toBe('fa');

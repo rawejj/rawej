@@ -1,8 +1,7 @@
 import { render, screen, fireEvent } from '@testing-library/react';
-import { ThemeContext } from '@/providers/ThemeProvider';
+import { ThemeContext } from '@/providers/ThemeContext';
 import { vi } from 'vitest';
 import { ThemeSwitcher } from './ThemeSwitcher';
-import React from 'react';
 
 describe('ThemeSwitcher', () => {
   it('renders current theme and options', () => {

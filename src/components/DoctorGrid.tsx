@@ -1,8 +1,9 @@
+"use client";
 
 import React from "react";
 import DoctorCard from "./DoctorCard";
 import DoctorCardSkeleton from "./DoctorCardSkeleton";
-import type { Doctor } from "@/app/page";
+import type { Doctor } from "@/components/BookingSection";
 
 
 interface DoctorGridProps {

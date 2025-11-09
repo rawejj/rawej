@@ -1,14 +1,19 @@
+"use client";
+
 import Image from "next/image";
 import React from "react";
+import { useTranslations } from '@/providers/TranslationsProvider';
 import type { Doctor } from "@/components/BookingSection";
-import { t } from "i18next";
 
 interface DoctorCardProps {
   doctor: Doctor;
   onBook: (doctor: Doctor) => void;
 }
 
-const DoctorCard: React.FC<DoctorCardProps> = ({ doctor, onBook }) => (
+const DoctorCard: React.FC<DoctorCardProps> = ({ doctor, onBook }) => {
+  const { t } = useTranslations();
+  
+  return (
   <div className="relative rounded-3xl bg-white dark:bg-zinc-800 shadow-lg p-6 flex flex-col items-center transition-transform hover:scale-[1.03] hover:shadow-2xl">
     {/* Call types top right */}
     {doctor.callTypes && doctor.callTypes.length > 0 && (
@@ -29,6 +34,7 @@ const DoctorCard: React.FC<DoctorCardProps> = ({ doctor, onBook }) => (
       width={80}
       height={80}
       className="rounded-full border-4 border-purple-200 dark:border-pink-400 mb-4 shadow-md"
+      loading="eager"
       onError={(e) => {
         // fallback to SVG if image fails
         (e.target as HTMLImageElement).src = "/images/default-doctor.svg";
@@ -49,6 +55,7 @@ const DoctorCard: React.FC<DoctorCardProps> = ({ doctor, onBook }) => (
       {t('book appointment')}
     </button>
   </div>
-);
+  );
+};
 
 export default DoctorCard;

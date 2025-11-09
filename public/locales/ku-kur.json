@@ -1,0 +1,21 @@
+{
+  "book appointment": "Nobeyê bigire",
+  "theme": {
+    "light": "Ronî",
+    "dark": "Tarî",
+    "system": "Otomatîk"
+  },
+  "callTypes": {
+    "phone": "Têlefon",
+    "video": "Vîdyo",
+    "voice": "Deng"
+  },
+  "header": {
+    "title": "Pergala Nobeta Doktor"
+  },
+  "meta": {
+    "title": "Pergala Nobeta Doktor - Onlîne rezerve bike",
+    "description": "Bi doktorên pispor re onlîne nobeyê bigire. Ji têlefon, vîdyo, an rêzikên dengî hilbijêre.",
+    "keywords": "doktor, nobet, rezervekirina onlîne, telemedicine, tenduristî"
+  }
+}

@@ -1,8 +1,4 @@
-"use client";
-
-import { createContext, useContext, ReactNode } from 'react';
-
-export type LanguageKey = 'en' | 'de' | 'fr' | 'ku-sor' | 'ku-kmr' | 'fa';
+export type LanguageKey = 'en' | 'de' | 'fr' | 'ku-sor' | 'ku-kur' | 'fa';
 
 export interface LanguageConfig {
   label: string;
@@ -36,7 +32,7 @@ export const languages: Record<LanguageKey, LanguageConfig> = {
     dateFormat: 'YYYY/MM/DD',
     timezone: 'Asia/Baghdad',
   },
-  'ku-kmr': {
+  'ku-kur': {
     label: 'Kurdi-Kermanji',
     direction: 'ltr',
     dateFormat: 'YYYY-MM-DD',
@@ -54,36 +50,4 @@ export interface LocalizationContextValue {
   language: LanguageKey;
   config: LanguageConfig;
   setLanguage: (lang: LanguageKey) => void;
-}
-
-export const LocalizationContext = createContext<LocalizationContextValue | undefined>(undefined);
-
-interface LocalizationProviderProps {
-  children: ReactNode;
-  initialLanguage?: LanguageKey;
-}
-
-export const LocalizationProvider = ({ children, initialLanguage }: LocalizationProviderProps) => {
-  // Use initialLanguage if provided, else default to 'en'
-  const lang = initialLanguage || 'en';
-  const value: LocalizationContextValue = {
-    language: lang,
-    config: languages[lang],
-    setLanguage: () => {},
-  };
-
-  return (
-    <LocalizationContext.Provider value={value}>
-      {children}
-    </LocalizationContext.Provider>
-  );
-};
-
-export function useLocalization() {
-  const ctx = useContext(LocalizationContext);
-  if (!ctx) {
-    throw new Error('useLocalization must be used within LocalizationProvider');
-  }
-  
-  return ctx;
 }

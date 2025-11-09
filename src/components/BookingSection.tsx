@@ -40,10 +40,19 @@ export default function BookingSection({ doctors: initialDoctors, translations, 
   const [showModal, setShowModal] = useState(false);
   const [selectedDoctor, setSelectedDoctor] = useState<Doctor | null>(null);
   const getNext7DaysFormatted = () => {
-    return getNext7DaysRaw().map(day => ({
-      ...day,
-      label: new Date(day.value).toLocaleDateString(locale || undefined, { weekday: "short", month: "short", day: "numeric" })
-    }));
+    return getNext7DaysRaw().map(day => {
+      try {
+        return {
+          ...day,
+          label: new Date(day.value).toLocaleDateString(locale || undefined, { weekday: "short", month: "short", day: "numeric" })
+        };
+      } catch {
+        return {
+          ...day,
+          label: new Date(day.value).toLocaleDateString(undefined, { weekday: "short", month: "short", day: "numeric" })
+        };
+      }
+    });
   };
   const [days] = useState(getNext7DaysFormatted());
   const [selectedDate, setSelectedDate] = useState(days[0].value);
