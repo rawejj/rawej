@@ -7,6 +7,7 @@ import DoctorCardSkeleton from "@/components/DoctorCardSkeleton";
 
 export type Doctor = {
   id: number;
+  uuid: string;
   name: string;
   specialty: string;
   rating: number;
@@ -16,46 +17,13 @@ export type Doctor = {
   callTypes?: Array<'phone' | 'video' | 'voice'>;
 };
 
-const getNext7DaysRaw = () => {
-  const days = [];
-  const today = new Date();
-  for (let i = 0; i < 7; i++) {
-    const d = new Date(today);
-    d.setDate(today.getDate() + i);
-    days.push({
-      label: d.toISOString().slice(0, 10),
-      value: d.toISOString().slice(0, 10),
-    });
-  }
-  return days;
-};
-
-const times = [
-  "09:00", "09:30", "10:00", "10:30", "11:00", "11:30",
-  "12:00", "12:30", "13:00", "13:30", "14:00", "14:30",
-  "15:00", "15:30", "16:00", "16:30"
-];
-
-export default function BookingSection({ doctors: initialDoctors, translations, locale, hasMore: hasMoreProp }: { doctors: Doctor[]; translations?: Record<string,string>; locale?: string; hasMore?: boolean }) {
+export default function BookingSection({ doctors: initialDoctors, translations, hasMore: hasMoreProp }: { doctors: Doctor[]; translations?: Record<string,string>; hasMore?: boolean }) {
+  const [error, setError] = useState<string | null>(null);
   const [showModal, setShowModal] = useState(false);
   const [selectedDoctor, setSelectedDoctor] = useState<Doctor | null>(null);
-  const getNext7DaysFormatted = () => {
-    return getNext7DaysRaw().map(day => {
-      try {
-        return {
-          ...day,
-          label: new Date(day.value).toLocaleDateString(locale || undefined, { weekday: "short", month: "short", day: "numeric" })
-        };
-      } catch {
-        return {
-          ...day,
-          label: new Date(day.value).toLocaleDateString(undefined, { weekday: "short", month: "short", day: "numeric" })
-        };
-      }
-    });
-  };
-  const [days] = useState(getNext7DaysFormatted());
-  const [selectedDate, setSelectedDate] = useState(days[0].value);
+  // State for available dates/times per doctor
+  const [availableDates, setAvailableDates] = useState<{ label: string; value: string; times: string[] }[]>([]);
+  const [selectedDate, setSelectedDate] = useState("");
   const [selectedTime, setSelectedTime] = useState("");
   const [confirmed, setConfirmed] = useState(false);
 
@@ -116,18 +84,40 @@ export default function BookingSection({ doctors: initialDoctors, translations, 
     };
   }, [fetchMoreDoctors, hasMore]);
 
-  const openModal = (doctor: Doctor) => {
+  const openModal = async (doctor: Doctor) => {
     setSelectedDoctor(doctor);
     setShowModal(true);
-    setSelectedDate(days[0].value);
-    setSelectedTime("");
     setConfirmed(false);
+
+    // Fetch availability from API
+    setError(null);
+    try {
+      const res = await fetch(`/api/v1/doctors/${doctor.uuid}/availability`);
+      const json = await res.json();
+      // Expecting: { dates: [{label, value, times: string[]}]} (no flat times array)
+      if (json && Array.isArray(json.dates)) {
+        setAvailableDates(json.dates);
+        setSelectedDate(json.dates[0]?.value || "");
+        setSelectedTime("");
+      } else {
+        setAvailableDates([]);
+        setSelectedDate("");
+        setSelectedTime("");
+        setError('Error loading availability.');
+      }
+    } catch {
+      setAvailableDates([]);
+      setSelectedDate("");
+      setSelectedTime("");
+      setError('Error loading availability.');
+    }
   };
 
   const closeModal = () => {
     setShowModal(false);
     setSelectedDoctor(null);
     setConfirmed(false);
+    setError(null);
   };
 
   const confirmBooking = () => {
@@ -171,8 +161,8 @@ export default function BookingSection({ doctors: initialDoctors, translations, 
         onDateChange={setSelectedDate}
         onTimeChange={setSelectedTime}
         onConfirm={confirmBooking}
-        getNext7Days={() => days}
-        times={times}
+        getNext7Days={() => availableDates}
+        error={error}
       />
       {/* Modal animation */}
       <style>{`

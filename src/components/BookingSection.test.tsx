@@ -57,6 +57,7 @@ vi.mock('next/navigation', () => ({
 const mockDoctors: Doctor[] = [
   {
     id: 1,
+    uuid: 'uuid-1',
     name: 'Dr. Alice',
     specialty: 'Cardiology',
     rating: 4.8,
@@ -66,6 +67,7 @@ const mockDoctors: Doctor[] = [
   },
   {
     id: 2,
+    uuid: 'uuid-2',
     name: 'Dr. Bob',
     specialty: 'Neurology',
     rating: 4.5,
@@ -76,6 +78,44 @@ const mockDoctors: Doctor[] = [
 ];
 
 describe('BookingSection', () => {
+  it('fetches and displays doctor availability when modal opens', async () => {
+    const mockDoctor = {
+      id: 99,
+      name: 'Dr. Test',
+      specialty: 'General',
+      rating: 4.5,
+      bio: 'Test bio',
+    };
+    // Mock fetch for doctor availability with Response-like object
+    vi.spyOn(global, 'fetch').mockImplementation((input) => {
+      if (typeof input === 'string' && input.includes('/api/v1/doctors/99/availability')) {
+        return Promise.resolve({
+          ok: true,
+          status: 200,
+          json: async () => ({
+            dates: [
+              { label: '2025-11-10', value: '2025-11-10' },
+              { label: '2025-11-11', value: '2025-11-11' },
+            ],
+            times: ['09:00', '10:00'],
+          }),
+        } as Response);
+      }
+      return Promise.reject(new Error('Unknown endpoint'));
+    });
+    renderWithProviders(
+      <BookingSection doctors={[mockDoctor]} translations={{}} hasMore={false} />
+    );
+    // Open modal
+    const bookButton = screen.getByRole('button', { name: /book/i });
+    fireEvent.click(bookButton);
+    // Wait for modal to show fetched dates/times as buttons
+    await waitFor(() => {
+      expect(screen.getByText('2025-11-10')).toBeInTheDocument();
+      expect(screen.getByRole('button', { name: '09:00' })).toBeInTheDocument();
+      expect(screen.getByRole('button', { name: '10:00' })).toBeInTheDocument();
+    });
+  });
   afterEach(() => {
     vi.clearAllMocks();
   });
@@ -197,7 +237,38 @@ describe('infinite scroll', () => {
 });
 
 describe('date and time selection', () => {
+  it('shows error in modal when doctor availability fetch fails', async () => {
+    vi.spyOn(global, 'fetch').mockRejectedValue(new Error('Network error'));
+    renderWithProviders(
+      <BookingSection doctors={mockDoctors} translations={{ noMoreDoctors: 'No more' }} />
+    );
+    const bookButton = screen.getAllByRole('button', { name: enTranslations["book appointment"] })[0];
+    fireEvent.click(bookButton);
+    await waitFor(() => {
+      // Error message should be shown in modal, not date selection
+      expect(screen.getByText(/error/i)).toBeInTheDocument();
+      expect(screen.queryByText('Select a Date')).not.toBeInTheDocument();
+    });
+    vi.clearAllMocks();
+  });
   it('renders available time slots after selecting a doctor', async () => {
+    // Mock fetch for doctor availability
+    vi.spyOn(global, 'fetch').mockImplementation((input) => {
+      if (typeof input === 'string' && input.includes('/api/v1/doctors/1/availability')) {
+        return Promise.resolve({
+          ok: true,
+          status: 200,
+          json: async () => ({
+            dates: [
+              { label: '2025-11-10', value: '2025-11-10' },
+              { label: '2025-11-11', value: '2025-11-11' },
+            ],
+            times: ['09:00', '10:00'],
+          }),
+        } as Response);
+      }
+      return Promise.reject(new Error('Unknown endpoint'));
+    });
     renderWithProviders(
       <BookingSection
         doctors={mockDoctors}
@@ -212,6 +283,7 @@ describe('date and time selection', () => {
       expect(screen.getByRole('button', { name: '09:00' })).toBeInTheDocument();
       expect(screen.getByRole('button', { name: '10:00' })).toBeInTheDocument();
     });
+    vi.clearAllMocks();
   });
 });
 
@@ -252,7 +324,6 @@ describe('localization', () => {
       <BookingSection
         doctors={mockDoctors}
         translations={{ noMoreDoctors: 'No more' }}
-        locale="fr-FR"
       />
     );
     const bookButtons = screen.getAllByRole('button', {
@@ -266,6 +337,22 @@ describe('localization', () => {
 
 describe('modal state management', () => {
   it('handles modal open/close and doctor switch', async () => {
+    vi.spyOn(global, 'fetch').mockImplementation((input) => {
+      if (typeof input === 'string' && (input.includes('/api/v1/doctors/1/availability') || input.includes('/api/v1/doctors/2/availability'))) {
+        return Promise.resolve({
+          ok: true,
+          status: 200,
+          json: async () => ({
+            dates: [
+              { label: '2025-11-10', value: '2025-11-10' },
+              { label: '2025-11-11', value: '2025-11-11' },
+            ],
+            times: ['09:00', '10:00'],
+          }),
+        } as Response);
+      }
+      return Promise.reject(new Error('Unknown endpoint'));
+    });
     renderWithProviders(
       <BookingSection
         doctors={mockDoctors}
@@ -291,6 +378,7 @@ describe('modal state management', () => {
       // Use getAllByText to avoid duplicate element error
       expect(screen.getAllByText('Dr. Bob').length).toBeGreaterThan(0);
     });
+    vi.clearAllMocks();
   });
 });
 
@@ -336,6 +424,22 @@ describe('BookingSection edge cases', () => {
   });
 
   it('handles confirm booking and modal close', async () => {
+    vi.spyOn(global, 'fetch').mockImplementation((input) => {
+      if (typeof input === 'string' && input.includes('/api/v1/doctors/1/availability')) {
+        return Promise.resolve({
+          ok: true,
+          status: 200,
+          json: async () => ({
+            dates: [
+              { label: '2025-11-10', value: '2025-11-10' },
+              { label: '2025-11-11', value: '2025-11-11' },
+            ],
+            times: ['09:00', '10:00'],
+          }),
+        } as Response);
+      }
+      return Promise.reject(new Error('Unknown endpoint'));
+    });
     renderWithProviders(
       <BookingSection doctors={mockDoctors} translations={{ noMoreDoctors: 'No more' }} />
     );
@@ -353,6 +457,7 @@ describe('BookingSection edge cases', () => {
     await waitFor(() => {
       expect(screen.queryByText('Select a date:')).not.toBeInTheDocument();
     }, { timeout: 2000 });
+    vi.clearAllMocks();
   });
 
   it('handles fetch error branch', async () => {
@@ -383,25 +488,37 @@ describe('BookingSection 100% coverage', () => {
     Date.prototype.toLocaleDateString = () => { throw new Error('fail'); };
     const minimalTranslations = {
       "book appointment": "Book Appointment",
-      theme: { light: "Light", dark: "Dark", system: "System" },
-      callTypes: { phone: "Phone", video: "Video", voice: "Voice" },
-      header: { title: "Header" },
-      meta: { title: "Title", description: "Description", keywords: "Keywords" },
-      buttons: {
-        confirm: "Confirm",
-        cancel: "Cancel",
-        "confirm booking": "Confirm Booking",
-        booked: "Booked"
-      },
-      labels: { "select a date": "Select a date", "select a time": "Select a time" },
-      weekdays: { sun: "Sun", mon: "Mon", tue: "Tue", wed: "Wed", thu: "Thu", fri: "Fri", sat: "Sat" },
-      months: { jan: "Jan", feb: "Feb", mar: "Mar", apr: "Apr", may: "May", jun: "Jun", jul: "Jul", aug: "Aug", sep: "Sep", oct: "Oct", nov: "Nov", dec: "Dec" }
+      "confirm": "Confirm",
+      "cancel": "Cancel",
+      "confirm booking": "Confirm Booking",
+      "booked": "Booked",
+      "select a date": "Select a date",
+      "select a time": "Select a time",
+      "noMoreDoctors": "No more doctors to load.",
+      "sun": "Sun",
+      "mon": "Mon",
+      "tue": "Tue",
+      "wed": "Wed",
+      "thu": "Thu",
+      "fri": "Fri",
+      "sat": "Sat",
+      "jan": "Jan",
+      "feb": "Feb",
+      "mar": "Mar",
+      "apr": "Apr",
+      "may": "May",
+      "jun": "Jun",
+      "jul": "Jul",
+      "aug": "Aug",
+      "sep": "Sep",
+      "oct": "Oct",
+      "nov": "Nov",
+      "dec": "Dec"
     };
     let container: HTMLElement | undefined = undefined;
     try {
       const result = renderWithProviders(
-        <BookingSection doctors={[]} locale="invalid-locale" />,
-        minimalTranslations
+        <BookingSection doctors={[]} translations={minimalTranslations} />
       );
       container = result.container;
     } catch {

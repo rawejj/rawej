@@ -15,14 +15,18 @@ export async function httpClient<T = unknown>(
     if (!res.ok) {
       // Try to parse error as JSON, fallback to text
       let error: unknown;
+      let message: string;
       try {
         error = await res.json();
+        message = error && typeof error === 'object' && 'message' in error
+          ? error.message as string
+          : '';
       } catch {
-        error = await res.text();
+        message = await res.text();
       }
       logger.error(`HTTP error ${res.status}: ${typeof error === 'string' ? error : JSON.stringify(error)}`, 'httpClient');
       throw new Error(
-        `HTTP error ${res.status}: ${typeof error === 'string' ? error : JSON.stringify(error)}`
+        `HTTP error ${res.status}: ${message || res.statusText}`
       );
     }
     const contentType = res.headers.get('content-type');

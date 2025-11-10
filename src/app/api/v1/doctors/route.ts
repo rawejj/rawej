@@ -8,6 +8,7 @@ import { fetchToken, refreshAccessToken, isTokenValid } from '@/utils/auth';
 
 interface Doctor {
   id: number;
+  uuid: string;
   name: string;
   email?: string;
   avatar?: string | null;
@@ -17,7 +18,6 @@ interface Doctor {
   bio?: string;
   availability?: string[];
   callTypes?: Array<'phone' | 'video' | 'voice'>;
-  // Add other fields as needed
 }
 
 interface DoctorsApiResponse {
@@ -76,6 +76,7 @@ export async function GET(request: Request) {
       data = await httpClient(apiUrl, {
         headers: {
           Authorization: `Bearer ${token?.accessToken}`,
+          Accept: 'application/json',
           'Content-Type': 'application/json',
         },
         next: { 
@@ -92,6 +93,7 @@ export async function GET(request: Request) {
         data = await httpClient(apiUrl, {
           headers: {
             Authorization: `Bearer ${refreshed?.accessToken}`,
+            Accept: 'application/json',
             'Content-Type': 'application/json',
           },
           next: { 
@@ -116,7 +118,7 @@ export async function GET(request: Request) {
       pageCount = typeof ret.pageCount === 'number' ? ret.pageCount : 1;
     }
 
-    const response: DoctorsApiResponse = {
+    const res = NextResponse.json({
       success: true,
       data: doctors,
       total,
@@ -124,11 +126,12 @@ export async function GET(request: Request) {
       perPage,
       pageCount,
       source: 'api'
-    };
-    const res = NextResponse.json(response);
+    } as DoctorsApiResponse);
+
     // Optimize for CDN caching with frequent revalidation for fresh data
     const cdnMaxAge = process.env.CDN_MAX_AGE || '300';
     const staleWhileRevalidate = process.env.CDN_STALE_WHILE_REVALIDATE || '600';
+
     res.headers.set('Cache-Control', `public, s-maxage=${cdnMaxAge}, stale-while-revalidate=${staleWhileRevalidate}`);
     return res;
   } catch (err: unknown) {

@@ -17,6 +17,7 @@ function renderWithProviders(ui: React.ReactNode, translations = enTranslations)
 describe('BookingModal', () => {
   const mockDoctor: Doctor = {
     id: 1,
+    uuid: 'uuid-1234',
     name: 'Dr. John Smith',
     specialty: 'Cardiology',
     rating: 4.8,

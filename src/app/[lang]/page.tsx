@@ -24,7 +24,7 @@ export async function generateMetadata({ params }: { params: { lang: string } })
   return generatePageMetadata(lang);
 }
 
-export default async function Home({ params }: { params: { lang: string } }) {
+export default async function Home() {
   // Fetch doctors server-side with caching
   let doctors: Doctor[] = [];
   let error: string | null = null;
@@ -47,16 +47,13 @@ export default async function Home({ params }: { params: { lang: string } }) {
     }
   }
 
-  // Use language param for SSR, fallback to DEFAULT_LANGUAGE
-  const lang = ((await params).lang || DEFAULT_LANGUAGE) as LanguageKey;
-
   return (
     <div className="min-h-screen flex flex-col bg-linear-to-br from-blue-100 via-purple-100 to-pink-100 dark:from-zinc-900 dark:via-zinc-800 dark:to-zinc-700 font-sans">
       <main className="flex-1">
         {error ? (
           <ErrorMessage error={error} />
         ) : (
-          <BookingSection doctors={doctors} locale={lang} />
+          <BookingSection doctors={doctors} />
         )}
       </main>
       <Footer />
