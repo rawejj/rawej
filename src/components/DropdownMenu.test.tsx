@@ -55,7 +55,7 @@ describe('DropdownMenu', () => {
     );
     const menu = container.querySelector('[role="menu"]');
     expect(menu).toHaveStyle('min-width: 300px');
-  expect(menu).toHaveStyle('background-color: rgb(255, 0, 0)');
+    expect(menu).toHaveStyle('background-color: rgb(255, 0, 0)');
   });
 
   it('does not prevent propagation when backdrop is clicked', () => {
@@ -79,7 +79,7 @@ describe('DropdownMenu', () => {
         <button>Option 3</button>
       </>
     );
-  render(<DropdownMenu {...defaultProps}>{children}</DropdownMenu>);
+    render(<DropdownMenu {...defaultProps}>{children}</DropdownMenu>);
     expect(screen.getByText('Option 1')).toBeInTheDocument();
     expect(screen.getByText('Option 2')).toBeInTheDocument();
     expect(screen.getByText('Option 3')).toBeInTheDocument();
@@ -88,7 +88,7 @@ describe('DropdownMenu', () => {
   it('allows interaction with menu items', () => {
     const handleClick = vi.fn();
     const children = <button onClick={handleClick}>Click Me</button>;
-  render(<DropdownMenu {...defaultProps}>{children}</DropdownMenu>);
+    render(<DropdownMenu {...defaultProps}>{children}</DropdownMenu>);
     const button = screen.getByText('Click Me');
     fireEvent.click(button);
     expect(handleClick).toHaveBeenCalled();
@@ -98,7 +98,7 @@ describe('DropdownMenu', () => {
     const onClose = vi.fn();
     const handleClick = vi.fn();
     const children = <button onClick={handleClick}>Click Me</button>;
-  render(<DropdownMenu {...defaultProps} onClose={onClose}>{children}</DropdownMenu>);
+    render(<DropdownMenu {...defaultProps} onClose={onClose}>{children}</DropdownMenu>);
     const button = screen.getByText('Click Me');
     fireEvent.click(button);
     expect(onClose).not.toHaveBeenCalled();

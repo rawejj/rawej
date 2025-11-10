@@ -48,22 +48,22 @@ describe('Header', () => {
   it('renders with sticky positioning', () => {
     const { container } = renderWithProviders(<Header />);
     const header = container.querySelector('header');
-  expect(header).toHaveClass('sticky');
-  expect(header).toHaveClass('top-0');
-  expect(header).toHaveClass('z-10');
+    expect(header).toHaveClass('sticky');
+    expect(header).toHaveClass('top-0');
+    expect(header).toHaveClass('z-10');
   });
 
   it('applies light theme styling', () => {
     const { container } = renderWithProviders(<Header />);
     const header = container.querySelector('header');
-  expect(header).toHaveClass('bg-white/80');
-  expect(header).toHaveClass('dark:bg-zinc-900/80');
+    expect(header).toHaveClass('bg-white/80');
+    expect(header).toHaveClass('dark:bg-zinc-900/80');
   });
 
   it('renders with shadow effect', () => {
     const { container } = renderWithProviders(<Header />);
     const header = container.querySelector('header');
-  expect(header).toHaveClass('shadow-md');
+    expect(header).toHaveClass('shadow-md');
   });
 
   it('renders header content wrapper', () => {
@@ -74,14 +74,14 @@ describe('Header', () => {
   it('maintains responsive padding', () => {
     const { container } = renderWithProviders(<Header />);
     const header = container.querySelector('header');
-  expect(header).toHaveClass('px-4');
-  expect(header).toHaveClass('py-6');
+    expect(header).toHaveClass('px-4');
+    expect(header).toHaveClass('py-6');
   });
 
   it('supports dark mode styling', () => {
     const { container } = renderWithProviders(<Header />);
     const header = container.querySelector('header');
-  expect(header).toHaveClass('dark:bg-zinc-900/80');
+    expect(header).toHaveClass('dark:bg-zinc-900/80');
   });
 
   it('renders without crashing when mounted', () => {

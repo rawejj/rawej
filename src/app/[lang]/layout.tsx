@@ -20,10 +20,10 @@ export default async function LangLayout({
 
   return (
     <div lang={lang} dir={config.direction}>
-        <TranslationsProvider translations={translations}>
-            <Header />
-            {children}
-        </TranslationsProvider>
+      <TranslationsProvider translations={translations}>
+        <Header />
+        {children}
+      </TranslationsProvider>
     </div>
   );
 }

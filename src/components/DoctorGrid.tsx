@@ -19,11 +19,11 @@ const DoctorGrid: React.FC<DoctorGridProps> = ({ doctors, onBook, loading }) => 
     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
       {loading
         ? Array.from({ length: skeletonCount }).map((_, idx) => (
-            <DoctorCardSkeleton key={idx} />
-          ))
+          <DoctorCardSkeleton key={idx} />
+        ))
         : doctors.map((doctor) => (
-            <DoctorCard key={doctor.id} doctor={doctor} onBook={onBook} />
-          ))}
+          <DoctorCard key={doctor.id} doctor={doctor} onBook={onBook} />
+        ))}
     </div>
   );
 };

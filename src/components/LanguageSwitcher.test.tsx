@@ -208,21 +208,21 @@ describe('LanguageSwitcher', () => {
       expect(deutschButton).not.toHaveStyle({ fontWeight: '600' });
     });
 
-      it('updates active indicator when language changes', () => {
-        const { rerender } = renderWithProviders(<LanguageSwitcher />);
-        (useLocalization as unknown as jest.Mock).mockReturnValue({
-          language: 'de',
-          setLanguage: mockSetLanguage,
-        });
-        rerender(
-          <ThemeContext.Provider value={{ theme: 'light', setTheme: () => {} }}>
-            <LocalizationClientProvider initialLanguage="de">
-              <LanguageSwitcher />
-            </LocalizationClientProvider>
-          </ThemeContext.Provider>
-        );
-        expect(screen.getByText('Deutsch')).toBeInTheDocument();
+    it('updates active indicator when language changes', () => {
+      const { rerender } = renderWithProviders(<LanguageSwitcher />);
+      (useLocalization as unknown as jest.Mock).mockReturnValue({
+        language: 'de',
+        setLanguage: mockSetLanguage,
       });
+      rerender(
+        <ThemeContext.Provider value={{ theme: 'light', setTheme: () => {} }}>
+          <LocalizationClientProvider initialLanguage="de">
+            <LanguageSwitcher />
+          </LocalizationClientProvider>
+        </ThemeContext.Provider>
+      );
+      expect(screen.getByText('Deutsch')).toBeInTheDocument();
+    });
   });
 
   describe('language direction display', () => {
@@ -273,12 +273,12 @@ describe('LanguageSwitcher', () => {
 
   describe('mouse interactions', () => {
     it('shows hover effect on language options', () => {
-  renderWithProviders(<LanguageSwitcher />);
-  const button = screen.getByRole('button', { name: /language selector/i });
-  fireEvent.click(button);
-  const languageOption = screen.getByRole('button', { name: /switch to deutsch/i });
-  fireEvent.mouseEnter(languageOption);
-  expect(languageOption).toBeInTheDocument();
+      renderWithProviders(<LanguageSwitcher />);
+      const button = screen.getByRole('button', { name: /language selector/i });
+      fireEvent.click(button);
+      const languageOption = screen.getByRole('button', { name: /switch to deutsch/i });
+      fireEvent.mouseEnter(languageOption);
+      expect(languageOption).toBeInTheDocument();
     });
 
     it('button responds to mouse enter', () => {

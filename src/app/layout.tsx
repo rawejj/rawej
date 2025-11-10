@@ -40,11 +40,11 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         />
       </head>
       <body suppressHydrationWarning className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
-          <LocalizationClientProvider>
-            <ThemeClientProvider>
-              {children}
-            </ThemeClientProvider>
-          </LocalizationClientProvider>
+        <LocalizationClientProvider>
+          <ThemeClientProvider>
+            {children}
+          </ThemeClientProvider>
+        </LocalizationClientProvider>
       </body>
     </html>
   );

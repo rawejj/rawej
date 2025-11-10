@@ -42,49 +42,49 @@ describe('LocalizationClientProvider', () => {
   describe('initial language detection', () => {
     it('uses initialLanguage prop when provided', () => {
       mockUsePathname.mockReturnValue('/en/doctors');
-        render(
-          <LocalizationContext.Provider value={{ language: 'en', config: { label: 'English', direction: 'ltr', dateFormat: 'MM/DD/YYYY', timezone: 'UTC' }, setLanguage: () => {} }}>
-            <LocalizationClientProvider initialLanguage={"fa" as LanguageKey}>
-              <TestComponent />
-            </LocalizationClientProvider>
-          </LocalizationContext.Provider>
-        );
-        expect(screen.getByTestId('language')).toHaveTextContent('fa');
+      render(
+        <LocalizationContext.Provider value={{ language: 'en', config: { label: 'English', direction: 'ltr', dateFormat: 'MM/DD/YYYY', timezone: 'UTC' }, setLanguage: () => {} }}>
+          <LocalizationClientProvider initialLanguage={"fa" as LanguageKey}>
+            <TestComponent />
+          </LocalizationClientProvider>
+        </LocalizationContext.Provider>
+      );
+      expect(screen.getByTestId('language')).toHaveTextContent('fa');
     });
 
     it('detects language from pathname', () => {
       mockUsePathname.mockReturnValue('/fr/doctors');
-        render(
-          <LocalizationContext.Provider value={{ language: 'fr', config: { label: 'French', direction: 'ltr', dateFormat: 'DD/MM/YYYY', timezone: 'Europe/Paris' }, setLanguage: () => {} }}>
-            <LocalizationClientProvider>
-              <TestComponent />
-            </LocalizationClientProvider>
-          </LocalizationContext.Provider>
-        );
+      render(
+        <LocalizationContext.Provider value={{ language: 'fr', config: { label: 'French', direction: 'ltr', dateFormat: 'DD/MM/YYYY', timezone: 'Europe/Paris' }, setLanguage: () => {} }}>
+          <LocalizationClientProvider>
+            <TestComponent />
+          </LocalizationClientProvider>
+        </LocalizationContext.Provider>
+      );
       expect(screen.getByTestId('language')).toHaveTextContent('fr');
     });
 
     it('uses default language when path has no language', () => {
       mockUsePathname.mockReturnValue('/doctors');
-        render(
-          <LocalizationContext.Provider value={{ language: 'en', config: { label: 'English', direction: 'ltr', dateFormat: 'MM/DD/YYYY', timezone: 'UTC' }, setLanguage: () => {} }}>
-            <LocalizationClientProvider>
-              <TestComponent />
-            </LocalizationClientProvider>
-          </LocalizationContext.Provider>
-        );
+      render(
+        <LocalizationContext.Provider value={{ language: 'en', config: { label: 'English', direction: 'ltr', dateFormat: 'MM/DD/YYYY', timezone: 'UTC' }, setLanguage: () => {} }}>
+          <LocalizationClientProvider>
+            <TestComponent />
+          </LocalizationClientProvider>
+        </LocalizationContext.Provider>
+      );
       expect(screen.getByTestId('language')).toBeInTheDocument();
     });
 
     it('uses default language when detected language is not valid', () => {
       mockUsePathname.mockReturnValue('/invalid/doctors');
-        render(
-          <LocalizationContext.Provider value={{ language: 'en', config: { label: 'English', direction: 'ltr', dateFormat: 'MM/DD/YYYY', timezone: 'UTC' }, setLanguage: () => {} }}>
-            <LocalizationClientProvider>
-              <TestComponent />
-            </LocalizationClientProvider>
-          </LocalizationContext.Provider>
-        );
+      render(
+        <LocalizationContext.Provider value={{ language: 'en', config: { label: 'English', direction: 'ltr', dateFormat: 'MM/DD/YYYY', timezone: 'UTC' }, setLanguage: () => {} }}>
+          <LocalizationClientProvider>
+            <TestComponent />
+          </LocalizationClientProvider>
+        </LocalizationContext.Provider>
+      );
       expect(screen.getByTestId('language')).toBeInTheDocument();
     });
   });
@@ -105,7 +105,7 @@ describe('LocalizationClientProvider', () => {
         </LocalizationClientProvider>
       );
 
-  const switchButton = screen.getByRole('button', { name: 'Switch to Persian' });
+      const switchButton = screen.getByRole('button', { name: 'Switch to Persian' });
       fireEvent.click(switchButton);
 
       await waitFor(() => {
@@ -128,7 +128,7 @@ describe('LocalizationClientProvider', () => {
         </LocalizationClientProvider>
       );
 
-  const switchButton = screen.getByRole('button', { name: 'Switch to Persian' });
+      const switchButton = screen.getByRole('button', { name: 'Switch to Persian' });
       fireEvent.click(switchButton);
 
       await waitFor(() => {
@@ -151,7 +151,7 @@ describe('LocalizationClientProvider', () => {
         </LocalizationClientProvider>
       );
 
-  const switchButton = screen.getByRole('button', { name: 'Switch to Persian' });
+      const switchButton = screen.getByRole('button', { name: 'Switch to Persian' });
       fireEvent.click(switchButton);
 
       await waitFor(() => {
@@ -202,7 +202,7 @@ describe('LocalizationClientProvider', () => {
         </LocalizationClientProvider>
       );
 
-  const switchButton = screen.getByRole('button', { name: 'Switch to Persian' });
+      const switchButton = screen.getByRole('button', { name: 'Switch to Persian' });
       fireEvent.click(switchButton);
 
       await waitFor(() => {
@@ -226,7 +226,7 @@ describe('LocalizationClientProvider', () => {
     });
 
     it('provides correct config for language', async () => {
-  mockUsePathname.mockReturnValue('/fa');
+      mockUsePathname.mockReturnValue('/fa');
       render(
         <LocalizationClientProvider>
           <TestComponent />

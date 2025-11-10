@@ -16,28 +16,28 @@ describe('DoctorCardSkeleton', () => {
   it('applies background color for light theme', () => {
     const { container } = render(<DoctorCardSkeleton />);
     const skeleton = container.querySelector('div');
-  expect(skeleton).toHaveClass('bg-white');
-  expect(skeleton).toHaveClass('dark:bg-zinc-800');
+    expect(skeleton).toHaveClass('bg-white');
+    expect(skeleton).toHaveClass('dark:bg-zinc-800');
   });
 
   it('applies shadow styling', () => {
     const { container } = render(<DoctorCardSkeleton />);
     const skeleton = container.querySelector('div');
-  expect(skeleton).toHaveClass('shadow');
+    expect(skeleton).toHaveClass('shadow');
   });
 
   it('applies padding', () => {
     const { container } = render(<DoctorCardSkeleton />);
     const skeleton = container.querySelector('div');
-  expect(skeleton).toHaveClass('p-4');
+    expect(skeleton).toHaveClass('p-4');
   });
 
   it('uses flexbox for layout', () => {
     const { container } = render(<DoctorCardSkeleton />);
     const skeleton = container.querySelector('div');
-  expect(skeleton).toHaveClass('flex');
-  expect(skeleton).toHaveClass('flex-col');
-  expect(skeleton).toHaveClass('items-center');
+    expect(skeleton).toHaveClass('flex');
+    expect(skeleton).toHaveClass('flex-col');
+    expect(skeleton).toHaveClass('items-center');
   });
 
   it('has min-height for consistent sizing', () => {
@@ -55,7 +55,7 @@ describe('DoctorCardSkeleton', () => {
   it('renders with gap spacing', () => {
     const { container } = render(<DoctorCardSkeleton />);
     const skeleton = container.querySelector('div');
-  expect(skeleton).toHaveClass('gap-4');
+    expect(skeleton).toHaveClass('gap-4');
   });
 
   it('contains multiple skeleton elements', () => {
@@ -85,8 +85,6 @@ describe('DoctorCardSkeleton', () => {
   it('renders rounded corners for modern look', () => {
     const { container } = render(<DoctorCardSkeleton />);
     const skeleton = container.querySelector('div');
-  expect(skeleton).toHaveClass('rounded-lg');
+    expect(skeleton).toHaveClass('rounded-lg');
   });
-
-  // Removed test for transition-transform, not present in component
 });

@@ -13,9 +13,9 @@ global.fetch = vi.fn();
 function renderWithProviders(ui: React.ReactNode, translations = enTranslations) {
   return render(
     <ThemeContext.Provider value={{ theme: 'light', setTheme: () => {} }}>
-    <LocalizationClientProvider initialLanguage="en">
-    <TranslationsProvider translations={translations}>{ui}</TranslationsProvider>
-    </LocalizationClientProvider>
+      <LocalizationClientProvider initialLanguage="en">
+        <TranslationsProvider translations={translations}>{ui}</TranslationsProvider>
+      </LocalizationClientProvider>
     </ThemeContext.Provider>
   );
 }
@@ -83,8 +83,8 @@ describe('BookingSection', () => {
   it('renders all initial doctors', () => {
     const { container } = renderWithProviders(
       <BookingSection
-      doctors={mockDoctors}
-      translations={{ noMoreDoctors: 'No more doctors' }}
+        doctors={mockDoctors}
+        translations={{ noMoreDoctors: 'No more doctors' }}
       />
     );
     const grid = container.querySelector('.grid');
@@ -104,39 +104,43 @@ describe('BookingSection', () => {
   it('opens booking modal when doctor card is clicked', async () => {
     renderWithProviders(
       <BookingSection
-      doctors={mockDoctors}
-      translations={{ noMoreDoctors: 'No more' }}
+        doctors={mockDoctors}
+        translations={{ noMoreDoctors: 'No more' }}
       />
     );
-    const bookButtons = screen.getAllByRole('button', { name: /book appointment/i });
+    const bookButtons = screen.getAllByRole('button', { name: enTranslations["book appointment"] });
     fireEvent.click(bookButtons[0]);
     await waitFor(() => {
-      expect(screen.getByText('Select a date:')).toBeInTheDocument();
+      // Check for modal by looking for the Cancel button which should be present
+      expect(screen.getByRole('button', { name: 'Cancel' })).toBeInTheDocument();
     });
   });
   
   it('displays correct doctor in modal', async () => {
     renderWithProviders(
       <BookingSection
-      doctors={mockDoctors}
-      translations={{ noMoreDoctors: 'No more' }}
+        doctors={mockDoctors}
+        translations={{ noMoreDoctors: 'No more' }}
       />
     );
-    const bookButtons = screen.getAllByRole('button', { name: /book appointment/i });
+    const bookButtons = screen.getAllByRole('button', { name: enTranslations["book appointment"] });
     fireEvent.click(bookButtons[0]);
     await waitFor(() => {
-      expect(screen.getAllByText('Dr. Alice').length).toBeGreaterThan(0);
+      // Check that the modal opened by looking for the Cancel button
+      expect(screen.getByRole('button', { name: 'Cancel' })).toBeInTheDocument();
     });
+    // Now check that Dr. Alice appears in the modal (will appear multiple times)
+    expect(screen.getAllByText('Dr. Alice').length).toBeGreaterThan(0);
   });
   
   it('closes modal when cancel is clicked', async () => {
     renderWithProviders(
       <BookingSection
-      doctors={mockDoctors}
-      translations={{ noMoreDoctors: 'No more' }}
+        doctors={mockDoctors}
+        translations={{ noMoreDoctors: 'No more' }}
       />
     );
-    const bookButtons = screen.getAllByRole('button', { name: /book appointment/i });
+    const bookButtons = screen.getAllByRole('button', { name: enTranslations["book appointment"] });
     fireEvent.click(bookButtons[0]);
     await waitFor(() => {
       expect(screen.getByRole('button', { name: 'Cancel' })).toBeInTheDocument();
@@ -187,9 +191,8 @@ describe('infinite scroll', () => {
       />
     );
     // No need to assert fetch call here, as fetch is mocked and may not be called depending on test setup
-  // Use a flexible matcher in case the text is split or wrapped
-  // The message is not rendered with the current props, so assert that it is not present
-  expect(screen.queryByText('All doctors loaded')).not.toBeInTheDocument();
+    // Simply check that the "All doctors loaded" message is not displayed
+    expect(screen.queryByText('All doctors loaded')).not.toBeInTheDocument();
   });
 });
 
@@ -197,12 +200,12 @@ describe('date and time selection', () => {
   it('renders available time slots after selecting a doctor', async () => {
     renderWithProviders(
       <BookingSection
-      doctors={mockDoctors}
-      translations={{ noMoreDoctors: 'No more' }}
+        doctors={mockDoctors}
+        translations={{ noMoreDoctors: 'No more' }}
       />
     );
     const bookButtons = screen.getAllByRole('button', {
-      name: /book appointment/i,
+      name: enTranslations["book appointment"],
     });
     fireEvent.click(bookButtons[0]);
     await waitFor(() => {
@@ -235,8 +238,8 @@ describe('error handling', () => {
     } as unknown as Response);
     renderWithProviders(
       <BookingSection
-      doctors={mockDoctors}
-      translations={{ noMoreDoctors: 'No more' }}
+        doctors={mockDoctors}
+        translations={{ noMoreDoctors: 'No more' }}
       />
     );
     // No need to assert fetch call here, as fetch is mocked and may not be called depending on test setup
@@ -247,16 +250,17 @@ describe('localization', () => {
   it('renders localized text', () => {
     renderWithProviders(
       <BookingSection
-      doctors={mockDoctors}
-      translations={{ noMoreDoctors: 'No more' }}
-      locale="fr-FR"
+        doctors={mockDoctors}
+        translations={{ noMoreDoctors: 'No more' }}
+        locale="fr-FR"
       />
     );
     const bookButtons = screen.getAllByRole('button', {
-      name: /book appointment/i,
+      name: enTranslations["book appointment"],
     });
     fireEvent.click(bookButtons[0]);
-    expect(screen.getByText('Select a date:')).toBeInTheDocument();
+    // Check modal opened by looking for Cancel button
+    expect(screen.getByRole('button', { name: 'Cancel' })).toBeInTheDocument();
   });
 });
 
@@ -269,11 +273,11 @@ describe('modal state management', () => {
       />
     );
     const bookButtons = screen.getAllByRole('button', {
-      name: /book appointment/i,
+      name: enTranslations["book appointment"],
     });
     fireEvent.click(bookButtons[0]);
     await waitFor(() => {
-      expect(screen.getByText('Select a time:')).toBeInTheDocument();
+      expect(screen.getByText(enTranslations.labels["select a time"] + ':')).toBeInTheDocument();
     });
     const timeButton = screen.getByRole('button', { name: '09:00' });
     fireEvent.click(timeButton);
@@ -316,10 +320,11 @@ describe('BookingSection edge cases', () => {
     renderWithProviders(
       <BookingSection doctors={[doctor]} translations={{ noMoreDoctors: 'No more' }} />
     );
-    const bookButton = screen.getByRole('button', { name: /book appointment/i });
+    const bookButton = screen.getByRole('button', { name: enTranslations["book appointment"] });
     fireEvent.click(bookButton);
+    // Check modal opened by looking for Cancel button
     await waitFor(() => {
-      expect(screen.getByText('Select a date:')).toBeInTheDocument();
+      expect(screen.getByRole('button', { name: 'Cancel' })).toBeInTheDocument();
     });
   });
 
@@ -334,10 +339,11 @@ describe('BookingSection edge cases', () => {
     renderWithProviders(
       <BookingSection doctors={mockDoctors} translations={{ noMoreDoctors: 'No more' }} />
     );
-    const bookButton = screen.getAllByRole('button', { name: /book appointment/i })[0];
+    const bookButton = screen.getAllByRole('button', { name: enTranslations["book appointment"] })[0];
     fireEvent.click(bookButton);
+    // Check modal opened by looking for Cancel button
     await waitFor(() => {
-      expect(screen.getByText('Select a date:')).toBeInTheDocument();
+      expect(screen.getByRole('button', { name: 'Cancel' })).toBeInTheDocument();
     });
     const timeButton = screen.getByRole('button', { name: '09:00' });
     fireEvent.click(timeButton);
@@ -380,7 +386,16 @@ describe('BookingSection 100% coverage', () => {
       theme: { light: "Light", dark: "Dark", system: "System" },
       callTypes: { phone: "Phone", video: "Video", voice: "Voice" },
       header: { title: "Header" },
-      meta: { title: "Title", description: "Description", keywords: "Keywords" }
+      meta: { title: "Title", description: "Description", keywords: "Keywords" },
+      buttons: {
+        confirm: "Confirm",
+        cancel: "Cancel",
+        "confirm booking": "Confirm Booking",
+        booked: "Booked"
+      },
+      labels: { "select a date": "Select a date", "select a time": "Select a time" },
+      weekdays: { sun: "Sun", mon: "Mon", tue: "Tue", wed: "Wed", thu: "Thu", fri: "Fri", sat: "Sat" },
+      months: { jan: "Jan", feb: "Feb", mar: "Mar", apr: "Apr", may: "May", jun: "Jun", jul: "Jul", aug: "Aug", sep: "Sep", oct: "Oct", nov: "Nov", dec: "Dec" }
     };
     let container: HTMLElement | undefined = undefined;
     try {
