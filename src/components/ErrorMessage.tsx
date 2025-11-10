@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 
-export default function ErrorMessage({ error }: { error: string }) {
+export default function ErrorMessage({ error, translations }: { error: string; translations?: Record<string,string> }) {
   const [loading, setLoading] = useState(false);
 
   const handleRetry = () => {
@@ -14,7 +14,7 @@ export default function ErrorMessage({ error }: { error: string }) {
     <div className="max-w-xl mx-auto mt-12 p-6 flex flex-col items-center gap-4 bg-linear-to-br from-red-100 via-pink-100 to-orange-100 dark:from-zinc-900 dark:via-zinc-800 dark:to-zinc-700 border border-red-300 dark:border-red-700 rounded-2xl shadow-lg animate-in fade-in">
       <div className="flex items-center gap-3">
         <svg width="32" height="32" viewBox="0 0 24 24" fill="none" className="text-red-500 dark:text-red-400"><circle cx="12" cy="12" r="10" fill="currentColor" opacity="0.15"/><path d="M12 8v4m0 4h.01" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/></svg>
-        <span className="text-lg font-semibold text-red-700 dark:text-red-400">Error loading doctors</span>
+        <span className="text-lg font-semibold text-red-700 dark:text-red-400">{translations?.errorLoadingDoctors ?? 'Error loading doctors'}</span>
       </div>
       <div className="text-base text-red-600 dark:text-red-300 text-center">{error}</div>
       <button
@@ -28,7 +28,7 @@ export default function ErrorMessage({ error }: { error: string }) {
             Loading...
           </span>
         ) : (
-          "Retry"
+          translations?.retry ?? "Retry"
         )}
       </button>
     </div>

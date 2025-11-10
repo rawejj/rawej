@@ -1,7 +1,8 @@
 "use client";
 
 import { useEffect, useState, useCallback } from 'react';
-import { ThemeContext, Theme } from "./ThemeProvider";
+import { Theme } from "./ThemeProvider";
+import { ThemeContext } from "./ThemeContext";
 
 const getSystemTheme = () =>
   window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';

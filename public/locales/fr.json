@@ -1,0 +1,53 @@
+{
+  "book appointment": "Prendre rendez-vous",
+  "theme": {
+    "light": "Clair",
+    "dark": "Sombre",
+    "system": "Auto"
+  },
+  "callTypes": {
+    "phone": "Téléphone",
+    "video": "Vidéo",
+    "voice": "Voix"
+  },
+  "header": {
+    "title": "Système de rendez-vous médical"
+  },
+  "meta": {
+    "title": "Système de rendez-vous médical - Réserver en ligne",
+    "description": "Prenez rendez-vous avec des médecins qualifiés en ligne. Choisissez parmi les consultations par téléphone, vidéo ou voix.",
+    "keywords": "médecin, rendez-vous, réservation en ligne, télémédecine, santé"
+  },
+  "buttons": {
+    "confirm booking": "Confirmer la réservation",
+    "booked": "Réservé",
+    "cancel": "Annuler"
+  },
+  "labels": {
+    "select a date": "date à sélectionner",
+    "select a time": "heure à sélectionner"
+  },
+  "weekdays": {
+    "sun": "Dim",
+    "mon": "Lun",
+    "tue": "Mar",
+    "wed": "Mer",
+    "thu": "Jeu",
+    "fri": "Ven",
+    "sat": "Sam"
+  },
+  "months": {
+    "jan": "Janv",
+    "feb": "Févr",
+    "mar": "Mars",
+    "apr": "Avr",
+    "may": "Mai",
+    "jun": "Juin",
+    "jul": "Juil",
+    "aug": "Août",
+    "sep": "Sept",
+    "oct": "Oct",
+    "nov": "Nov",
+    "dec": "Déc"
+  }
+}

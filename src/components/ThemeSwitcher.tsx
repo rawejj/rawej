@@ -1,7 +1,10 @@
 "use client";
 
-import React, { useContext, useState } from 'react';
-import { ThemeContext, Theme } from '@/providers/ThemeProvider';
+import React, { useContext, useState, useSyncExternalStore } from 'react';
+import { Theme } from '@/providers/ThemeProvider';
+import { ThemeContext } from '@/providers/ThemeContext';
+import { DropdownMenu } from './DropdownMenu';
+import { useTranslations } from '@/providers/TranslationsProvider';
 
 const themes: Theme[] = ['light', 'dark', 'system'];
 
@@ -46,17 +49,18 @@ const icons: Record<Theme, React.FC> = {
   system: SystemIcon,
 };
 
-const labels: Record<Theme, string> = {
-  light: 'Light',
-  dark: 'Dark',
-  system: 'Auto',
-};
-
 export const ThemeSwitcher: React.FC = () => {
+  const { t } = useTranslations();
   const { theme, setTheme } = useContext(ThemeContext);
   const [isOpen, setIsOpen] = useState(false);
   const CurrentIcon = icons[theme];
 
+  // Use useSyncExternalStore to safely handle client-only rendering
+  const mounted = useSyncExternalStore(
+    () => () => {},
+    () => true,
+    () => false
+  );
 
   // Use CSS variables for background/foreground
   const getBg = () => {
@@ -71,10 +75,11 @@ export const ThemeSwitcher: React.FC = () => {
   };
 
   return (
-    <div style={{ position: 'relative' }}>
+    <div style={{ position: 'relative' }} suppressHydrationWarning>
       {/* Toggle Button */}
       <button
         onClick={() => setIsOpen(!isOpen)}
+        suppressHydrationWarning
         style={{
           display: 'flex',
           alignItems: 'center',
@@ -103,109 +108,86 @@ export const ThemeSwitcher: React.FC = () => {
         aria-label="Theme selector"
         aria-expanded={isOpen}
       >
-        <CurrentIcon />
-        <span>{labels[theme]}</span>
+        {mounted ? <CurrentIcon /> : null}
+        <span suppressHydrationWarning>{mounted ? t(`theme.${theme}`) : 'Auto'}</span>
         <ChevronIcon />
       </button>
-
-      {/* Dropdown Menu */}
-      {isOpen && (
-        <>
-          {/* Backdrop to close dropdown */}
-          <div
-            data-testid="theme-switcher-backdrop"
-            onClick={() => setIsOpen(false)}
-            style={{
-              position: 'fixed',
-              inset: 0,
-              zIndex: 999,
-            }}
-          />
-          
-          {/* Dropdown */}
-          <div
-            role="menu"
-            style={{
-              position: 'absolute',
-              top: 'calc(100% + 0.5rem)',
-              right: 0,
-              minWidth: '160px',
-              borderRadius: '12px',
-              background: getBg(),
-              backdropFilter: 'blur(12px)',
-              boxShadow: theme === 'dark'
-                ? '0 8px 24px rgba(0,0,0,0.42), 0 2px 6px rgba(0,0,0,0.18)'
-                : '0 8px 24px rgba(0,0,0,0.12), 0 2px 6px rgba(0,0,0,0.08)',
-              border: '1px solid rgba(0, 0, 0, 0.08)',
-              overflow: 'hidden',
-              zIndex: 1000,
-              animation: 'slideIn 0.2s ease-out',
-            }}
-          >
-            {themes.map((t, index) => {
-              const Icon = icons[t];
-              const isActive = theme === t;
-              return (
-                <button
-                  key={t}
-                  onClick={() => {
-                    setTheme(t);
-                    setIsOpen(false);
-                  }}
-                  style={{
-                    width: '100%',
-                    display: 'flex',
-                    alignItems: 'center',
-                    gap: '0.75rem',
-                    padding: '0.75rem 1rem',
-                    border: 'none',
-                    background: isActive 
-                      ? 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)'
-                      : 'transparent',
-                    color: isActive ? '#fff' : getFg(),
-                    fontSize: '0.875rem',
-                    fontWeight: isActive ? '600' : '500',
-                    cursor: 'pointer',
-                    transition: 'all 0.15s',
-                    textAlign: 'left',
-                    borderTop: index > 0 ? '1px solid rgba(0, 0, 0, 0.05)' : 'none',
-                  }}
-                  onMouseEnter={(e) => {
-                    if (!isActive) {
-                      e.currentTarget.style.background = theme === 'dark' ? 'rgba(255,255,255,0.04)' : 'rgba(0, 0, 0, 0.04)';
-                    }
-                  }}
-                  onMouseLeave={(e) => {
-                    if (!isActive) {
-                      e.currentTarget.style.background = 'transparent';
-                    }
-                  }}
-                  aria-label={`Switch to ${labels[t]} theme`}
+      <DropdownMenu
+        isOpen={isOpen}
+        onClose={() => setIsOpen(false)}
+        style={{
+          minWidth: '160px',
+          background: getBg(),
+          backdropFilter: 'blur(12px)',
+          boxShadow: theme === 'dark'
+            ? '0 8px 24px rgba(0,0,0,0.42), 0 2px 6px rgba(0,0,0,0.18)'
+            : '0 8px 24px rgba(0,0,0,0.12), 0 2px 6px rgba(0,0,0,0.08)',
+          border: '1px solid rgba(0, 0, 0, 0.08)',
+          color: getFg(),
+        }}
+        backdropTestId="theme-switcher-backdrop"
+      >
+        {themes.map((themeOption, index) => {
+          const Icon = icons[themeOption];
+          const isActive = theme === themeOption;
+          return (
+            <button
+              key={themeOption}
+              onClick={() => {
+                setTheme(themeOption);
+                setIsOpen(false);
+              }}
+              style={{
+                width: '100%',
+                display: 'flex',
+                alignItems: 'center',
+                gap: '0.75rem',
+                padding: '0.75rem 1rem',
+                border: 'none',
+                background: isActive 
+                  ? 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)'
+                  : 'transparent',
+                color: isActive ? '#fff' : getFg(),
+                fontSize: '0.875rem',
+                fontWeight: isActive ? '600' : '500',
+                cursor: 'pointer',
+                transition: 'all 0.15s',
+                textAlign: 'left',
+                borderTop: index > 0 ? '1px solid rgba(0, 0, 0, 0.05)' : 'none',
+              }}
+              onMouseEnter={(e) => {
+                if (!isActive) {
+                  e.currentTarget.style.background = theme === 'dark' ? 'rgba(255,255,255,0.04)' : 'rgba(0, 0, 0, 0.04)';
+                }
+              }}
+              onMouseLeave={(e) => {
+                if (!isActive) {
+                  e.currentTarget.style.background = 'transparent';
+                }
+              }}
+              aria-label={`Switch to ${t(`theme.${themeOption}`)} theme`}
+            >
+              <Icon />
+              <span>{t(`theme.${themeOption}`)}</span>
+              {isActive && (
+                <svg 
+                  width="14" 
+                  height="14" 
+                  viewBox="0 0 24 24" 
+                  fill="none" 
+                  stroke="currentColor" 
+                  strokeWidth="3" 
+                  strokeLinecap="round" 
+                  strokeLinejoin="round"
+                  style={{ marginLeft: 'auto' }}
                 >
-                  <Icon />
-                  <span>{labels[t]}</span>
-                  {isActive && (
-                    <svg 
-                      width="14" 
-                      height="14" 
-                      viewBox="0 0 24 24" 
-                      fill="none" 
-                      stroke="currentColor" 
-                      strokeWidth="3" 
-                      strokeLinecap="round" 
-                      strokeLinejoin="round"
-                      style={{ marginLeft: 'auto' }}
-                    >
-                      <polyline points="20 6 9 17 4 12"/>
-                    </svg>
-                  )}
-                </button>
-              );
-            })}
-          </div>
-        </>
-      )}
-      
+                  <polyline points="20 6 9 17 4 12"/>
+                </svg>
+              )}
+            </button>
+          );
+        })}
+      </DropdownMenu>
       <style jsx>{`
         @keyframes slideIn {
           from {
