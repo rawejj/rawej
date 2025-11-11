@@ -1,13 +1,15 @@
 "use client";
 
-import { useContext } from 'react';
-import { LocalizationContext } from './LocalizationContext';
+import { useContext } from "react";
+import { LocalizationContext } from "./LocalizationContext";
 
 export function useLocalization() {
   const ctx = useContext(LocalizationContext);
   if (!ctx) {
-    throw new Error('useLocalization must be used within LocalizationClientProvider');
+    throw new Error(
+      "useLocalization must be used within LocalizationClientProvider",
+    );
   }
-  
+
   return ctx;
 }

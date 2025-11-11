@@ -1,4 +1,3 @@
-
 import ErrorMessage from "@/components/ErrorMessage";
 import Footer from "@/components/Footer";
 import Header from "@/components/Header";
@@ -19,7 +18,7 @@ type DoctorsApiResponse = {
 };
 
 // Enable ISR: revalidate in the background
-export const revalidate = parseInt(process.env.ISR_REVALIDATE || '60', 10);
+export const revalidate = parseInt(process.env.ISR_REVALIDATE || "60", 10);
 
 export default async function Home() {
   // Always use default language (English)
@@ -29,17 +28,28 @@ export default async function Home() {
   let doctors: Doctor[] = [];
   let error: string | null = null;
   try {
-    const revalidateTime = parseInt(process.env.ISR_REVALIDATE || '60', 10);
-    const res = await httpClient(`${process.env.NEXT_PUBLIC_API_URL}/doctors?page=1&limit=9`, { 
-      next: { tags: ['doctors'], revalidate: revalidateTime }
-    });
-    if (typeof res === "object" && res !== null && "success" in res && "data" in res && Array.isArray((res as DoctorsApiResponse).data)) {
+    const revalidateTime = parseInt(process.env.ISR_REVALIDATE || "60", 10);
+    const res = await httpClient(
+      `${process.env.NEXT_PUBLIC_API_URL}/doctors?page=1&limit=9`,
+      {
+        next: { tags: ["doctors"], revalidate: revalidateTime },
+      },
+    );
+    if (
+      typeof res === "object" &&
+      res !== null &&
+      "success" in res &&
+      "data" in res &&
+      Array.isArray((res as DoctorsApiResponse).data)
+    ) {
       doctors = (res as DoctorsApiResponse).data;
     } else {
-      throw new Error(`Doctors data is not an array. Response: ${JSON.stringify(res)}`);
+      throw new Error(
+        `Doctors data is not an array. Response: ${JSON.stringify(res)}`,
+      );
     }
   } catch (err) {
-    console.error('Doctors API error:', err);
+    console.error("Doctors API error:", err);
     if (err instanceof Error) {
       error = err.message;
     } else {

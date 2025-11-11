@@ -1,41 +1,41 @@
-import { describe, it, expect } from 'vitest';
-import React, { useContext } from 'react';
-import { render, screen } from '@testing-library/react';
-import { LocalizationContext } from './LocalizationContext';
-import type { LocalizationContextValue } from './LocalizationProvider';
+import { describe, it, expect } from "vitest";
+import React, { useContext } from "react";
+import { render, screen } from "@testing-library/react";
+import { LocalizationContext } from "./LocalizationContext";
+import type { LocalizationContextValue } from "./LocalizationProvider";
 
-describe('LocalizationContext', () => {
-  describe('context creation', () => {
-    it('creates a valid context object', () => {
+describe("LocalizationContext", () => {
+  describe("context creation", () => {
+    it("creates a valid context object", () => {
       expect(LocalizationContext).toBeDefined();
-      expect(LocalizationContext._currentValue).toBe(undefined);
     });
 
-    it('is a React Context', () => {
-      expect(LocalizationContext).toHaveProperty('Provider');
-      expect(LocalizationContext).toHaveProperty('Consumer');
+    it("is a React Context", () => {
+      expect(LocalizationContext).toHaveProperty("Provider");
+      expect(LocalizationContext).toHaveProperty("Consumer");
     });
 
-    it('exports a Context.Provider component', () => {
+    it("exports a Context.Provider component", () => {
       const { Provider } = LocalizationContext;
       expect(Provider).toBeDefined();
     });
 
-    it('exports a Context.Consumer component', () => {
+    it("exports a Context.Consumer component", () => {
       const { Consumer } = LocalizationContext;
       expect(Consumer).toBeDefined();
     });
   });
 
-  describe('context usage with Provider', () => {
-    it('provides value through Provider', () => {
+  describe("context usage with Provider", () => {
+    it("provides value through Provider", () => {
       const mockValue: LocalizationContextValue = {
-        language: 'en',
+        language: "en",
         config: {
-          direction: 'ltr',
-          dateFormat: 'MM/DD/YYYY',
-          locale: 'en-US',
-          timezone: 'UTC',
+          label: "English",
+          locale: "en-US",
+          direction: "ltr",
+          dateFormat: "MM/DD/YYYY",
+          timezone: "UTC",
         },
         setLanguage: () => {},
       };
@@ -48,20 +48,21 @@ describe('LocalizationContext', () => {
       render(
         <LocalizationContext.Provider value={mockValue}>
           <TestComponent />
-        </LocalizationContext.Provider>
+        </LocalizationContext.Provider>,
       );
 
-      expect(screen.getByTestId('language')).toHaveTextContent('en');
+      expect(screen.getByTestId("language")).toHaveTextContent("en");
     });
 
-    it('provides config object through context', () => {
+    it("provides config object through context", () => {
       const mockValue: LocalizationContextValue = {
-        language: 'fa',
+        language: "fa",
         config: {
-          direction: 'rtl',
-          dateFormat: 'YYYY/MM/DD',
-          locale: 'fa-IR',
-          timezone: 'Asia/Tehran',
+          label: "Persian",
+          locale: "fa-IR",
+          direction: "rtl",
+          dateFormat: "YYYY/MM/DD",
+          timezone: "Asia/Tehran",
         },
         setLanguage: () => {},
       };
@@ -74,21 +75,22 @@ describe('LocalizationContext', () => {
       render(
         <LocalizationContext.Provider value={mockValue}>
           <TestComponent />
-        </LocalizationContext.Provider>
+        </LocalizationContext.Provider>,
       );
 
-      expect(screen.getByTestId('direction')).toHaveTextContent('rtl');
+      expect(screen.getByTestId("direction")).toHaveTextContent("rtl");
     });
 
-    it('provides setLanguage function through context', () => {
+    it("provides setLanguage function through context", () => {
       let callCount = 0;
       const mockValue: LocalizationContextValue = {
-        language: 'en',
+        language: "en",
         config: {
-          direction: 'ltr',
-          dateFormat: 'MM/DD/YYYY',
-          locale: 'en-US',
-          timezone: 'UTC',
+          label: "English",
+          locale: "en-US",
+          direction: "ltr",
+          dateFormat: "MM/DD/YYYY",
+          timezone: "UTC",
         },
         setLanguage: () => {
           callCount++;
@@ -100,7 +102,7 @@ describe('LocalizationContext', () => {
         return (
           <button
             data-testid="button"
-            onClick={() => context?.setLanguage('de')}
+            onClick={() => context?.setLanguage("de")}
           >
             Switch
           </button>
@@ -110,23 +112,24 @@ describe('LocalizationContext', () => {
       const { getByTestId } = render(
         <LocalizationContext.Provider value={mockValue}>
           <TestComponent />
-        </LocalizationContext.Provider>
+        </LocalizationContext.Provider>,
       );
 
-      getByTestId('button').click();
+      getByTestId("button").click();
       expect(callCount).toBe(1);
     });
   });
 
-  describe('different language configurations', () => {
-    it('supports English localization', () => {
+  describe("different language configurations", () => {
+    it("supports English localization", () => {
       const mockValue: LocalizationContextValue = {
-        language: 'en',
+        language: "en",
         config: {
-          direction: 'ltr',
-          dateFormat: 'MM/DD/YYYY',
-          locale: 'en-US',
-          timezone: 'UTC',
+          label: "English",
+          locale: "en-US",
+          direction: "ltr",
+          dateFormat: "MM/DD/YYYY",
+          timezone: "UTC",
         },
         setLanguage: () => {},
       };
@@ -144,21 +147,22 @@ describe('LocalizationContext', () => {
       render(
         <LocalizationContext.Provider value={mockValue}>
           <TestComponent />
-        </LocalizationContext.Provider>
+        </LocalizationContext.Provider>,
       );
 
-      expect(screen.getByTestId('lang')).toHaveTextContent('en');
-      expect(screen.getByTestId('dir')).toHaveTextContent('ltr');
+      expect(screen.getByTestId("lang")).toHaveTextContent("en");
+      expect(screen.getByTestId("dir")).toHaveTextContent("ltr");
     });
 
-    it('supports Persian localization with RTL', () => {
+    it("supports Persian localization with RTL", () => {
       const mockValue: LocalizationContextValue = {
-        language: 'fa',
+        language: "fa",
         config: {
-          direction: 'rtl',
-          dateFormat: 'YYYY/MM/DD',
-          locale: 'fa-IR',
-          timezone: 'Asia/Tehran',
+          label: "Persian",
+          locale: "fa-IR",
+          direction: "rtl",
+          dateFormat: "YYYY/MM/DD",
+          timezone: "Asia/Tehran",
         },
         setLanguage: () => {},
       };
@@ -176,21 +180,22 @@ describe('LocalizationContext', () => {
       render(
         <LocalizationContext.Provider value={mockValue}>
           <TestComponent />
-        </LocalizationContext.Provider>
+        </LocalizationContext.Provider>,
       );
 
-      expect(screen.getByTestId('lang')).toHaveTextContent('fa');
-      expect(screen.getByTestId('dir')).toHaveTextContent('rtl');
+      expect(screen.getByTestId("lang")).toHaveTextContent("fa");
+      expect(screen.getByTestId("dir")).toHaveTextContent("rtl");
     });
 
-    it('supports German localization', () => {
+    it("supports German localization", () => {
       const mockValue: LocalizationContextValue = {
-        language: 'de',
+        language: "de",
         config: {
-          direction: 'ltr',
-          dateFormat: 'DD.MM.YYYY',
-          locale: 'de-DE',
-          timezone: 'Europe/Berlin',
+          label: "German",
+          locale: "de-DE",
+          direction: "ltr",
+          dateFormat: "DD.MM.YYYY",
+          timezone: "Europe/Berlin",
         },
         setLanguage: () => {},
       };
@@ -203,20 +208,21 @@ describe('LocalizationContext', () => {
       render(
         <LocalizationContext.Provider value={mockValue}>
           <TestComponent />
-        </LocalizationContext.Provider>
+        </LocalizationContext.Provider>,
       );
 
-      expect(screen.getByTestId('locale')).toHaveTextContent('de-DE');
+      expect(screen.getByTestId("locale")).toHaveTextContent("de-DE");
     });
 
-    it('supports Kurdish localization', () => {
+    it("supports Kurdish localization", () => {
       const mockValue: LocalizationContextValue = {
-        language: 'ku-sor',
+        language: "ku-sor",
         config: {
-          direction: 'ltr',
-          dateFormat: 'DD/MM/YYYY',
-          locale: 'ku_IQ',
-          timezone: 'Asia/Baghdad',
+          label: "Kurdi-Sorani",
+          locale: "ku-IQ",
+          direction: "ltr",
+          dateFormat: "DD/MM/YYYY",
+          timezone: "Asia/Baghdad",
         },
         setLanguage: () => {},
       };
@@ -229,39 +235,40 @@ describe('LocalizationContext', () => {
       render(
         <LocalizationContext.Provider value={mockValue}>
           <TestComponent />
-        </LocalizationContext.Provider>
+        </LocalizationContext.Provider>,
       );
 
-      expect(screen.getByTestId('lang')).toHaveTextContent('ku-sor');
+      expect(screen.getByTestId("lang")).toHaveTextContent("ku-sor");
     });
   });
 
-  describe('context default values', () => {
-    it('initializes with undefined when no Provider', () => {
+  describe("context default values", () => {
+    it("initializes with undefined when no Provider", () => {
       const TestComponent = () => {
         const context = useContext(LocalizationContext);
         return (
           <span data-testid="result">
-            {context === undefined ? 'undefined' : 'defined'}
+            {context === undefined ? "undefined" : "defined"}
           </span>
         );
       };
 
       render(<TestComponent />);
 
-      expect(screen.getByTestId('result')).toHaveTextContent('undefined');
+      expect(screen.getByTestId("result")).toHaveTextContent("undefined");
     });
   });
 
-  describe('multiple context consumers', () => {
-    it('provides same value to multiple consumers', () => {
+  describe("multiple context consumers", () => {
+    it("provides same value to multiple consumers", () => {
       const mockValue: LocalizationContextValue = {
-        language: 'en',
+        language: "en",
         config: {
-          direction: 'ltr',
-          dateFormat: 'MM/DD/YYYY',
-          locale: 'en-US',
-          timezone: 'UTC',
+          label: "English",
+          locale: "en-US",
+          direction: "ltr",
+          dateFormat: "MM/DD/YYYY",
+          timezone: "UTC",
         },
         setLanguage: () => {},
       };
@@ -280,39 +287,45 @@ describe('LocalizationContext', () => {
         <LocalizationContext.Provider value={mockValue}>
           <Consumer1 />
           <Consumer2 />
-        </LocalizationContext.Provider>
+        </LocalizationContext.Provider>,
       );
 
-      expect(screen.getByTestId('consumer1')).toHaveTextContent('en');
-      expect(screen.getByTestId('consumer2')).toHaveTextContent('en');
+      expect(screen.getByTestId("consumer1")).toHaveTextContent("en");
+      expect(screen.getByTestId("consumer2")).toHaveTextContent("en");
     });
   });
 
-  describe('context value updates', () => {
-    it('reflects value changes when Provider re-renders', () => {
+  describe("context value updates", () => {
+    it("reflects value changes when Provider re-renders", () => {
       const initialValue: LocalizationContextValue = {
-        language: 'en',
+        language: "en",
         config: {
-          direction: 'ltr',
-          dateFormat: 'MM/DD/YYYY',
-          locale: 'en-US',
-          timezone: 'UTC',
+          label: "English",
+          locale: "en-US",
+          direction: "ltr",
+          dateFormat: "MM/DD/YYYY",
+          timezone: "UTC",
         },
         setLanguage: () => {},
       };
 
       const updatedValue: LocalizationContextValue = {
-        language: 'de',
+        language: "de",
         config: {
-          direction: 'ltr',
-          dateFormat: 'DD.MM.YYYY',
-          locale: 'de-DE',
-          timezone: 'Europe/Berlin',
+          label: "Deutsch",
+          locale: "de-DE",
+          direction: "ltr",
+          dateFormat: "DD.MM.YYYY",
+          timezone: "Europe/Berlin",
         },
         setLanguage: () => {},
       };
 
-      const TestComponent = ({ value }: { value: LocalizationContextValue }) => {
+      const TestComponent = ({
+        value,
+      }: {
+        value: LocalizationContextValue;
+      }) => {
         const Consumer = () => {
           const context = useContext(LocalizationContext);
           return <span data-testid="language">{context?.language}</span>;
@@ -326,33 +339,35 @@ describe('LocalizationContext', () => {
       };
 
       const { rerender } = render(<TestComponent value={initialValue} />);
-      expect(screen.getByTestId('language')).toHaveTextContent('en');
+      expect(screen.getByTestId("language")).toHaveTextContent("en");
 
       rerender(<TestComponent value={updatedValue} />);
-      expect(screen.getByTestId('language')).toHaveTextContent('de');
+      expect(screen.getByTestId("language")).toHaveTextContent("de");
     });
   });
 
-  describe('nested providers', () => {
-    it('inner provider value overrides outer provider', () => {
+  describe("nested providers", () => {
+    it("inner provider value overrides outer provider", () => {
       const outerValue: LocalizationContextValue = {
-        language: 'en',
+        language: "en",
         config: {
-          direction: 'ltr',
-          dateFormat: 'MM/DD/YYYY',
-          locale: 'en-US',
-          timezone: 'UTC',
+          label: "English",
+          locale: "en-US",
+          direction: "ltr",
+          dateFormat: "MM/DD/YYYY",
+          timezone: "UTC",
         },
         setLanguage: () => {},
       };
 
       const innerValue: LocalizationContextValue = {
-        language: 'fa',
+        language: "fa",
         config: {
-          direction: 'rtl',
-          dateFormat: 'YYYY/MM/DD',
-          locale: 'fa-IR',
-          timezone: 'Asia/Tehran',
+          label: "Persian",
+          locale: "fa-IR",
+          direction: "rtl",
+          dateFormat: "YYYY/MM/DD",
+          timezone: "Asia/Tehran",
         },
         setLanguage: () => {},
       };
@@ -369,22 +384,23 @@ describe('LocalizationContext', () => {
               <TestComponent />
             </LocalizationContext.Provider>
           </div>
-        </LocalizationContext.Provider>
+        </LocalizationContext.Provider>,
       );
 
-      expect(screen.getByTestId('language')).toHaveTextContent('fa');
+      expect(screen.getByTestId("language")).toHaveTextContent("fa");
     });
   });
 
-  describe('config property access', () => {
-    it('provides all required config properties', () => {
+  describe("config property access", () => {
+    it("provides all required config properties", () => {
       const mockValue: LocalizationContextValue = {
-        language: 'en',
+        language: "en",
         config: {
-          direction: 'ltr',
-          dateFormat: 'MM/DD/YYYY',
-          locale: 'en-US',
-          timezone: 'UTC',
+          label: "English",
+          locale: "en-US",
+          direction: "ltr",
+          dateFormat: "MM/DD/YYYY",
+          timezone: "UTC",
         },
         setLanguage: () => {},
       };
@@ -394,18 +410,22 @@ describe('LocalizationContext', () => {
         const hasRequiredProps =
           context?.config.direction &&
           context?.config.dateFormat &&
-          context?.config.locale &&
+          context?.config.label &&
           context?.config.timezone;
-        return <span data-testid="check">{hasRequiredProps ? 'complete' : 'incomplete'}</span>;
+        return (
+          <span data-testid="check">
+            {hasRequiredProps ? "complete" : "incomplete"}
+          </span>
+        );
       };
 
       render(
         <LocalizationContext.Provider value={mockValue}>
           <TestComponent />
-        </LocalizationContext.Provider>
+        </LocalizationContext.Provider>,
       );
 
-      expect(screen.getByTestId('check')).toHaveTextContent('complete');
+      expect(screen.getByTestId("check")).toHaveTextContent("complete");
     });
   });
 });

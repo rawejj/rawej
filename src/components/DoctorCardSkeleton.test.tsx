@@ -1,90 +1,90 @@
-import { render } from '@testing-library/react';
-import DoctorCardSkeleton from './DoctorCardSkeleton';
+import { render } from "@testing-library/react";
+import DoctorCardSkeleton from "./DoctorCardSkeleton";
 
-describe('DoctorCardSkeleton', () => {
-  it('renders skeleton container', () => {
+describe("DoctorCardSkeleton", () => {
+  it("renders skeleton container", () => {
     const { container } = render(<DoctorCardSkeleton />);
-    expect(container.querySelector('div')).toBeInTheDocument();
+    expect(container.querySelector("div")).toBeInTheDocument();
   });
 
-  it('renders with rounded styling', () => {
+  it("renders with rounded styling", () => {
     const { container } = render(<DoctorCardSkeleton />);
-    const skeleton = container.querySelector('div');
-    expect(skeleton).toHaveClass('rounded-lg');
+    const skeleton = container.querySelector("div");
+    expect(skeleton).toHaveClass("rounded-lg");
   });
 
-  it('applies background color for light theme', () => {
+  it("applies background color for light theme", () => {
     const { container } = render(<DoctorCardSkeleton />);
-    const skeleton = container.querySelector('div');
-    expect(skeleton).toHaveClass('bg-white');
-    expect(skeleton).toHaveClass('dark:bg-zinc-800');
+    const skeleton = container.querySelector("div");
+    expect(skeleton).toHaveClass("bg-white");
+    expect(skeleton).toHaveClass("dark:bg-zinc-800");
   });
 
-  it('applies shadow styling', () => {
+  it("applies shadow styling", () => {
     const { container } = render(<DoctorCardSkeleton />);
-    const skeleton = container.querySelector('div');
-    expect(skeleton).toHaveClass('shadow');
+    const skeleton = container.querySelector("div");
+    expect(skeleton).toHaveClass("shadow");
   });
 
-  it('applies padding', () => {
+  it("applies padding", () => {
     const { container } = render(<DoctorCardSkeleton />);
-    const skeleton = container.querySelector('div');
-    expect(skeleton).toHaveClass('p-4');
+    const skeleton = container.querySelector("div");
+    expect(skeleton).toHaveClass("p-4");
   });
 
-  it('uses flexbox for layout', () => {
+  it("uses flexbox for layout", () => {
     const { container } = render(<DoctorCardSkeleton />);
-    const skeleton = container.querySelector('div');
-    expect(skeleton).toHaveClass('flex');
-    expect(skeleton).toHaveClass('flex-col');
-    expect(skeleton).toHaveClass('items-center');
+    const skeleton = container.querySelector("div");
+    expect(skeleton).toHaveClass("flex");
+    expect(skeleton).toHaveClass("flex-col");
+    expect(skeleton).toHaveClass("items-center");
   });
 
-  it('has min-height for consistent sizing', () => {
+  it("has min-height for consistent sizing", () => {
     const { container } = render(<DoctorCardSkeleton />);
-    const skeleton = container.querySelector('div');
+    const skeleton = container.querySelector("div");
     expect(skeleton).toBeInTheDocument();
   });
 
-  it('applies dark mode styling', () => {
+  it("applies dark mode styling", () => {
     const { container } = render(<DoctorCardSkeleton />);
-    const skeleton = container.querySelector('div');
-    expect(skeleton).toHaveClass('dark:bg-zinc-800');
+    const skeleton = container.querySelector("div");
+    expect(skeleton).toHaveClass("dark:bg-zinc-800");
   });
 
-  it('renders with gap spacing', () => {
+  it("renders with gap spacing", () => {
     const { container } = render(<DoctorCardSkeleton />);
-    const skeleton = container.querySelector('div');
-    expect(skeleton).toHaveClass('gap-4');
+    const skeleton = container.querySelector("div");
+    expect(skeleton).toHaveClass("gap-4");
   });
 
-  it('contains multiple skeleton elements', () => {
+  it("contains multiple skeleton elements", () => {
     const { container } = render(<DoctorCardSkeleton />);
-    const elements = container.querySelectorAll('.animate-pulse');
+    const elements = container.querySelectorAll(".animate-pulse");
     expect(elements.length).toBeGreaterThan(0);
   });
 
-  it('applies animate-pulse class for skeleton effect', () => {
+  it("applies animate-pulse class for skeleton effect", () => {
     const { container } = render(<DoctorCardSkeleton />);
-    const pulseElements = container.querySelectorAll('.animate-pulse');
+    const pulseElements = container.querySelectorAll(".animate-pulse");
     expect(pulseElements.length).toBeGreaterThan(0);
   });
 
-  it('renders without crashing', () => {
+  it("renders without crashing", () => {
     expect(() => render(<DoctorCardSkeleton />)).not.toThrow();
   });
 
-  it('maintains consistent card height', () => {
+  it("maintains consistent card height", () => {
     const { container } = render(<DoctorCardSkeleton />);
-    const skeleton = container.querySelector('div');
+    const skeleton = container.querySelector("div");
     expect(skeleton).toBeInTheDocument();
     // The actual component uses 'p-4', not 'p-6'
-    expect(skeleton).toHaveClass('p-4');
+    expect(skeleton).toHaveClass("p-4");
   });
 
-  it('renders rounded corners for modern look', () => {
+  it("renders rounded corners for modern look", () => {
     const { container } = render(<DoctorCardSkeleton />);
-    const skeleton = container.querySelector('div');
-    expect(skeleton).toHaveClass('rounded-lg');
+    const skeleton = container.querySelector("div");
+    expect(skeleton).toHaveClass("rounded-lg");
   });
 });

@@ -21,7 +21,8 @@
   "buttons": {
     "confirm booking": "Confirmer la réservation",
     "booked": "Réservé",
-    "cancel": "Annuler"
+    "cancel": "Annuler",
+    "retry": "Réessayer"
   },
   "labels": {
     "select a date": "date à sélectionner",

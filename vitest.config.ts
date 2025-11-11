@@ -1,19 +1,19 @@
-import { defineConfig } from 'vitest/config';
-import path from 'path';
+import { defineConfig } from "vitest/config";
+import path from "path";
 
 export default defineConfig({
   resolve: {
     alias: {
-      '@': path.resolve(__dirname, './src'),
+      "@": path.resolve(__dirname, "./src"),
     },
   },
   test: {
-    environment: 'jsdom',
+    environment: "jsdom",
     globals: true,
-    setupFiles: ['./setupTests.ts'],
-    exclude: ['public/**', 'node_modules/**'],
+    setupFiles: ["./setupTests.ts"],
+    exclude: ["public/**", "node_modules/**"],
     coverage: {
-      exclude: ['public/**', 'node_modules/**'],
+      exclude: ["public/**", "node_modules/**"],
     },
   },
 });

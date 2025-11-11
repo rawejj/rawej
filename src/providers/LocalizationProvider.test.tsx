@@ -1,18 +1,18 @@
-import { render, screen } from '@testing-library/react';
-import { LocalizationClientProvider } from './LocalizationClientProvider';
-import { useLocalization } from './useLocalization';
-import { languages } from './LocalizationProvider';
-import { fireEvent } from '@testing-library/react';
-import { vi } from 'vitest';
+import { render, screen } from "@testing-library/react";
+import { LocalizationClientProvider } from "./LocalizationClientProvider";
+import { useLocalization } from "./useLocalization";
+import { languages } from "./LocalizationProvider";
+import { fireEvent } from "@testing-library/react";
+import { vi } from "vitest";
 
-vi.mock('next/navigation', () => ({
-  usePathname: () => '/en',
+vi.mock("next/navigation", () => ({
+  usePathname: () => "/en",
   useRouter: () => ({
     push: vi.fn(),
   }),
 }));
 
-describe('LocalizationProvider', () => {
+describe("LocalizationProvider", () => {
   function TestComponent() {
     const { language, config, setLanguage } = useLocalization();
     return (
@@ -21,33 +21,41 @@ describe('LocalizationProvider', () => {
         <span data-testid="dir">{config.direction}</span>
         <span data-testid="dateFormat">{config.dateFormat}</span>
         <span data-testid="timezone">{config.timezone}</span>
-        <button onClick={() => setLanguage('fa')}>Switch to Persian</button>
+        <button onClick={() => setLanguage("fa")}>Switch to Persian</button>
       </div>
     );
   }
 
-  it('provides default English config', () => {
+  it("provides default English config", () => {
     render(
       <LocalizationClientProvider>
         <TestComponent />
-      </LocalizationClientProvider>
+      </LocalizationClientProvider>,
     );
-    expect(screen.getByTestId('lang').textContent).toBe('en');
-    expect(screen.getByTestId('dir').textContent).toBe('ltr');
-    expect(screen.getByTestId('dateFormat').textContent).toBe(languages.en.dateFormat);
-    expect(screen.getByTestId('timezone').textContent).toBe(languages.en.timezone);
+    expect(screen.getByTestId("lang").textContent).toBe("en");
+    expect(screen.getByTestId("dir").textContent).toBe("ltr");
+    expect(screen.getByTestId("dateFormat").textContent).toBe(
+      languages.en.dateFormat,
+    );
+    expect(screen.getByTestId("timezone").textContent).toBe(
+      languages.en.timezone,
+    );
   });
 
-  it('switches to Persian and updates config', () => {
+  it("switches to Persian and updates config", () => {
     render(
       <LocalizationClientProvider>
         <TestComponent />
-      </LocalizationClientProvider>
+      </LocalizationClientProvider>,
     );
-    fireEvent.click(screen.getByText('Switch to Persian'));
-    expect(screen.getByTestId('lang').textContent).toBe('fa');
-    expect(screen.getByTestId('dir').textContent).toBe('rtl');
-    expect(screen.getByTestId('dateFormat').textContent).toBe(languages.fa.dateFormat);
-    expect(screen.getByTestId('timezone').textContent).toBe(languages.fa.timezone);
+    fireEvent.click(screen.getByText("Switch to Persian"));
+    expect(screen.getByTestId("lang").textContent).toBe("fa");
+    expect(screen.getByTestId("dir").textContent).toBe("rtl");
+    expect(screen.getByTestId("dateFormat").textContent).toBe(
+      languages.fa.dateFormat,
+    );
+    expect(screen.getByTestId("timezone").textContent).toBe(
+      languages.fa.timezone,
+    );
   });
 });

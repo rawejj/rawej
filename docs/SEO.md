@@ -5,7 +5,9 @@ This document describes the SEO implementation for the multi-language doctor app
 ## Features
 
 ### 1. **Dynamic Metadata per Language**
+
 Each language route (`/en`, `/de`, `/fr`, `/ku-sor`, `/ku-kur`, `/fa`) generates its own metadata including:
+
 - Page title
 - Meta description
 - Keywords
@@ -13,12 +15,15 @@ Each language route (`/en`, `/de`, `/fr`, `/ku-sor`, `/ku-kur`, `/fa`) generates
 - Twitter Card tags
 
 ### 2. **Language and Direction Attributes**
+
 - `lang` attribute is set dynamically based on the route
 - `dir` attribute is set to `rtl` for Persian and Kurdish Sorani, `ltr` for others
 - Proper HTML semantics for accessibility and SEO
 
 ### 3. **Alternate Language Links**
+
 Each page includes `<link rel="alternate" hreflang="xx">` tags pointing to all language versions:
+
 ```html
 <link rel="alternate" hreflang="en" href="https://yourdomain.com/en" />
 <link rel="alternate" hreflang="de" href="https://yourdomain.com/de" />
@@ -29,29 +34,37 @@ Each page includes `<link rel="alternate" hreflang="xx">` tags pointing to all l
 ```
 
 ### 4. **Canonical URLs**
+
 Each page has a canonical URL to prevent duplicate content issues.
 
 ### 5. **Sitemap**
+
 Auto-generated sitemap at `/sitemap.xml` includes:
+
 - All language routes
 - Last modification dates
 - Change frequency
 - Priority levels
 
 ### 6. **Robots.txt**
+
 Auto-generated robots.txt at `/robots.txt` includes:
+
 - Allow all pages except `/api/` and `/storage/`
 - Link to sitemap
 
 ## Configuration
 
 ### Environment Variables
+
 Create a `.env.local` file with:
+
 ```bash
 NEXT_PUBLIC_APP_URL=https://yourdomain.com
 ```
 
 For local development:
+
 ```bash
 NEXT_PUBLIC_APP_URL=http://localhost:3000
 ```
@@ -59,6 +72,7 @@ NEXT_PUBLIC_APP_URL=http://localhost:3000
 ## Translation Structure
 
 Each language file (`public/locales/{lang}.json`) includes a `meta` section:
+
 ```json
 {
   "meta": {
@@ -92,7 +106,9 @@ Each language file (`public/locales/{lang}.json`) includes a `meta` section:
 ## Testing SEO
 
 ### Check Metadata
+
 View page source and look for:
+
 ```html
 <title>...</title>
 <meta name="description" content="..." />
@@ -102,12 +118,15 @@ View page source and look for:
 ```
 
 ### Check Sitemap
+
 Visit: `http://localhost:3000/sitemap.xml`
 
 ### Check Robots
+
 Visit: `http://localhost:3000/robots.txt`
 
 ### Validation Tools
+
 - [Google Rich Results Test](https://search.google.com/test/rich-results)
 - [Facebook Sharing Debugger](https://developers.facebook.com/tools/debug/)
 - [Twitter Card Validator](https://cards-dev.twitter.com/validator)

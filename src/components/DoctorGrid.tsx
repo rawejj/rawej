@@ -5,15 +5,17 @@ import DoctorCard from "./DoctorCard";
 import DoctorCardSkeleton from "./DoctorCardSkeleton";
 import type { Doctor } from "@/components/BookingSection";
 
-
 interface DoctorGridProps {
   doctors: Doctor[];
   onBook: (doctor: Doctor) => void;
   loading?: boolean;
 }
 
-
-const DoctorGrid: React.FC<DoctorGridProps> = ({ doctors, onBook, loading }) => {
+const DoctorGrid: React.FC<DoctorGridProps> = ({
+  doctors,
+  onBook,
+  loading,
+}) => {
   const skeletonCount = Math.max(doctors.length, 6); // fallback to 6 skeletons if no doctors
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
@@ -27,6 +29,5 @@ const DoctorGrid: React.FC<DoctorGridProps> = ({ doctors, onBook, loading }) => 
     </div>
   );
 };
-
 
 export default DoctorGrid;

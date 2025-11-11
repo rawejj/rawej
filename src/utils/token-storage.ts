@@ -1,10 +1,9 @@
-// src/utils/token-storage.ts
-import fs from 'fs';
-import path from 'path';
+import fs from "fs";
+import path from "path";
 
 const TOKEN_PATH = process.env.TOKEN_FILE_PATH
   ? path.resolve(process.cwd(), process.env.TOKEN_FILE_PATH)
-  : path.resolve(process.cwd(), 'storage/tokens/auth.json');
+  : path.resolve(process.cwd(), "storage/tokens/auth.json");
 
 export type TokenData = {
   accessToken: string;
@@ -17,13 +16,13 @@ export function saveToken(token: TokenData) {
   if (!fs.existsSync(dir)) {
     fs.mkdirSync(dir, { recursive: true });
   }
-  fs.writeFileSync(TOKEN_PATH, JSON.stringify(token), 'utf8');
+  fs.writeFileSync(TOKEN_PATH, JSON.stringify(token), "utf8");
 }
 
 export function loadToken(): TokenData | null {
   if (!fs.existsSync(TOKEN_PATH)) return null;
   try {
-    const raw = fs.readFileSync(TOKEN_PATH, 'utf8');
+    const raw = fs.readFileSync(TOKEN_PATH, "utf8");
     return JSON.parse(raw);
   } catch {
     return null;

@@ -21,7 +21,8 @@
   "buttons": {
     "confirm booking": "پەسندکردنی نۆبە",
     "booked": "رێکخراوە",
-    "cancel": "بەشکەوتن"
+    "cancel": "باشکەوتن",
+    "retry": "دوبارە"
   },
   "labels": {
     "select a date": "هەڵبژاردەنی ڕۆژ",

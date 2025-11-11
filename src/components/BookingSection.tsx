@@ -14,15 +14,25 @@ export type Doctor = {
   image?: string;
   bio: string;
   availability?: string[];
-  callTypes?: Array<'phone' | 'video' | 'voice'>;
+  callTypes?: Array<"phone" | "video" | "voice">;
 };
 
-export default function BookingSection({ doctors: initialDoctors, translations, hasMore: hasMoreProp }: { doctors: Doctor[]; translations?: Record<string,string>; hasMore?: boolean }) {
+export default function BookingSection({
+  doctors: initialDoctors,
+  translations,
+  hasMore: hasMoreProp,
+}: {
+  doctors: Doctor[];
+  translations?: Record<string, string>;
+  hasMore?: boolean;
+}) {
   const [error, setError] = useState<string | null>(null);
   const [showModal, setShowModal] = useState(false);
   const [selectedDoctor, setSelectedDoctor] = useState<Doctor | null>(null);
   // State for available dates/times per doctor
-  const [availableDates, setAvailableDates] = useState<{ label: string; value: string; times: string[] }[]>([]);
+  const [availableDates, setAvailableDates] = useState<
+    { label: string; value: string; times: string[] }[]
+  >([]);
   const [selectedDate, setSelectedDate] = useState("");
   const [selectedTime, setSelectedTime] = useState("");
   const [confirmed, setConfirmed] = useState(false);
@@ -31,7 +41,7 @@ export default function BookingSection({ doctors: initialDoctors, translations, 
   const [doctors, setDoctors] = useState<Doctor[]>(initialDoctors);
   const [page, setPage] = useState(1);
   const [hasMore, setHasMore] = useState(
-    typeof hasMoreProp === 'boolean' ? hasMoreProp : true
+    typeof hasMoreProp === "boolean" ? hasMoreProp : true,
   );
   const [loading, setLoading] = useState(false);
   const observerRef = useRef<HTMLDivElement | null>(null);
@@ -44,9 +54,12 @@ export default function BookingSection({ doctors: initialDoctors, translations, 
       const res = await fetch(`/api/v1/doctors?page=${page + 1}&limit=10`);
       const json = await res.json();
       if (json.success && Array.isArray(json.data)) {
-        setDoctors(prev => [...prev, ...json.data]);
-        setPage(prev => prev + 1);
-        if (json.data.length === 0 || (json.pageCount && page + 1 >= json.pageCount)) {
+        setDoctors((prev) => [...prev, ...json.data]);
+        setPage((prev) => prev + 1);
+        if (
+          json.data.length === 0 ||
+          (json.pageCount && page + 1 >= json.pageCount)
+        ) {
           setHasMore(false);
         }
       } else {
@@ -55,9 +68,9 @@ export default function BookingSection({ doctors: initialDoctors, translations, 
     } catch (error) {
       if (error instanceof Error) {
         // Optionally log error for debugging
-        console.error('Failed to fetch doctors:', error.message);
+        console.error("Failed to fetch doctors:", error.message);
       } else {
-        console.error('Failed to fetch doctors: Unknown error');
+        console.error("Failed to fetch doctors: Unknown error");
       }
       setHasMore(false);
     } finally {
@@ -68,11 +81,14 @@ export default function BookingSection({ doctors: initialDoctors, translations, 
   // IntersectionObserver for infinite scroll
   useEffect(() => {
     if (!hasMore) return;
-    const observer = new window.IntersectionObserver((entries) => {
-      if (entries[0].isIntersecting) {
-        fetchMoreDoctors();
-      }
-    }, { threshold: 1 });
+    const observer = new window.IntersectionObserver(
+      (entries) => {
+        if (entries[0].isIntersecting) {
+          fetchMoreDoctors();
+        }
+      },
+      { threshold: 1 },
+    );
     const refValue = observerRef.current;
     if (refValue) {
       observer.observe(refValue);
@@ -103,13 +119,13 @@ export default function BookingSection({ doctors: initialDoctors, translations, 
         setAvailableDates([]);
         setSelectedDate("");
         setSelectedTime("");
-        setError('Error loading availability.');
+        setError("Error loading availability.");
       }
     } catch {
       setAvailableDates([]);
       setSelectedDate("");
       setSelectedTime("");
-      setError('Error loading availability.');
+      setError("Error loading availability.");
     }
   };
 
@@ -127,28 +143,62 @@ export default function BookingSection({ doctors: initialDoctors, translations, 
     }, 1500);
   };
 
+  // Move fetchAvailability definition here so it's in scope for BookingModal
+  const fetchAvailability = async (doctor?: Doctor) => {
+    const doc = doctor || selectedDoctor;
+    if (!doc) return;
+    setError(null);
+    try {
+      const res = await fetch(`/api/v1/doctors/${doc.uuid}/availability`);
+      const json = await res.json();
+      if (json && Array.isArray(json.dates)) {
+        setAvailableDates(json.dates);
+        setSelectedDate(json.dates[0]?.value || "");
+        setSelectedTime("");
+      } else {
+        setAvailableDates([]);
+        setSelectedDate("");
+        setSelectedTime("");
+        setError("Error loading availability.");
+      }
+    } catch {
+      setAvailableDates([]);
+      setSelectedDate("");
+      setSelectedTime("");
+      setError("Error loading availability.");
+    }
+  };
+
   return (
     <>
       <main className="max-w-6xl mx-auto px-4 py-8">
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
           {doctors.map((doctor, idx) => (
-            <DoctorCard key={doctor.id + '-' + idx} doctor={doctor} onBook={openModal} />
+            <DoctorCard
+              key={doctor.id + "-" + idx}
+              doctor={doctor}
+              onBook={openModal}
+            />
           ))}
           {/* Skeletons to fill empty grid spaces when loading */}
-          {loading && (() => {
-            // Determine columns (default 3 for lg)
-            const columns = 3;
-            const remainder = doctors.length % columns;
-            const skeletonsNeeded = remainder === 0 ? columns : columns - remainder;
-            return Array.from({ length: skeletonsNeeded }).map((_, idx) => (
-              <DoctorCardSkeleton key={"skeleton-" + idx} />
-            ));
-          })()}
+          {loading &&
+            (() => {
+              // Determine columns (default 3 for lg)
+              const columns = 3;
+              const remainder = doctors.length % columns;
+              const skeletonsNeeded =
+                remainder === 0 ? columns : columns - remainder;
+              return Array.from({ length: skeletonsNeeded }).map((_, idx) => (
+                <DoctorCardSkeleton key={"skeleton-" + idx} />
+              ));
+            })()}
         </div>
         {/* Sentinel for infinite scroll */}
         <div ref={observerRef} style={{ height: 1 }} />
         {!hasMore && (
-          <div className="text-center text-gray-400 py-4">{translations?.noMoreDoctors ?? 'No more doctors to load.'}</div>
+          <div className="text-center text-gray-400 py-4">
+            {translations?.noMoreDoctors ?? "No more doctors to load."}
+          </div>
         )}
       </main>
       <BookingModal
@@ -163,6 +213,7 @@ export default function BookingSection({ doctors: initialDoctors, translations, 
         onConfirm={confirmBooking}
         getNext7Days={() => availableDates}
         error={error}
+        fetchAvailability={fetchAvailability}
       />
       {/* Modal animation */}
       <style>{`

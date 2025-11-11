@@ -21,7 +21,8 @@
   "buttons": {
     "confirm booking": "Bixweberê pejirandinê",
     "booked": "Reservasyon kirin",
-    "cancel": "Bişkojkê"
+    "cancel": "Bişkojkê",
+    "retry": "Dîsa biceribîne"
   },
   "labels": {
     "select a date": "Dîrokê hilbijêre",

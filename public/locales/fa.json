@@ -21,7 +21,8 @@
   "buttons": {
     "confirm booking": "تأیید رزرو",
     "booked": "رزرو شده",
-    "cancel": "لغو"
+    "cancel": "لغو",
+    "retry": "تلاش مجدد"
   },
   "labels": {
     "select a date": "انتخاب تاریخ",

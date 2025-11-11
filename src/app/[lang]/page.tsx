@@ -16,10 +16,14 @@ type DoctorsApiResponse = {
 };
 
 // Enable ISR: revalidate in the background
-export const revalidate = parseInt(process.env.ISR_REVALIDATE || '60', 10);
+export const revalidate = parseInt(process.env.ISR_REVALIDATE || "60", 10);
 
 // Generate metadata for SEO
-export async function generateMetadata({ params }: { params: { lang: string } }) {
+export async function generateMetadata({
+  params,
+}: {
+  params: { lang: string };
+}) {
   const lang = ((await params).lang || DEFAULT_LANGUAGE) as LanguageKey;
   return generatePageMetadata(lang);
 }
@@ -29,17 +33,22 @@ export default async function Home() {
   let doctors: Doctor[] = [];
   let error: string | null = null;
   try {
-    const revalidateTime = parseInt(process.env.ISR_REVALIDATE || '60', 10);
-    const res = await httpClient<DoctorsApiResponse>(`${process.env.NEXT_PUBLIC_API_URL}/doctors?page=1&limit=9`, { 
-      next: { tags: ['doctors'], revalidate: revalidateTime }
-    });
+    const revalidateTime = parseInt(process.env.ISR_REVALIDATE || "60", 10);
+    const res = await httpClient<DoctorsApiResponse>(
+      `${process.env.NEXT_PUBLIC_API_URL}/doctors?page=1&limit=9`,
+      {
+        next: { tags: ["doctors"], revalidate: revalidateTime },
+      },
+    );
     if (res && res.success && Array.isArray(res.data)) {
       doctors = res.data;
     } else {
-      throw new Error(`Doctors data is not an array. Response: ${JSON.stringify(res)}`);
+      throw new Error(
+        `Doctors data is not an array. Response: ${JSON.stringify(res)}`,
+      );
     }
   } catch (err) {
-    console.error('Doctors API error:', err);
+    console.error("Doctors API error:", err);
     if (err instanceof Error) {
       error = err.message;
     } else {

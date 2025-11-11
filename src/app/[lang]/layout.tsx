@@ -14,7 +14,7 @@ export default async function LangLayout({
 }) {
   const lang = ((await params).lang || DEFAULT_LANGUAGE) as LanguageKey;
   const config = languages[lang] || languages[DEFAULT_LANGUAGE];
-  
+
   // Load translations for this language
   const translations = await loadTranslations(lang);
 

@@ -1,21 +1,21 @@
-import { describe, it, expect } from 'vitest';
-import React, { useContext } from 'react';
-import { render, screen, fireEvent } from '@testing-library/react';
-import { ThemeContext } from './ThemeContext';
-import type { ThemeContextProps } from './ThemeProvider';
+import { describe, it, expect } from "vitest";
+import React, { useContext } from "react";
+import { render, screen, fireEvent } from "@testing-library/react";
+import { ThemeContext } from "./ThemeContext";
+import type { ThemeContextProps } from "./ThemeProvider";
 
-describe('ThemeContext', () => {
-  describe('context creation', () => {
-    it('creates a valid context object', () => {
+describe("ThemeContext", () => {
+  describe("context creation", () => {
+    it("creates a valid context object", () => {
       expect(ThemeContext).toBeDefined();
     });
 
-    it('is a React Context', () => {
-      expect(ThemeContext).toHaveProperty('Provider');
-      expect(ThemeContext).toHaveProperty('Consumer');
+    it("is a React Context", () => {
+      expect(ThemeContext).toHaveProperty("Provider");
+      expect(ThemeContext).toHaveProperty("Consumer");
     });
 
-    it('has default context value with theme property', () => {
+    it("has default context value with theme property", () => {
       const TestComponent = () => {
         const context = useContext(ThemeContext);
         return <span data-testid="theme">{context.theme}</span>;
@@ -23,39 +23,41 @@ describe('ThemeContext', () => {
 
       render(<TestComponent />);
 
-      expect(screen.getByTestId('theme')).toHaveTextContent('system');
+      expect(screen.getByTestId("theme")).toHaveTextContent("system");
     });
 
-    it('has default context value with setTheme function', () => {
+    it("has default context value with setTheme function", () => {
       const TestComponent = () => {
         const context = useContext(ThemeContext);
         return (
           <span data-testid="setTheme">
-            {typeof context.setTheme === 'function' ? 'function' : 'not function'}
+            {typeof context.setTheme === "function"
+              ? "function"
+              : "not function"}
           </span>
         );
       };
 
       render(<TestComponent />);
 
-      expect(screen.getByTestId('setTheme')).toHaveTextContent('function');
+      expect(screen.getByTestId("setTheme")).toHaveTextContent("function");
     });
 
-    it('exports a Context.Provider component', () => {
+    it("exports a Context.Provider component", () => {
       const { Provider } = ThemeContext;
       expect(Provider).toBeDefined();
     });
 
-    it('exports a Context.Consumer component', () => {
+    it("exports a Context.Consumer component", () => {
       const { Consumer } = ThemeContext;
       expect(Consumer).toBeDefined();
     });
   });
 
-  describe('context usage with Provider', () => {
-    it('provides light theme through Provider', () => {
+  describe("context usage with Provider", () => {
+    it("provides light theme through Provider", () => {
       const mockValue: ThemeContextProps = {
-        theme: 'light',
+        theme: "light",
         setTheme: () => {},
       };
 
@@ -67,15 +69,15 @@ describe('ThemeContext', () => {
       render(
         <ThemeContext.Provider value={mockValue}>
           <TestComponent />
-        </ThemeContext.Provider>
+        </ThemeContext.Provider>,
       );
 
-      expect(screen.getByTestId('theme')).toHaveTextContent('light');
+      expect(screen.getByTestId("theme")).toHaveTextContent("light");
     });
 
-    it('provides dark theme through Provider', () => {
+    it("provides dark theme through Provider", () => {
       const mockValue: ThemeContextProps = {
-        theme: 'dark',
+        theme: "dark",
         setTheme: () => {},
       };
 
@@ -87,15 +89,15 @@ describe('ThemeContext', () => {
       render(
         <ThemeContext.Provider value={mockValue}>
           <TestComponent />
-        </ThemeContext.Provider>
+        </ThemeContext.Provider>,
       );
 
-      expect(screen.getByTestId('theme')).toHaveTextContent('dark');
+      expect(screen.getByTestId("theme")).toHaveTextContent("dark");
     });
 
-    it('provides system theme through Provider', () => {
+    it("provides system theme through Provider", () => {
       const mockValue: ThemeContextProps = {
-        theme: 'system',
+        theme: "system",
         setTheme: () => {},
       };
 
@@ -107,16 +109,16 @@ describe('ThemeContext', () => {
       render(
         <ThemeContext.Provider value={mockValue}>
           <TestComponent />
-        </ThemeContext.Provider>
+        </ThemeContext.Provider>,
       );
 
-      expect(screen.getByTestId('theme')).toHaveTextContent('system');
+      expect(screen.getByTestId("theme")).toHaveTextContent("system");
     });
 
-    it('provides setTheme function through context', () => {
+    it("provides setTheme function through context", () => {
       let callCount = 0;
       const mockValue: ThemeContextProps = {
-        theme: 'light',
+        theme: "light",
         setTheme: () => {
           callCount++;
         },
@@ -125,10 +127,7 @@ describe('ThemeContext', () => {
       const TestComponent = () => {
         const context = useContext(ThemeContext);
         return (
-          <button
-            data-testid="button"
-            onClick={() => context.setTheme('dark')}
-          >
+          <button data-testid="button" onClick={() => context.setTheme("dark")}>
             Toggle
           </button>
         );
@@ -137,18 +136,18 @@ describe('ThemeContext', () => {
       const { getByTestId } = render(
         <ThemeContext.Provider value={mockValue}>
           <TestComponent />
-        </ThemeContext.Provider>
+        </ThemeContext.Provider>,
       );
 
-      fireEvent.click(getByTestId('button'));
+      fireEvent.click(getByTestId("button"));
       expect(callCount).toBe(1);
     });
   });
 
-  describe('theme options', () => {
-    it('supports light theme option', () => {
+  describe("theme options", () => {
+    it("supports light theme option", () => {
       const mockValue: ThemeContextProps = {
-        theme: 'light',
+        theme: "light",
         setTheme: () => {},
       };
 
@@ -156,7 +155,7 @@ describe('ThemeContext', () => {
         const context = useContext(ThemeContext);
         return (
           <span data-testid="result">
-            {context.theme === 'light' ? 'is-light' : 'not-light'}
+            {context.theme === "light" ? "is-light" : "not-light"}
           </span>
         );
       };
@@ -164,15 +163,15 @@ describe('ThemeContext', () => {
       render(
         <ThemeContext.Provider value={mockValue}>
           <TestComponent />
-        </ThemeContext.Provider>
+        </ThemeContext.Provider>,
       );
 
-      expect(screen.getByTestId('result')).toHaveTextContent('is-light');
+      expect(screen.getByTestId("result")).toHaveTextContent("is-light");
     });
 
-    it('supports dark theme option', () => {
+    it("supports dark theme option", () => {
       const mockValue: ThemeContextProps = {
-        theme: 'dark',
+        theme: "dark",
         setTheme: () => {},
       };
 
@@ -180,7 +179,7 @@ describe('ThemeContext', () => {
         const context = useContext(ThemeContext);
         return (
           <span data-testid="result">
-            {context.theme === 'dark' ? 'is-dark' : 'not-dark'}
+            {context.theme === "dark" ? "is-dark" : "not-dark"}
           </span>
         );
       };
@@ -188,15 +187,15 @@ describe('ThemeContext', () => {
       render(
         <ThemeContext.Provider value={mockValue}>
           <TestComponent />
-        </ThemeContext.Provider>
+        </ThemeContext.Provider>,
       );
 
-      expect(screen.getByTestId('result')).toHaveTextContent('is-dark');
+      expect(screen.getByTestId("result")).toHaveTextContent("is-dark");
     });
 
-    it('supports system theme option', () => {
+    it("supports system theme option", () => {
       const mockValue: ThemeContextProps = {
-        theme: 'system',
+        theme: "system",
         setTheme: () => {},
       };
 
@@ -204,7 +203,7 @@ describe('ThemeContext', () => {
         const context = useContext(ThemeContext);
         return (
           <span data-testid="result">
-            {context.theme === 'system' ? 'is-system' : 'not-system'}
+            {context.theme === "system" ? "is-system" : "not-system"}
           </span>
         );
       };
@@ -212,15 +211,15 @@ describe('ThemeContext', () => {
       render(
         <ThemeContext.Provider value={mockValue}>
           <TestComponent />
-        </ThemeContext.Provider>
+        </ThemeContext.Provider>,
       );
 
-      expect(screen.getByTestId('result')).toHaveTextContent('is-system');
+      expect(screen.getByTestId("result")).toHaveTextContent("is-system");
     });
   });
 
-  describe('default context value', () => {
-    it('initializes with system theme when no Provider', () => {
+  describe("default context value", () => {
+    it("initializes with system theme when no Provider", () => {
       const TestComponent = () => {
         const context = useContext(ThemeContext);
         return <span data-testid="theme">{context.theme}</span>;
@@ -228,29 +227,31 @@ describe('ThemeContext', () => {
 
       render(<TestComponent />);
 
-      expect(screen.getByTestId('theme')).toHaveTextContent('system');
+      expect(screen.getByTestId("theme")).toHaveTextContent("system");
     });
 
-    it('initializes with empty setTheme function when no Provider', () => {
+    it("initializes with empty setTheme function when no Provider", () => {
       const TestComponent = () => {
         const context = useContext(ThemeContext);
         return (
           <span data-testid="type">
-            {typeof context.setTheme === 'function' ? 'function' : 'not function'}
+            {typeof context.setTheme === "function"
+              ? "function"
+              : "not function"}
           </span>
         );
       };
 
       render(<TestComponent />);
 
-      expect(screen.getByTestId('type')).toHaveTextContent('function');
+      expect(screen.getByTestId("type")).toHaveTextContent("function");
     });
   });
 
-  describe('context value structure', () => {
-    it('has theme property of type string', () => {
+  describe("context value structure", () => {
+    it("has theme property of type string", () => {
       const mockValue: ThemeContextProps = {
-        theme: 'light',
+        theme: "light",
         setTheme: () => {},
       };
 
@@ -258,7 +259,7 @@ describe('ThemeContext', () => {
         const context = useContext(ThemeContext);
         return (
           <span data-testid="type">
-            {typeof context.theme === 'string' ? 'string' : 'not string'}
+            {typeof context.theme === "string" ? "string" : "not string"}
           </span>
         );
       };
@@ -266,15 +267,15 @@ describe('ThemeContext', () => {
       render(
         <ThemeContext.Provider value={mockValue}>
           <TestComponent />
-        </ThemeContext.Provider>
+        </ThemeContext.Provider>,
       );
 
-      expect(screen.getByTestId('type')).toHaveTextContent('string');
+      expect(screen.getByTestId("type")).toHaveTextContent("string");
     });
 
-    it('has setTheme property of type function', () => {
+    it("has setTheme property of type function", () => {
       const mockValue: ThemeContextProps = {
-        theme: 'light',
+        theme: "light",
         setTheme: () => {},
       };
 
@@ -282,7 +283,9 @@ describe('ThemeContext', () => {
         const context = useContext(ThemeContext);
         return (
           <span data-testid="type">
-            {typeof context.setTheme === 'function' ? 'function' : 'not function'}
+            {typeof context.setTheme === "function"
+              ? "function"
+              : "not function"}
           </span>
         );
       };
@@ -290,15 +293,15 @@ describe('ThemeContext', () => {
       render(
         <ThemeContext.Provider value={mockValue}>
           <TestComponent />
-        </ThemeContext.Provider>
+        </ThemeContext.Provider>,
       );
 
-      expect(screen.getByTestId('type')).toHaveTextContent('function');
+      expect(screen.getByTestId("type")).toHaveTextContent("function");
     });
 
-    it('context has exactly two properties', () => {
+    it("context has exactly two properties", () => {
       const mockValue: ThemeContextProps = {
-        theme: 'light',
+        theme: "light",
         setTheme: () => {},
       };
 
@@ -313,20 +316,20 @@ describe('ThemeContext', () => {
       render(
         <ThemeContext.Provider value={mockValue}>
           <TestComponent />
-        </ThemeContext.Provider>
+        </ThemeContext.Provider>,
       );
 
       const context = values[0] as Record<string, unknown>;
       expect(Object.keys(context)).toHaveLength(2);
-      expect(Object.keys(context)).toContain('theme');
-      expect(Object.keys(context)).toContain('setTheme');
+      expect(Object.keys(context)).toContain("theme");
+      expect(Object.keys(context)).toContain("setTheme");
     });
   });
 
-  describe('multiple consumers', () => {
-    it('provides same value to multiple consumers', () => {
+  describe("multiple consumers", () => {
+    it("provides same value to multiple consumers", () => {
       const mockValue: ThemeContextProps = {
-        theme: 'light',
+        theme: "light",
         setTheme: () => {},
       };
 
@@ -344,23 +347,23 @@ describe('ThemeContext', () => {
         <ThemeContext.Provider value={mockValue}>
           <Consumer1 />
           <Consumer2 />
-        </ThemeContext.Provider>
+        </ThemeContext.Provider>,
       );
 
-      expect(screen.getByTestId('consumer1')).toHaveTextContent('light');
-      expect(screen.getByTestId('consumer2')).toHaveTextContent('light');
+      expect(screen.getByTestId("consumer1")).toHaveTextContent("light");
+      expect(screen.getByTestId("consumer2")).toHaveTextContent("light");
     });
   });
 
-  describe('context value updates', () => {
-    it('reflects value changes when Provider re-renders', () => {
+  describe("context value updates", () => {
+    it("reflects value changes when Provider re-renders", () => {
       const initialValue: ThemeContextProps = {
-        theme: 'light',
+        theme: "light",
         setTheme: () => {},
       };
 
       const updatedValue: ThemeContextProps = {
-        theme: 'dark',
+        theme: "dark",
         setTheme: () => {},
       };
 
@@ -378,22 +381,22 @@ describe('ThemeContext', () => {
       };
 
       const { rerender } = render(<TestComponent value={initialValue} />);
-      expect(screen.getByTestId('theme')).toHaveTextContent('light');
+      expect(screen.getByTestId("theme")).toHaveTextContent("light");
 
       rerender(<TestComponent value={updatedValue} />);
-      expect(screen.getByTestId('theme')).toHaveTextContent('dark');
+      expect(screen.getByTestId("theme")).toHaveTextContent("dark");
     });
   });
 
-  describe('nested providers', () => {
-    it('inner provider value overrides outer provider', () => {
+  describe("nested providers", () => {
+    it("inner provider value overrides outer provider", () => {
       const outerValue: ThemeContextProps = {
-        theme: 'light',
+        theme: "light",
         setTheme: () => {},
       };
 
       const innerValue: ThemeContextProps = {
-        theme: 'dark',
+        theme: "dark",
         setTheme: () => {},
       };
 
@@ -409,18 +412,18 @@ describe('ThemeContext', () => {
               <TestComponent />
             </ThemeContext.Provider>
           </div>
-        </ThemeContext.Provider>
+        </ThemeContext.Provider>,
       );
 
-      expect(screen.getByTestId('theme')).toHaveTextContent('dark');
+      expect(screen.getByTestId("theme")).toHaveTextContent("dark");
     });
   });
 
-  describe('setTheme callback', () => {
-    it('setTheme can be called with different theme values', () => {
+  describe("setTheme callback", () => {
+    it("setTheme can be called with different theme values", () => {
       const calls: string[] = [];
       const mockValue: ThemeContextProps = {
-        theme: 'light',
+        theme: "light",
         setTheme: (theme) => {
           calls.push(theme);
         },
@@ -432,19 +435,19 @@ describe('ThemeContext', () => {
           <>
             <button
               data-testid="btn-dark"
-              onClick={() => context.setTheme('dark')}
+              onClick={() => context.setTheme("dark")}
             >
               Dark
             </button>
             <button
               data-testid="btn-light"
-              onClick={() => context.setTheme('light')}
+              onClick={() => context.setTheme("light")}
             >
               Light
             </button>
             <button
               data-testid="btn-system"
-              onClick={() => context.setTheme('system')}
+              onClick={() => context.setTheme("system")}
             >
               System
             </button>
@@ -455,21 +458,21 @@ describe('ThemeContext', () => {
       render(
         <ThemeContext.Provider value={mockValue}>
           <TestComponent />
-        </ThemeContext.Provider>
+        </ThemeContext.Provider>,
       );
 
-      fireEvent.click(screen.getByTestId('btn-dark'));
-      fireEvent.click(screen.getByTestId('btn-light'));
-      fireEvent.click(screen.getByTestId('btn-system'));
+      fireEvent.click(screen.getByTestId("btn-dark"));
+      fireEvent.click(screen.getByTestId("btn-light"));
+      fireEvent.click(screen.getByTestId("btn-system"));
 
-      expect(calls).toEqual(['dark', 'light', 'system']);
+      expect(calls).toEqual(["dark", "light", "system"]);
     });
   });
 
-  describe('context persistence', () => {
-    it('context maintains state across renders', () => {
+  describe("context persistence", () => {
+    it("context maintains state across renders", () => {
       const mockValue: ThemeContextProps = {
-        theme: 'light',
+        theme: "light",
         setTheme: () => {},
       };
 
@@ -494,7 +497,7 @@ describe('ThemeContext', () => {
         <ThemeContext.Provider value={mockValue}>
           <Consumer1 />
           <Consumer2 />
-        </ThemeContext.Provider>
+        </ThemeContext.Provider>,
       );
 
       const initialCount1 = consumer1RenderCount.current;
@@ -504,11 +507,15 @@ describe('ThemeContext', () => {
         <ThemeContext.Provider value={mockValue}>
           <Consumer1 />
           <Consumer2 />
-        </ThemeContext.Provider>
+        </ThemeContext.Provider>,
       );
 
-      expect(consumer1RenderCount.current).toBeGreaterThanOrEqual(initialCount1);
-      expect(consumer2RenderCount.current).toBeGreaterThanOrEqual(initialCount2);
+      expect(consumer1RenderCount.current).toBeGreaterThanOrEqual(
+        initialCount1,
+      );
+      expect(consumer2RenderCount.current).toBeGreaterThanOrEqual(
+        initialCount2,
+      );
     });
   });
 });

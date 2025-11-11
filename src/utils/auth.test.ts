@@ -1,59 +1,59 @@
-import { describe, it, expect, beforeEach, vi } from 'vitest';
-import { isTokenValid, fetchToken, refreshAccessToken } from './auth';
-import { saveToken, loadToken, clearToken } from './token-storage';
-import { httpClient } from './http-client';
-import { logger } from './logger';
-import type { TokenData } from './token-storage';
+import { describe, it, expect, beforeEach, vi } from "vitest";
+import { isTokenValid, fetchToken, refreshAccessToken } from "./auth";
+import { saveToken, loadToken, clearToken } from "./token-storage";
+import { httpClient } from "./http-client";
+import { logger } from "./logger";
+import type { TokenData } from "./token-storage";
 
-vi.mock('./http-client');
-vi.mock('./token-storage');
-vi.mock('./logger');
+vi.mock("./http-client");
+vi.mock("./token-storage");
+vi.mock("./logger");
 
-describe('Auth Utils', () => {
+describe("Auth Utils", () => {
   const mockTokenData: TokenData = {
-    accessToken: 'test-access-token',
-    refreshToken: 'test-refresh-token',
+    accessToken: "test-access-token",
+    refreshToken: "test-refresh-token",
     expiresAt: Date.now() + 3600000,
   };
 
   const expiredTokenData: TokenData = {
-    accessToken: 'expired-token',
-    refreshToken: 'test-refresh-token',
+    accessToken: "expired-token",
+    refreshToken: "test-refresh-token",
     expiresAt: Date.now() - 1000,
   };
 
   beforeEach(() => {
     vi.clearAllMocks();
-    process.env.MEET_API = 'https://api.example.com';
-    process.env.MEET_API_USER = 'testuser';
-    process.env.MEET_API_PASSWORD = 'testpass';
+    process.env.MEET_API = "https://api.example.com";
+    process.env.MEET_API_USER = "testuser";
+    process.env.MEET_API_PASSWORD = "testpass";
   });
 
-  describe('isTokenValid', () => {
-    it('returns true for valid token', () => {
+  describe("isTokenValid", () => {
+    it("returns true for valid token", () => {
       const result = isTokenValid(mockTokenData);
       expect(result).toBe(true);
     });
 
-    it('returns false for null token', () => {
+    it("returns false for null token", () => {
       const result = isTokenValid(null);
       expect(result).toBe(false);
     });
 
-    it('returns false for expired token', () => {
+    it("returns false for expired token", () => {
       const result = isTokenValid(expiredTokenData);
       expect(result).toBe(false);
     });
 
-    it('returns false if accessToken is empty', () => {
+    it("returns false if accessToken is empty", () => {
       const result = isTokenValid({
         ...mockTokenData,
-        accessToken: '',
+        accessToken: "",
       });
       expect(result).toBe(false);
     });
 
-    it('returns false if accessToken is not a string', () => {
+    it("returns false if accessToken is not a string", () => {
       const result = isTokenValid({
         ...mockTokenData,
         accessToken: null as unknown as string,
@@ -61,7 +61,7 @@ describe('Auth Utils', () => {
       expect(result).toBe(false);
     });
 
-    it('returns false if expiresAt is in the past', () => {
+    it("returns false if expiresAt is in the past", () => {
       const result = isTokenValid({
         ...mockTokenData,
         expiresAt: Date.now() - 100,
@@ -70,210 +70,221 @@ describe('Auth Utils', () => {
     });
   });
 
-  describe('fetchToken', () => {
-    it('fetches token from API and saves it', async () => {
+  describe("fetchToken", () => {
+    it("fetches token from API and saves it", async () => {
       vi.mocked(httpClient).mockResolvedValue({
-        accessToken: 'new-access-token',
-        refreshToken: 'new-refresh-token',
+        accessToken: "new-access-token",
+        refreshToken: "new-refresh-token",
         expiresIn: 3600,
       });
 
       const result = await fetchToken();
 
-      expect(result).toBe('new-access-token');
-      expect(saveToken).toHaveBeenCalledWith(expect.objectContaining({
-        accessToken: 'new-access-token',
-        refreshToken: 'new-refresh-token',
-      }));
+      expect(result).toBe("new-access-token");
+      expect(saveToken).toHaveBeenCalledWith(
+        expect.objectContaining({
+          accessToken: "new-access-token",
+          refreshToken: "new-refresh-token",
+        }),
+      );
     });
 
-    it('uses default expiresIn of 3600 if not provided', async () => {
+    it("uses default expiresIn of 3600 if not provided", async () => {
       vi.mocked(httpClient).mockResolvedValue({
-        accessToken: 'new-access-token',
-        refreshToken: 'new-refresh-token',
+        accessToken: "new-access-token",
+        refreshToken: "new-refresh-token",
       });
 
       await fetchToken();
 
-      expect(saveToken).toHaveBeenCalledWith(expect.objectContaining({
-        expiresAt: expect.any(Number),
-      }));
+      expect(saveToken).toHaveBeenCalledWith(
+        expect.objectContaining({
+          expiresAt: expect.any(Number),
+        }),
+      );
       const savedToken = vi.mocked(saveToken).mock.calls[0][0];
       const expectedExpiry = Date.now() + 3600 * 1000;
       expect(Math.abs(savedToken.expiresAt - expectedExpiry)).toBeLessThan(100);
     });
 
-    it('calls correct API endpoint with credentials', async () => {
+    it("calls correct API endpoint with credentials", async () => {
       vi.mocked(httpClient).mockResolvedValue({
-        accessToken: 'test',
-        refreshToken: 'test',
+        accessToken: "test",
+        refreshToken: "test",
       });
 
       await fetchToken();
 
       expect(httpClient).toHaveBeenCalledWith(
-        'https://api.example.com/auth/token',
+        "https://api.example.com/auth/token",
         expect.objectContaining({
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
-            username: 'testuser',
-            password: 'testpass',
+            username: "testuser",
+            password: "testpass",
           }),
-        })
+        }),
       );
     });
 
-    it('logs debug message before fetching', async () => {
+    it("logs debug message before fetching", async () => {
       vi.mocked(httpClient).mockResolvedValue({
-        accessToken: 'test',
-        refreshToken: 'test',
+        accessToken: "test",
+        refreshToken: "test",
       });
 
       await fetchToken();
 
       expect(logger.debug).toHaveBeenCalledWith(
-        expect.stringContaining('Fetching token'),
-        'Auth'
+        expect.stringContaining("Fetching token"),
+        "Auth",
       );
     });
 
-    it('logs info message after successful fetch', async () => {
+    it("logs info message after successful fetch", async () => {
       vi.mocked(httpClient).mockResolvedValue({
-        accessToken: 'test',
-        refreshToken: 'test',
+        accessToken: "test",
+        refreshToken: "test",
       });
 
       await fetchToken();
 
       expect(logger.info).toHaveBeenCalledWith(
-        'Token fetched and saved',
-        'Auth'
+        "Token fetched and saved",
+        "Auth",
       );
     });
 
-    it('logs error and throws on API failure', async () => {
-      const error = new Error('Network error');
+    it("logs error and throws on API failure", async () => {
+      const error = new Error("Network error");
       vi.mocked(httpClient).mockRejectedValue(error);
 
-      await expect(fetchToken()).rejects.toThrow('Network error');
-      expect(logger.error).toHaveBeenCalledWith(error, 'Auth - fetchToken');
+      await expect(fetchToken()).rejects.toThrow("Network error");
+      expect(logger.error).toHaveBeenCalledWith(error, "Auth - fetchToken");
     });
   });
 
-  describe('refreshAccessToken', () => {
-    it('refreshes token and saves new one', async () => {
+  describe("refreshAccessToken", () => {
+    it("refreshes token and saves new one", async () => {
       vi.mocked(loadToken).mockReturnValue(mockTokenData);
       vi.mocked(httpClient).mockResolvedValue({
-        accessToken: 'refreshed-access-token',
-        refreshToken: 'refreshed-refresh-token',
+        accessToken: "refreshed-access-token",
+        refreshToken: "refreshed-refresh-token",
         expiresIn: 3600,
       });
 
       const result = await refreshAccessToken();
 
-      expect(result).toBe('refreshed-access-token');
-      expect(saveToken).toHaveBeenCalledWith(expect.objectContaining({
-        accessToken: 'refreshed-access-token',
-        refreshToken: 'refreshed-refresh-token',
-      }));
+      expect(result).toBe("refreshed-access-token");
+      expect(saveToken).toHaveBeenCalledWith(
+        expect.objectContaining({
+          accessToken: "refreshed-access-token",
+          refreshToken: "refreshed-refresh-token",
+        }),
+      );
     });
 
-    it('retains old refresh token if not provided in response', async () => {
+    it("retains old refresh token if not provided in response", async () => {
       vi.mocked(loadToken).mockReturnValue(mockTokenData);
       vi.mocked(httpClient).mockResolvedValue({
-        accessToken: 'new-access-token',
+        accessToken: "new-access-token",
         expiresIn: 3600,
       });
 
       await refreshAccessToken();
 
-      expect(saveToken).toHaveBeenCalledWith(expect.objectContaining({
-        refreshToken: mockTokenData.refreshToken,
-      }));
+      expect(saveToken).toHaveBeenCalledWith(
+        expect.objectContaining({
+          refreshToken: mockTokenData.refreshToken,
+        }),
+      );
     });
 
-    it('throws error if no refresh token is available', async () => {
+    it("throws error if no refresh token is available", async () => {
       vi.mocked(loadToken).mockReturnValue(null);
 
       await expect(refreshAccessToken()).rejects.toThrow(
-        'No refresh token available'
+        "No refresh token available",
       );
       expect(logger.error).toHaveBeenCalledWith(
         expect.any(Error),
-        'Auth - refreshAccessToken'
+        "Auth - refreshAccessToken",
       );
     });
 
-    it('clears token on refresh failure', async () => {
+    it("clears token on refresh failure", async () => {
       vi.mocked(loadToken).mockReturnValue(mockTokenData);
-      const error = new Error('Refresh failed');
+      const error = new Error("Refresh failed");
       vi.mocked(httpClient).mockRejectedValue(error);
 
-      await expect(refreshAccessToken()).rejects.toThrow('Refresh failed');
+      await expect(refreshAccessToken()).rejects.toThrow("Refresh failed");
 
       expect(clearToken).toHaveBeenCalled();
     });
 
-    it('calls correct refresh endpoint with refresh token', async () => {
+    it("calls correct refresh endpoint with refresh token", async () => {
       vi.mocked(loadToken).mockReturnValue(mockTokenData);
       vi.mocked(httpClient).mockResolvedValue({
-        accessToken: 'new-access-token',
-        refreshToken: 'new-refresh-token',
+        accessToken: "new-access-token",
+        refreshToken: "new-refresh-token",
       });
 
       await refreshAccessToken();
 
       expect(httpClient).toHaveBeenCalledWith(
-        'https://api.example.com/auth/refresh',
+        "https://api.example.com/auth/refresh",
         expect.objectContaining({
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
             refreshToken: mockTokenData.refreshToken,
           }),
-        })
+        }),
       );
     });
 
-    it('logs debug message before refreshing', async () => {
+    it("logs debug message before refreshing", async () => {
       vi.mocked(loadToken).mockReturnValue(mockTokenData);
       vi.mocked(httpClient).mockResolvedValue({
-        accessToken: 'test',
-        refreshToken: 'test',
+        accessToken: "test",
+        refreshToken: "test",
       });
 
       await refreshAccessToken();
 
       expect(logger.debug).toHaveBeenCalledWith(
-        'Refreshing access token',
-        'Auth'
+        "Refreshing access token",
+        "Auth",
       );
     });
 
-    it('logs info message after successful refresh', async () => {
+    it("logs info message after successful refresh", async () => {
       vi.mocked(loadToken).mockReturnValue(mockTokenData);
       vi.mocked(httpClient).mockResolvedValue({
-        accessToken: 'test',
-        refreshToken: 'test',
+        accessToken: "test",
+        refreshToken: "test",
       });
 
       await refreshAccessToken();
 
       expect(logger.info).toHaveBeenCalledWith(
-        'Access token refreshed and saved',
-        'Auth'
+        "Access token refreshed and saved",
+        "Auth",
       );
     });
 
-    it('logs error on refresh failure', async () => {
+    it("logs error on refresh failure", async () => {
       vi.mocked(loadToken).mockReturnValue(mockTokenData);
-      const error = new Error('Network error');
+      const error = new Error("Network error");
       vi.mocked(httpClient).mockRejectedValue(error);
 
       await expect(refreshAccessToken()).rejects.toThrow();
 
-      expect(logger.error).toHaveBeenCalledWith(error, 'Auth - refreshAccessToken');
+      expect(logger.error).toHaveBeenCalledWith(
+        error,
+        "Auth - refreshAccessToken",
+      );
     });
   });
 });
