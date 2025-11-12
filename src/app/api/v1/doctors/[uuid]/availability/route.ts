@@ -1,3 +1,4 @@
+import { IS_DEV } from "@/lib/constants";
 import { httpClient } from "@/utils/http-client";
 import { logger } from "@/utils/logger";
 import { NextResponse } from "next/server";
@@ -13,7 +14,7 @@ export async function GET(request: NextRequest, context: { params: Params }) {
     Vary: "*",
   };
 
-  const apiUrl = `${process.env.MEET_API}/meets/${uuid}`;
+  const apiUrl = `${process.env.MEET_API}/meets/${uuid}/availability`;
   logger.debug(
     `Fetching availability from ${apiUrl}`,
     "Doctors Availability API",
@@ -74,9 +75,11 @@ export async function GET(request: NextRequest, context: { params: Params }) {
       status: 200,
       headers: commonHeaders,
     });
-  } catch {
+  } catch (err) {
+    logger.error(`Failed to fetch availability: ${err}`, "Doctors Availability API");
+
     return new NextResponse(
-      JSON.stringify({ message: "Failed to fetch availability" }),
+      JSON.stringify({ message: IS_DEV ? err :"Failed to fetch availabilities" }),
       { status: 500, headers: commonHeaders },
     );
   }

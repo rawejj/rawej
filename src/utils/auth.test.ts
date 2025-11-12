@@ -1,5 +1,5 @@
 import { describe, it, expect, beforeEach, vi } from "vitest";
-import { isTokenValid, fetchToken, refreshAccessToken } from "./auth";
+import { isTokenValid, fetchToken, refreshToken } from "./auth";
 import { saveToken, loadToken, clearToken } from "./token-storage";
 import { httpClient } from "./http-client";
 import { logger } from "./logger";
@@ -174,7 +174,7 @@ describe("Auth Utils", () => {
         expiresIn: 3600,
       });
 
-      const result = await refreshAccessToken();
+      const result = await refreshToken();
 
       expect(result).toBe("refreshed-access-token");
       expect(saveToken).toHaveBeenCalledWith(
@@ -192,7 +192,7 @@ describe("Auth Utils", () => {
         expiresIn: 3600,
       });
 
-      await refreshAccessToken();
+      await refreshToken();
 
       expect(saveToken).toHaveBeenCalledWith(
         expect.objectContaining({
@@ -204,7 +204,7 @@ describe("Auth Utils", () => {
     it("throws error if no refresh token is available", async () => {
       vi.mocked(loadToken).mockReturnValue(null);
 
-      await expect(refreshAccessToken()).rejects.toThrow(
+      await expect(refreshToken()).rejects.toThrow(
         "No refresh token available",
       );
       expect(logger.error).toHaveBeenCalledWith(
@@ -218,7 +218,7 @@ describe("Auth Utils", () => {
       const error = new Error("Refresh failed");
       vi.mocked(httpClient).mockRejectedValue(error);
 
-      await expect(refreshAccessToken()).rejects.toThrow("Refresh failed");
+      await expect(refreshToken()).rejects.toThrow("Refresh failed");
 
       expect(clearToken).toHaveBeenCalled();
     });
@@ -230,7 +230,7 @@ describe("Auth Utils", () => {
         refreshToken: "new-refresh-token",
       });
 
-      await refreshAccessToken();
+      await refreshToken();
 
       expect(httpClient).toHaveBeenCalledWith(
         "https://api.example.com/auth/refresh",
@@ -251,7 +251,7 @@ describe("Auth Utils", () => {
         refreshToken: "test",
       });
 
-      await refreshAccessToken();
+      await refreshToken();
 
       expect(logger.debug).toHaveBeenCalledWith(
         "Refreshing access token",
@@ -266,7 +266,7 @@ describe("Auth Utils", () => {
         refreshToken: "test",
       });
 
-      await refreshAccessToken();
+      await refreshToken();
 
       expect(logger.info).toHaveBeenCalledWith(
         "Access token refreshed and saved",
@@ -279,7 +279,7 @@ describe("Auth Utils", () => {
       const error = new Error("Network error");
       vi.mocked(httpClient).mockRejectedValue(error);
 
-      await expect(refreshAccessToken()).rejects.toThrow();
+      await expect(refreshToken()).rejects.toThrow();
 
       expect(logger.error).toHaveBeenCalledWith(
         error,

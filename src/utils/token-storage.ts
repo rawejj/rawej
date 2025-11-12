@@ -20,7 +20,10 @@ export function saveToken(token: TokenData) {
 }
 
 export function loadToken(): TokenData | null {
-  if (!fs.existsSync(TOKEN_PATH)) return null;
+  if (!fs.existsSync(TOKEN_PATH)) {
+    return null;
+  }
+  
   try {
     const raw = fs.readFileSync(TOKEN_PATH, "utf8");
     return JSON.parse(raw);

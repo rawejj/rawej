@@ -49,9 +49,9 @@ export async function fetchToken(): Promise<string> {
   }
 }
 
-export async function refreshAccessToken(): Promise<string> {
+export async function refreshToken(): Promise<string> {
   const apiBase = process.env.MEET_API;
-  const refreshUrl = `${apiBase}/auth/refresh`;
+  const refreshUrl = `${apiBase}/auth/refresh-token`;
   logger.debug("Refreshing access token", "Auth");
   const token = loadToken();
   if (!token?.refreshToken) {

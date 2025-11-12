@@ -200,21 +200,21 @@ describe("HTTP Client", () => {
   describe("type safety", () => {
     it("returns correctly typed response", async () => {
       interface ApiResponse {
-        userId: number;
+        Id: number;
         name: string;
       }
 
       global.fetch = vi.fn().mockResolvedValue({
         ok: true,
         headers: new Headers({ "content-type": "application/json" }),
-        json: vi.fn().mockResolvedValue({ userId: 1, name: "John" }),
+        json: vi.fn().mockResolvedValue({ Id: 1, name: "John" }),
       });
 
       const result = await httpClient<ApiResponse>(
         "https://api.example.com/user/1",
       );
 
-      expect(result).toEqual({ userId: 1, name: "John" });
+      expect(result).toEqual({ Id: 1, name: "John" });
     });
   });
 });

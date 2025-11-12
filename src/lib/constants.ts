@@ -1,5 +1,7 @@
 import { LanguageKey } from "@/providers/LocalizationProvider";
 
+export const IS_DEV = process.env.NODE_ENV === "development";
+
 /**
  * Supported languages in the application
  */
