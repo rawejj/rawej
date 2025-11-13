@@ -1,4 +1,7 @@
 {
+  "messages": {
+    "no availability slots": "Keine verfügbaren Buchungszeiten."
+  },
   "book appointment": "Termin buchen",
   "theme": {
     "light": "Hell",

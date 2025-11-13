@@ -1,4 +1,7 @@
 {
+  "messages": {
+    "no availability slots": "No available slots for booking."
+  },
   "book appointment": "Book Appointment",
   "theme": {
     "light": "Light",

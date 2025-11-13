@@ -1,4 +1,7 @@
 {
+  "messages": {
+    "no availability slots": "کاتێک بۆ پێشنیارکردن بەردەست نییە."
+  },
   "book appointment": "نۆبە گرتن",
   "theme": {
     "light": "ڕووناک",

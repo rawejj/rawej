@@ -45,4 +45,21 @@ export const mockDoctors = [
     availability: ["2025-11-08T14:00", "2025-11-09T15:00"],
     callTypes: ["video"],
   },
+  {
+    id: 5,
+    uuid: "cace0bc5-32ea-420b-927a-a4ae485686ee",
+    name: "Dr. David Example",
+    specialty: "General Practitioner",
+    image: "https://randomuser.me/api/portraits/men/45.jpg",
+    rating: 4.7,
+    bio: "Experienced GP available for online consultations.",
+    availability: [
+      "2025-11-13T09:00",
+      "2025-11-13T10:00",
+      "2025-11-13T11:00",
+      "2025-11-14T09:30",
+      "2025-11-14T10:30"
+    ],
+    callTypes: ["phone", "video", "voice"],
+  },
 ];

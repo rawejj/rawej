@@ -1,4 +1,7 @@
 {
+  "messages": {
+    "no availability slots": "Aucun créneau disponible pour la réservation."
+  },
   "book appointment": "Prendre rendez-vous",
   "theme": {
     "light": "Clair",

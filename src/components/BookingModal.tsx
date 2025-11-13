@@ -16,6 +16,7 @@ interface BookingModalProps {
   onConfirm: () => void;
   getNext7Days: () => { label: string; value: string; times: string[] }[];
   fetchAvailability?: () => void;
+  loading?: boolean;
 }
 
 const BookingModal: React.FC<BookingModalProps> = ({
@@ -31,24 +32,17 @@ const BookingModal: React.FC<BookingModalProps> = ({
   getNext7Days,
   error,
   fetchAvailability,
+  loading = false,
 }) => {
   const { t } = useTranslations();
-
-  // If you fetch API in parent, pass a fetchAvailability prop and call it here. If you fetch in modal, call it here.
-  const handleRefresh = () => {
-    if (fetchAvailability) fetchAvailability();
-  };
-
   const days = getNext7Days();
   const selectedDay = days.find((day) => day.value === selectedDate);
   const times = selectedDay?.times || [];
-  const isLoading =
-    !error &&
-    (!getNext7Days ||
-      typeof getNext7Days !== "function" ||
-      days.length === 0 ||
-      !Array.isArray(times) ||
-      times.length === 0);
+  // Retry handler for error state
+  const handleRefresh = () => {
+    if (fetchAvailability) fetchAvailability();
+  };
+  const isLoading = !error && loading;
   if (!show || !doctor) {
     return null;
   }
@@ -120,10 +114,14 @@ const BookingModal: React.FC<BookingModalProps> = ({
               <div className="w-20 h-3 bg-gray-200 dark:bg-zinc-700 rounded mb-2 animate-pulse" />
             </div>
           </div>
+        ) : !loading && Array.isArray(days) && days.length === 0 ? (
+          <div className="mb-6 text-center text-zinc-500 dark:text-zinc-300 font-semibold">
+            {t("messages.no availability slots")}
+          </div>
         ) : (
           <>
             <div className="mb-2 text-sm font-medium text-zinc-700 dark:text-zinc-200">
-              {t("labels.select a date")}:
+              {t("labels.select a date")}: 
             </div>
             <div className="flex gap-2 overflow-x-auto pb-2 mb-4 hide-scrollbar">
               {getNext7Days().map((day) => (
@@ -141,7 +139,7 @@ const BookingModal: React.FC<BookingModalProps> = ({
               ))}
             </div>
             <div className="mb-2 text-sm font-medium text-zinc-700 dark:text-zinc-200">
-              {t("labels.select a time")}:
+              {t("labels.select a time")}: 
             </div>
             <div className="grid grid-cols-3 gap-2 mb-6">
               {times.map((time) => (

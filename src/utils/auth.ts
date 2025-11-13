@@ -33,6 +33,7 @@ export async function fetchToken(): Promise<string> {
         username: process.env.MEET_API_USER,
         password: process.env.MEET_API_PASSWORD,
       }),
+      skipAuthRetry: true,
     });
     const expiresIn = tokenResp.expiresIn || 3600;
     const tokenData: TokenData = {
@@ -68,6 +69,7 @@ export async function refreshToken(): Promise<string> {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ refreshToken: token.refreshToken }),
+      skipAuthRetry: true,
     });
     const expiresIn = resp.expiresIn || 3600;
     const newToken: TokenData = {

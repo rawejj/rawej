@@ -42,35 +42,11 @@ export async function GET(request: NextRequest, context: { params: Params }) {
 
     // Transform remote meets to { dates: [{ label, value, times: [] }] }
     type Meet = { start: string; end: string };
-    const meets = Array.isArray((data as { meets?: Meet[] })?.meets)
-      ? (data as { meets: Meet[] }).meets
+    const meets = Array.isArray((data as { dates?: Meet[] })?.dates)
+      ? (data as { dates: Meet[] }).dates
       : [];
-    // Group by date
-    const dateMap: Record<
-      string,
-      { label: string; value: string; times: string[] }
-    > = {};
-    meets.forEach((meet: Meet) => {
-      // Parse start time
-      const startDate = new Date(meet.start.replace(" +0000 UTC", "Z"));
-      const endDate = new Date(meet.end.replace(" +0000 UTC", "Z"));
-      const dateStr = startDate.toISOString().slice(0, 10); // YYYY-MM-DD
-      const label = startDate.toLocaleDateString("en-US", {
-        month: "short",
-        day: "numeric",
-        year: "numeric",
-      });
-      // Time range string
-      const startTime = startDate.toISOString().slice(11, 16); // HH:mm
-      const endTime = endDate.toISOString().slice(11, 16); // HH:mm
-      const timeRange = `${startTime} - ${endTime}`;
-      if (!dateMap[dateStr]) {
-        dateMap[dateStr] = { label, value: dateStr, times: [] };
-      }
-      dateMap[dateStr].times.push(timeRange);
-    });
-
-    const dates = Object.values(dateMap);
+      
+    const dates = Object.values(meets);
     return new NextResponse(JSON.stringify({ dates }), {
       status: 200,
       headers: commonHeaders,

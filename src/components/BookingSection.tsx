@@ -36,6 +36,7 @@ export default function BookingSection({
   const [selectedDate, setSelectedDate] = useState("");
   const [selectedTime, setSelectedTime] = useState("");
   const [confirmed, setConfirmed] = useState(false);
+  const [modalLoading, setModalLoading] = useState(false);
 
   // Infinite scroll state
   const [doctors, setDoctors] = useState<Doctor[]>(initialDoctors);
@@ -107,13 +108,18 @@ export default function BookingSection({
 
     // Fetch availability from API
     setError(null);
+    setModalLoading(true);
     try {
       const res = await fetch(`/api/v1/doctors/${doctor.uuid}/availability`);
       const json = await res.json();
       // Expecting: { dates: [{label, value, times: string[]}]} (no flat times array)
       if (json && Array.isArray(json.dates)) {
         setAvailableDates(json.dates);
-        setSelectedDate(json.dates[0]?.value || "");
+        if (json.dates.length > 0) {
+          setSelectedDate(json.dates[0]?.value || "");
+        } else {
+          setSelectedDate("");
+        }
         setSelectedTime("");
       } else {
         setAvailableDates([]);
@@ -126,6 +132,8 @@ export default function BookingSection({
       setSelectedDate("");
       setSelectedTime("");
       setError("Error loading availability.");
+    } finally {
+      setModalLoading(false);
     }
   };
 
@@ -134,6 +142,7 @@ export default function BookingSection({
     setSelectedDoctor(null);
     setConfirmed(false);
     setError(null);
+    setModalLoading(false);
   };
 
   const confirmBooking = () => {
@@ -148,12 +157,17 @@ export default function BookingSection({
     const doc = doctor || selectedDoctor;
     if (!doc) return;
     setError(null);
+    setModalLoading(true);
     try {
       const res = await fetch(`/api/v1/doctors/${doc.uuid}/availability`);
       const json = await res.json();
       if (json && Array.isArray(json.dates)) {
         setAvailableDates(json.dates);
-        setSelectedDate(json.dates[0]?.value || "");
+        if (json.dates.length > 0) {
+          setSelectedDate(json.dates[0]?.value || "");
+        } else {
+          setSelectedDate("");
+        }
         setSelectedTime("");
       } else {
         setAvailableDates([]);
@@ -166,6 +180,8 @@ export default function BookingSection({
       setSelectedDate("");
       setSelectedTime("");
       setError("Error loading availability.");
+    } finally {
+      setModalLoading(false);
     }
   };
 
@@ -214,6 +230,7 @@ export default function BookingSection({
         getNext7Days={() => availableDates}
         error={error}
         fetchAvailability={fetchAvailability}
+        loading={modalLoading}
       />
       {/* Modal animation */}
       <style>{`

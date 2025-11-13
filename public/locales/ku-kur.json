@@ -1,4 +1,7 @@
 {
+  "messages": {
+    "no availability slots": "Demek bo rezervasyon nayê dîtin."
+  },
   "book appointment": "Nobeyê bigire",
   "theme": {
     "light": "Ronî",

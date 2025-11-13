@@ -1,4 +1,7 @@
 {
+  "messages": {
+    "no availability slots": "زمانی برای رزرو موجود نیست."
+  },
   "book appointment": "رزرو نوبت",
   "theme": {
     "light": "روشن",

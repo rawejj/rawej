@@ -3,9 +3,13 @@ import { loadToken } from "./token-storage";
 import { fetchToken, refreshToken } from "./auth";
 import { IS_DEV } from "@/lib/constants";
 
+export interface HttpClientOptions extends RequestInit {
+  skipAuthRetry?: boolean;
+}
+
 export async function httpClient<T = unknown>(
   url: string,
-  options?: RequestInit
+  options: HttpClientOptions = {}
 ): Promise<T> {
   // Disable SSL verification in local/dev if env is set
   if (IS_DEV) {
@@ -29,11 +33,11 @@ export async function httpClient<T = unknown>(
     (baseHeaders as Record<string, string>)["Authorization"] =
       `Bearer ${tokenData.accessToken}`;
   }
-  let opts: RequestInit = { ...options, headers: baseHeaders };
-  let res = await fetch(url, opts);
+  let reqOpts: RequestInit = { ...options, headers: baseHeaders };
+  let res = await fetch(url, reqOpts);
 
   // If unauthorized, try to refresh token and retry once
-  if (res.status === 401 && tokenData?.refreshToken) {
+  if (!options.skipAuthRetry && res.status === 401 && tokenData?.refreshToken) {
     try {
       await refreshToken();
       tokenData = loadToken();
@@ -41,8 +45,8 @@ export async function httpClient<T = unknown>(
         const retryHeaders = { ...(options?.headers || {}) };
         (retryHeaders as Record<string, string>)["Authorization"] =
           `Bearer ${tokenData.accessToken}`;
-        opts = { ...options, headers: retryHeaders };
-        res = await fetch(url, opts);
+        reqOpts = { ...options, headers: retryHeaders };
+        res = await fetch(url, reqOpts);
       }
     } catch {
       // If refresh fails, proceed with original response
