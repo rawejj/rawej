@@ -36,7 +36,7 @@ describe("token-storage", () => {
   const mockTokenData: TokenData = {
     accessToken: "test-access-token",
     refreshToken: "test-refresh-token",
-    expiresAt: Date.now() + 3600000,
+    expiresIn: Date.now() + 3600000,
   };
 
   beforeEach(() => {
@@ -117,7 +117,7 @@ describe("token-storage", () => {
       const token: TokenData = {
         accessToken: "access-123",
         refreshToken: "refresh-456",
-        expiresAt: 1234567890,
+        expiresIn: 1234567890,
       };
       vi.mocked(fs.existsSync).mockReturnValue(true);
       vi.mocked(fs.readFileSync).mockReturnValue(JSON.stringify(token));
@@ -126,7 +126,7 @@ describe("token-storage", () => {
 
       expect(result?.accessToken).toBe("access-123");
       expect(result?.refreshToken).toBe("refresh-456");
-      expect(result?.expiresAt).toBe(1234567890);
+      expect(result?.expiresIn).toBe(1234567890);
     });
   });
 

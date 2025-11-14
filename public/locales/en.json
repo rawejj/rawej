@@ -1,6 +1,7 @@
 {
   "messages": {
-    "no availability slots": "No available slots for booking."
+    "no availability slots": "No available slots for booking.",
+    "error loading availability": "Error loading availability."
   },
   "book appointment": "Book Appointment",
   "theme": {

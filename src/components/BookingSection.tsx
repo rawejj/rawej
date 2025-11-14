@@ -4,6 +4,7 @@ import { useState, useRef, useEffect, useCallback } from "react";
 import DoctorCard from "@/components/DoctorCard";
 import BookingModal from "@/components/BookingModal";
 import DoctorCardSkeleton from "@/components/DoctorCardSkeleton";
+import { useTranslations } from "@/providers/TranslationsProvider";
 
 export type Doctor = {
   id: number;
@@ -26,12 +27,13 @@ export default function BookingSection({
   translations?: Record<string, string>;
   hasMore?: boolean;
 }) {
+  const { t } = useTranslations();
   const [error, setError] = useState<string | null>(null);
   const [showModal, setShowModal] = useState(false);
   const [selectedDoctor, setSelectedDoctor] = useState<Doctor | null>(null);
   // State for available dates/times per doctor
   const [availableDates, setAvailableDates] = useState<
-    { label: string; value: string; times: string[] }[]
+    { title: string; label: string; value: string; times: { start: string; end: string; duration: string }[] }[]
   >([]);
   const [selectedDate, setSelectedDate] = useState("");
   const [selectedTime, setSelectedTime] = useState("");
@@ -112,11 +114,11 @@ export default function BookingSection({
     try {
       const res = await fetch(`/api/v1/doctors/${doctor.uuid}/availability`);
       const json = await res.json();
-      // Expecting: { dates: [{label, value, times: string[]}]} (no flat times array)
-      if (json && Array.isArray(json.dates)) {
-        setAvailableDates(json.dates);
-        if (json.dates.length > 0) {
-          setSelectedDate(json.dates[0]?.value || "");
+      // API returns array directly, not wrapped in dates property
+      if (json && Array.isArray(json)) {
+        setAvailableDates(json);
+        if (json.length > 0) {
+          setSelectedDate(json[0]?.value || "");
         } else {
           setSelectedDate("");
         }
@@ -125,13 +127,13 @@ export default function BookingSection({
         setAvailableDates([]);
         setSelectedDate("");
         setSelectedTime("");
-        setError("Error loading availability.");
+        setError(t("messages.error loading availability"));
       }
     } catch {
       setAvailableDates([]);
       setSelectedDate("");
       setSelectedTime("");
-      setError("Error loading availability.");
+      setError(t("messages.error loading availability"));
     } finally {
       setModalLoading(false);
     }
@@ -161,10 +163,10 @@ export default function BookingSection({
     try {
       const res = await fetch(`/api/v1/doctors/${doc.uuid}/availability`);
       const json = await res.json();
-      if (json && Array.isArray(json.dates)) {
-        setAvailableDates(json.dates);
-        if (json.dates.length > 0) {
-          setSelectedDate(json.dates[0]?.value || "");
+      if (json && Array.isArray(json)) {
+        setAvailableDates(json);
+        if (json.length > 0) {
+          setSelectedDate(json[0]?.value || "");
         } else {
           setSelectedDate("");
         }
@@ -173,13 +175,13 @@ export default function BookingSection({
         setAvailableDates([]);
         setSelectedDate("");
         setSelectedTime("");
-        setError("Error loading availability.");
+        setError(t("messages.error loading availability"));
       }
     } catch {
       setAvailableDates([]);
       setSelectedDate("");
       setSelectedTime("");
-      setError("Error loading availability.");
+      setError(t("messages.error loading availability"));
     } finally {
       setModalLoading(false);
     }

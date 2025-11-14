@@ -6,6 +6,24 @@ import type { NextRequest } from "next/server";
 
 type Params = { uuid: string };
 
+type Meet = {
+  start: string;
+  end: string;
+};
+
+type TimeSlot = {
+  start: string;
+  end: string;
+  duration: string;
+};
+
+type DateSlot = {
+  title: string;
+  label: string;
+  value: string;
+  times: TimeSlot[];
+};
+
 export async function GET(request: NextRequest, context: { params: Params }) {
   const { uuid } = await context.params;
   const commonHeaders = {
@@ -40,14 +58,11 @@ export async function GET(request: NextRequest, context: { params: Params }) {
       "Doctors Availability API",
     );
 
-    // Transform remote meets to { dates: [{ label, value, times: [] }] }
-    type Meet = { start: string; end: string };
-    const meets = Array.isArray((data as { dates?: Meet[] })?.dates)
-      ? (data as { dates: Meet[] }).dates
+    const meets: DateSlot[] = Array.isArray((data as { dates?: DateSlot[] }).dates)
+      ? (data as { dates: DateSlot[] }).dates
       : [];
-      
-    const dates = Object.values(meets);
-    return new NextResponse(JSON.stringify({ dates }), {
+    
+    return new NextResponse(JSON.stringify(meets), {
       status: 200,
       headers: commonHeaders,
     });

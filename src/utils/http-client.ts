@@ -1,7 +1,6 @@
 import { logger } from "@/utils/logger";
 import { loadToken } from "./token-storage";
 import { fetchToken, refreshToken } from "./auth";
-import { IS_DEV } from "@/lib/constants";
 
 export interface HttpClientOptions extends RequestInit {
   skipAuthRetry?: boolean;
@@ -12,7 +11,7 @@ export async function httpClient<T = unknown>(
   options: HttpClientOptions = {}
 ): Promise<T> {
   // Disable SSL verification in local/dev if env is set
-  if (IS_DEV) {
+  if (process.env.NODE_ENV === "development") {
     process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
   }
 

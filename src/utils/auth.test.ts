@@ -13,13 +13,13 @@ describe("Auth Utils", () => {
   const mockTokenData: TokenData = {
     accessToken: "test-access-token",
     refreshToken: "test-refresh-token",
-    expiresAt: Date.now() + 3600000,
+    expiresIn: Date.now() + 3600000,
   };
 
   const expiredTokenData: TokenData = {
     accessToken: "expired-token",
     refreshToken: "test-refresh-token",
-    expiresAt: Date.now() - 1000,
+    expiresIn: Date.now() - 1000,
   };
 
   beforeEach(() => {
@@ -64,7 +64,7 @@ describe("Auth Utils", () => {
     it("returns false if expiresAt is in the past", () => {
       const result = isTokenValid({
         ...mockTokenData,
-        expiresAt: Date.now() - 100,
+        expiresIn: Date.now() - 100,
       });
       expect(result).toBe(false);
     });
@@ -99,12 +99,12 @@ describe("Auth Utils", () => {
 
       expect(saveToken).toHaveBeenCalledWith(
         expect.objectContaining({
-          expiresAt: expect.any(Number),
+          expiresIn: expect.any(Number),
         }),
       );
       const savedToken = vi.mocked(saveToken).mock.calls[0][0];
       const expectedExpiry = Date.now() + 3600 * 1000;
-      expect(Math.abs(savedToken.expiresAt - expectedExpiry)).toBeLessThan(100);
+      expect(Math.abs(savedToken.expiresIn - expectedExpiry)).toBeLessThan(100);
     });
 
     it("calls correct API endpoint with credentials", async () => {
@@ -165,7 +165,7 @@ describe("Auth Utils", () => {
     });
   });
 
-  describe("refreshAccessToken", () => {
+  describe("refreshToken", () => {
     it("refreshes token and saves new one", async () => {
       vi.mocked(loadToken).mockReturnValue(mockTokenData);
       vi.mocked(httpClient).mockResolvedValue({
@@ -233,7 +233,7 @@ describe("Auth Utils", () => {
       await refreshToken();
 
       expect(httpClient).toHaveBeenCalledWith(
-        "https://api.example.com/auth/refresh",
+        "https://api.example.com/auth/refresh-token",
         expect.objectContaining({
           method: "POST",
           headers: { "Content-Type": "application/json" },

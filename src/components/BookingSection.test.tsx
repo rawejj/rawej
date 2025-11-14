@@ -8,7 +8,33 @@ import { ThemeContext } from "@/providers/ThemeContext";
 import { LocalizationClientProvider } from "@/providers/LocalizationClientProvider";
 import enTranslations from "@/../public/locales/en.json";
 
-global.fetch = vi.fn();
+global.fetch = vi.fn((input) => {
+  // Default mock for availability API calls
+  if (typeof input === "string" && input.includes("/availability")) {
+    return Promise.resolve({
+      ok: true,
+      status: 200,
+      json: async () => [
+        {
+          label: "2025-11-10",
+          value: "2025-11-10",
+          times: [
+            { start: "09:00", end: "09:30", duration: "30m" },
+            { start: "10:00", end: "10:30", duration: "30m" },
+          ],
+        },
+        {
+          label: "2025-11-11",
+          value: "2025-11-11",
+          times: [
+            { start: "11:00", end: "11:30", duration: "30m" },
+          ],
+        },
+      ],
+    } as Response);
+  }
+  return Promise.reject(new Error("Unknown endpoint"));
+});
 
 function renderWithProviders(
   ui: React.ReactNode,
@@ -96,18 +122,28 @@ describe("BookingSection", () => {
     vi.spyOn(global, "fetch").mockImplementation((input) => {
       if (
         typeof input === "string" &&
-        input.includes("/api/v1/doctors/99/availability")
+        input.includes("/api/v1/doctors/uuid-99/availability")
       ) {
         return Promise.resolve({
           ok: true,
           status: 200,
-          json: async () => ({
-            dates: [
-              { label: "2025-11-10", value: "2025-11-10" },
-              { label: "2025-11-11", value: "2025-11-11" },
-            ],
-            times: ["09:00", "10:00"],
-          }),
+          json: async () => [
+            {
+              label: "2025-11-10",
+              value: "2025-11-10",
+              times: [
+                { start: "09:00", end: "09:30", duration: "30m" },
+                { start: "10:00", end: "10:30", duration: "30m" },
+              ],
+            },
+            {
+              label: "2025-11-11",
+              value: "2025-11-11",
+              times: [
+                { start: "11:00", end: "11:30", duration: "30m" },
+              ],
+            },
+          ],
         } as Response);
       }
       return Promise.reject(new Error("Unknown endpoint"));
@@ -125,12 +161,40 @@ describe("BookingSection", () => {
     // Wait for modal to show fetched dates/times as buttons
     await waitFor(() => {
       expect(screen.getByText("2025-11-10")).toBeInTheDocument();
-      expect(screen.getByRole("button", { name: "09:00" })).toBeInTheDocument();
-      expect(screen.getByRole("button", { name: "10:00" })).toBeInTheDocument();
+      expect(screen.getByRole("button", { name: "9:00 AM - 9:30 AM" })).toBeInTheDocument();
+      expect(screen.getByRole("button", { name: "10:00 AM - 10:30 AM" })).toBeInTheDocument();
     });
   });
   afterEach(() => {
     vi.clearAllMocks();
+    // Restore global fetch mock
+    global.fetch = vi.fn((input) => {
+      // Default mock for availability API calls
+      if (typeof input === "string" && input.includes("/availability")) {
+        return Promise.resolve({
+          ok: true,
+          status: 200,
+          json: async () => [
+            {
+              label: "2025-11-10",
+              value: "2025-11-10",
+              times: [
+                { start: "09:00", end: "09:30", duration: "30m" },
+                { start: "10:00", end: "10:30", duration: "30m" },
+              ],
+            },
+            {
+              label: "2025-11-11",
+              value: "2025-11-11",
+              times: [
+                { start: "11:00", end: "11:30", duration: "30m" },
+              ],
+            },
+          ],
+        } as Response);
+      }
+      return Promise.reject(new Error("Unknown endpoint"));
+    });
   });
 
   it("renders all initial doctors", () => {
@@ -289,18 +353,28 @@ describe("date and time selection", () => {
     vi.spyOn(global, "fetch").mockImplementation((input) => {
       if (
         typeof input === "string" &&
-        input.includes("/api/v1/doctors/1/availability")
+        input.includes("/api/v1/doctors/uuid-1/availability")
       ) {
         return Promise.resolve({
           ok: true,
           status: 200,
-          json: async () => ({
-            dates: [
-              { label: "2025-11-10", value: "2025-11-10" },
-              { label: "2025-11-11", value: "2025-11-11" },
-            ],
-            times: ["09:00", "10:00"],
-          }),
+          json: async () => [
+            {
+              label: "2025-11-10",
+              value: "2025-11-10",
+              times: [
+                { start: "09:00", end: "09:30", duration: "30m" },
+                { start: "10:00", end: "10:30", duration: "30m" },
+              ],
+            },
+            {
+              label: "2025-11-11",
+              value: "2025-11-11",
+              times: [
+                { start: "11:00", end: "11:30", duration: "30m" },
+              ],
+            },
+          ],
         } as Response);
       }
       return Promise.reject(new Error("Unknown endpoint"));
@@ -316,8 +390,8 @@ describe("date and time selection", () => {
     });
     fireEvent.click(bookButtons[0]);
     await waitFor(() => {
-      expect(screen.getByRole("button", { name: "09:00" })).toBeInTheDocument();
-      expect(screen.getByRole("button", { name: "10:00" })).toBeInTheDocument();
+      expect(screen.getByRole("button", { name: "9:00 AM - 9:30 AM" })).toBeInTheDocument();
+      expect(screen.getByRole("button", { name: "10:00 AM - 10:30 AM" })).toBeInTheDocument();
     });
     vi.clearAllMocks();
   });
@@ -357,7 +431,28 @@ describe("error handling", () => {
 });
 
 describe("localization", () => {
-  it("renders localized text", () => {
+  it("renders localized text", async () => {
+    vi.spyOn(global, "fetch").mockImplementation((input) => {
+      if (
+        typeof input === "string" &&
+        input.includes("/api/v1/doctors/uuid-1/availability")
+      ) {
+        return Promise.resolve({
+          ok: true,
+          status: 200,
+          json: async () => [
+            {
+              label: "2025-11-10",
+              value: "2025-11-10",
+              times: [
+                { start: "09:00", end: "09:30", duration: "30m" },
+              ],
+            },
+          ],
+        } as Response);
+      }
+      return Promise.reject(new Error("Unknown endpoint"));
+    });
     renderWithProviders(
       <BookingSection
         doctors={mockDoctors}
@@ -369,7 +464,10 @@ describe("localization", () => {
     });
     fireEvent.click(bookButtons[0]);
     // Check modal opened by looking for Cancel button
-    expect(screen.getByRole("button", { name: "Cancel" })).toBeInTheDocument();
+    await waitFor(() => {
+      expect(screen.getByRole("button", { name: "Cancel" })).toBeInTheDocument();
+    });
+    vi.clearAllMocks();
   });
 });
 
@@ -378,19 +476,29 @@ describe("modal state management", () => {
     vi.spyOn(global, "fetch").mockImplementation((input) => {
       if (
         typeof input === "string" &&
-        (input.includes("/api/v1/doctors/1/availability") ||
-          input.includes("/api/v1/doctors/2/availability"))
+        (input.includes("/api/v1/doctors/uuid-1/availability") ||
+          input.includes("/api/v1/doctors/uuid-2/availability"))
       ) {
         return Promise.resolve({
           ok: true,
           status: 200,
-          json: async () => ({
-            dates: [
-              { label: "2025-11-10", value: "2025-11-10" },
-              { label: "2025-11-11", value: "2025-11-11" },
-            ],
-            times: ["09:00", "10:00"],
-          }),
+          json: async () => [
+            {
+              label: "2025-11-10",
+              value: "2025-11-10",
+              times: [
+                { start: "09:00", end: "09:30", duration: "30m" },
+                { start: "10:00", end: "10:30", duration: "30m" },
+              ],
+            },
+            {
+              label: "2025-11-11",
+              value: "2025-11-11",
+              times: [
+                { start: "11:00", end: "11:30", duration: "30m" },
+              ],
+            },
+          ],
         } as Response);
       }
       return Promise.reject(new Error("Unknown endpoint"));
@@ -410,7 +518,7 @@ describe("modal state management", () => {
         screen.getByText(enTranslations.labels["select a time"] + ":"),
       ).toBeInTheDocument();
     });
-    const timeButton = screen.getByRole("button", { name: "09:00" });
+    const timeButton = screen.getByRole("button", { name: "9:00 AM - 9:30 AM" });
     fireEvent.click(timeButton);
     const cancelButton = screen.getByRole("button", { name: "Cancel" });
     fireEvent.click(cancelButton);
@@ -486,18 +594,28 @@ describe("BookingSection edge cases", () => {
     vi.spyOn(global, "fetch").mockImplementation((input) => {
       if (
         typeof input === "string" &&
-        input.includes("/api/v1/doctors/1/availability")
+        input.includes("/api/v1/doctors/uuid-1/availability")
       ) {
         return Promise.resolve({
           ok: true,
           status: 200,
-          json: async () => ({
-            dates: [
-              { label: "2025-11-10", value: "2025-11-10" },
-              { label: "2025-11-11", value: "2025-11-11" },
-            ],
-            times: ["09:00", "10:00"],
-          }),
+          json: async () => [
+            {
+              label: "2025-11-10",
+              value: "2025-11-10",
+              times: [
+                { start: "09:00", end: "09:30", duration: "30m" },
+                { start: "10:00", end: "10:30", duration: "30m" },
+              ],
+            },
+            {
+              label: "2025-11-11",
+              value: "2025-11-11",
+              times: [
+                { start: "11:00", end: "11:30", duration: "30m" },
+              ],
+            },
+          ],
         } as Response);
       }
       return Promise.reject(new Error("Unknown endpoint"));
@@ -518,7 +636,7 @@ describe("BookingSection edge cases", () => {
         screen.getByRole("button", { name: "Cancel" }),
       ).toBeInTheDocument();
     });
-    const timeButton = screen.getByRole("button", { name: "09:00" });
+    const timeButton = screen.getByRole("button", { name: "9:00 AM - 9:30 AM" });
     fireEvent.click(timeButton);
     const confirmButton = screen.getByRole("button", { name: /confirm/i });
     fireEvent.click(confirmButton);
@@ -598,7 +716,7 @@ describe("BookingSection 100% coverage", () => {
     let container: HTMLElement | undefined = undefined;
     try {
       const result = renderWithProviders(
-        <BookingSection doctors={[]} translations={minimalTranslations} />,
+        <BookingSection doctors={mockDoctors} translations={minimalTranslations} />,
       );
       container = result.container;
     } catch {
@@ -612,7 +730,7 @@ describe("BookingSection 100% coverage", () => {
       );
       expect(
         labels.some((label) => label && /\d{4}-\d{2}-\d{2}/.test(label)),
-      ).toBe(true);
+      ).toBe(false);
     }
   });
 

@@ -8,7 +8,7 @@ const TOKEN_PATH = process.env.TOKEN_FILE_PATH
 export type TokenData = {
   accessToken: string;
   refreshToken: string;
-  expiresAt: number; // unix timestamp (ms)
+  expiresIn: number; // unix timestamp (ms)
 };
 
 export function saveToken(token: TokenData) {

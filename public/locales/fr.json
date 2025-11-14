@@ -1,6 +1,7 @@
 {
   "messages": {
-    "no availability slots": "Aucun créneau disponible pour la réservation."
+    "no availability slots": "Aucun créneau disponible pour la réservation.",
+    "error loading availability": "Erreur lors du chargement de la disponibilité."
   },
   "book appointment": "Prendre rendez-vous",
   "theme": {

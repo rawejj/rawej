@@ -13,7 +13,7 @@ export function isTokenValid(token: TokenData | null): boolean {
     !!token &&
     typeof token.accessToken === "string" &&
     token.accessToken.length > 0 &&
-    token.expiresAt > Date.now()
+    token.expiresIn > Date.now()
   );
 }
 
@@ -39,7 +39,7 @@ export async function fetchToken(): Promise<string> {
     const tokenData: TokenData = {
       accessToken: tokenResp.accessToken,
       refreshToken: tokenResp.refreshToken,
-      expiresAt: Date.now() + expiresIn * 1000,
+      expiresIn: Date.now() + expiresIn * 1000,
     };
     saveToken(tokenData);
     logger.info("Token fetched and saved", "Auth");
@@ -75,7 +75,7 @@ export async function refreshToken(): Promise<string> {
     const newToken: TokenData = {
       accessToken: resp.accessToken,
       refreshToken: resp.refreshToken || token.refreshToken,
-      expiresAt: Date.now() + expiresIn * 1000,
+      expiresIn: Date.now() + expiresIn * 1000,
     };
     saveToken(newToken);
     logger.info("Access token refreshed and saved", "Auth");

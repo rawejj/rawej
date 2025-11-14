@@ -1,6 +1,7 @@
 {
   "messages": {
-    "no availability slots": "Keine verfügbaren Buchungszeiten."
+    "no availability slots": "Keine verfügbaren Buchungszeiten.",
+    "error loading availability": "Fehler beim Laden der Verfügbarkeit."
   },
   "book appointment": "Termin buchen",
   "theme": {

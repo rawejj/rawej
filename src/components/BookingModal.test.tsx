@@ -32,12 +32,12 @@ describe("BookingModal", () => {
   };
 
   const mockTimes = [
-    "9:00 AM",
-    "10:00 AM",
-    "11:00 AM",
-    "2:00 PM",
-    "3:00 PM",
-    "4:00 PM",
+    { start: "09:00", end: "10:00", duration: "60" },
+    { start: "10:00", end: "11:00", duration: "60" },
+    { start: "11:00", end: "12:00", duration: "60" },
+    { start: "14:00", end: "15:00", duration: "60" },
+    { start: "15:00", end: "16:00", duration: "60" },
+    { start: "16:00", end: "17:00", duration: "60" },
   ];
 
   const getNext7Days = () => [
@@ -109,7 +109,7 @@ describe("BookingModal", () => {
       <BookingModal {...defaultProps} selectedDate="2024-01-01" />,
     );
     const selectedButton = screen.getByRole("button", { name: "Mon" });
-    expect(selectedButton).toHaveClass("bg-purple-500");
+    expect(selectedButton).toHaveClass("bg-linear-to-r");
   });
 
   it("calls onDateChange when date is selected", () => {
@@ -125,16 +125,16 @@ describe("BookingModal", () => {
   it("renders time selection buttons", () => {
     renderWithProviders(<BookingModal {...defaultProps} />);
     expect(screen.getByText(/Select a Time/i)).toBeInTheDocument();
-    expect(screen.getByRole("button", { name: "9:00 AM" })).toBeInTheDocument();
-    expect(screen.getByRole("button", { name: "2:00 PM" })).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "9:00 AM - 10:00 AM 60" })).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "2:00 PM - 3:00 PM 60" })).toBeInTheDocument();
   });
 
   it("highlights selected time", () => {
     renderWithProviders(
-      <BookingModal {...defaultProps} selectedTime="9:00 AM" />,
+      <BookingModal {...defaultProps} selectedTime="09:00" />,
     );
-    const selectedButton = screen.getByRole("button", { name: "9:00 AM" });
-    expect(selectedButton).toHaveClass("bg-pink-400");
+    const selectedButton = screen.getByRole("button", { name: "9:00 AM - 10:00 AM 60" });
+    expect(selectedButton).toHaveClass("bg-linear-to-r");
   });
 
   it("calls onTimeChange when time is selected", () => {
@@ -142,9 +142,9 @@ describe("BookingModal", () => {
     renderWithProviders(
       <BookingModal {...defaultProps} onTimeChange={onTimeChange} />,
     );
-    const timeButton = screen.getByRole("button", { name: "9:00 AM" });
+    const timeButton = screen.getByRole("button", { name: "9:00 AM - 10:00 AM 60" });
     fireEvent.click(timeButton);
-    expect(onTimeChange).toHaveBeenCalledWith("9:00 AM");
+    expect(onTimeChange).toHaveBeenCalledWith("09:00");
   });
 
   it("disables confirm button when no time is selected", () => {
@@ -157,7 +157,7 @@ describe("BookingModal", () => {
 
   it("enables confirm button when time is selected", () => {
     renderWithProviders(
-      <BookingModal {...defaultProps} selectedTime="9:00 AM" />,
+      <BookingModal {...defaultProps} selectedTime="09:00" />,
     );
     const confirmButton = screen.getByRole("button", {
       name: /Confirm Booking/i,
