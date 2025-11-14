@@ -1,7 +1,11 @@
 import Image from "next/image";
-import React from "react";
+import React, { useContext } from "react";
 import { Doctor } from "./BookingSection";
 import { useTranslations } from "@/providers/TranslationsProvider";
+import dayjs from "dayjs";
+import { toJalaali } from "jalaali-js";
+import { LocalizationContext } from "@/providers/LocalizationContext";
+import { JALALI_MONTHS } from "@/lib/constants";
 
 interface BookingModalProps {
   error?: string | null;
@@ -38,6 +42,9 @@ const BookingModal: React.FC<BookingModalProps> = ({
   const days = getNext7Days();
   const selectedDay = days.find((day) => day.value === selectedDate);
   const times = selectedDay?.times || [];
+  // Get current language from context
+  const localization = useContext(LocalizationContext);
+  const lang = localization?.language || "en";
   // Retry handler for error state
   const handleRefresh = () => {
     if (fetchAvailability) fetchAvailability();
@@ -124,19 +131,43 @@ const BookingModal: React.FC<BookingModalProps> = ({
               {t("labels.select a date")}: 
             </div>
             <div className="flex gap-2 overflow-x-auto pb-2 mb-4 hide-scrollbar">
-              {getNext7Days().map((day) => (
-                <button
-                  key={day.value}
-                  className={`px-4 py-2 rounded-full border font-semibold transition-colors min-w-[90px] ${
-                    selectedDate === day.value
-                      ? "bg-purple-500 text-white border-purple-500"
-                      : "bg-zinc-100 dark:bg-zinc-800 text-zinc-700 dark:text-zinc-200 border-zinc-300 dark:border-zinc-700"
-                  }`}
-                  onClick={() => onDateChange(day.value)}
-                >
-                  {day.label}
-                </button>
-              ))}
+              {getNext7Days().map((day) => {
+                let formattedLabel = day.label;
+                if (lang === "fa") {
+                  // Jalali: جمعه - 23 آبان 1404
+                  const d = dayjs(day.value);
+                  const [year, month, dayNumGreg] = day.value.split('-').map(Number);
+                  const jDate = toJalaali(year, month, dayNumGreg);
+                  const weekdays = {
+                    0: t("weekdays.sun"),
+                    1: t("weekdays.mon"),
+                    2: t("weekdays.tue"),
+                    3: t("weekdays.wed"),
+                    4: t("weekdays.thu"),
+                    5: t("weekdays.fri"),
+                    6: t("weekdays.sat"),
+                  };
+                  const weekday = weekdays[d.day() as 0 | 1 | 2 | 3 | 4 | 5 | 6];
+                  const dayNum = jDate.jd.toString().padStart(2, '0');
+                  const monthNum = jDate.jm.toString().padStart(2, '0');
+                  const monthName = JALALI_MONTHS[monthNum as "01" | "02" | "03" | "04" | "05" | "06" | "07" | "08" | "09" | "10" | "11" | "12"];
+                  const yearStr = jDate.jy.toString();
+                  formattedLabel = `${weekday} - ${dayNum} ${monthName} ${yearStr}`;
+                }
+                return (
+                  <button
+                    key={day.value}
+                    className={`px-4 py-2 rounded-full border font-semibold transition-colors min-w-[90px] ${
+                      selectedDate === day.value
+                        ? "bg-purple-500 text-white border-purple-500"
+                        : "bg-zinc-100 dark:bg-zinc-800 text-zinc-700 dark:text-zinc-200 border-zinc-300 dark:border-zinc-700"
+                    }`}
+                    onClick={() => onDateChange(day.value)}
+                  >
+                    {formattedLabel}
+                  </button>
+                );
+              })}
             </div>
             <div className="mb-2 text-sm font-medium text-zinc-700 dark:text-zinc-200">
               {t("labels.select a time")}: 
