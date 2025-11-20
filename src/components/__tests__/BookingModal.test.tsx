@@ -31,6 +31,31 @@ describe("BookingModal", () => {
     callTypes: ["phone", "video"],
   };
 
+  const mockProducts = [
+    {
+      id: 1,
+      title: "Video Consultation",
+      slug: "video-consultation",
+      slug_old: "video-consultation",
+      title_en: "Video Consultation",
+      summary: "Video call with doctor",
+      description: "Detailed video consultation",
+      display_rank: 1,
+      created_at: "2024-01-01T00:00:00Z",
+      prices: [
+        {
+          id: 1,
+          product_id: 1,
+          title: "Standard",
+          price: 100000,
+          discount_amount: 0,
+          discount_percent: "0",
+          created_at: "2024-01-01T00:00:00Z",
+        },
+      ],
+    },
+  ];
+
   const mockTimes = [
     { start: "09:00", end: "10:00", duration: "60" },
     { start: "10:00", end: "11:00", duration: "60" },
@@ -49,6 +74,9 @@ describe("BookingModal", () => {
   const defaultProps = {
     show: true,
     doctor: mockDoctor,
+    products: mockProducts,
+    selectedProductId: 1,
+    selectedPriceId: 1,
     selectedDate: "2024-01-01",
     selectedTime: "",
     confirmed: false,
@@ -56,7 +84,8 @@ describe("BookingModal", () => {
     onDateChange: vi.fn(),
     onTimeChange: vi.fn(),
     onConfirm: vi.fn(),
-    getNext7Days,
+    onProductSelect: vi.fn(),
+    availableDates: getNext7Days(),
   };
 
   it("returns null when show is false", () => {
@@ -125,15 +154,15 @@ describe("BookingModal", () => {
   it("renders time selection buttons", () => {
     renderWithProviders(<BookingModal {...defaultProps} />);
     expect(screen.getByText(/Select a Time/i)).toBeInTheDocument();
-    expect(screen.getByRole("button", { name: "9:00 AM - 10:00 AM 60" })).toBeInTheDocument();
-    expect(screen.getByRole("button", { name: "2:00 PM - 3:00 PM 60" })).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "09:00 60" })).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "14:00 60" })).toBeInTheDocument();
   });
 
   it("highlights selected time", () => {
     renderWithProviders(
       <BookingModal {...defaultProps} selectedTime="09:00" />,
     );
-    const selectedButton = screen.getByRole("button", { name: "9:00 AM - 10:00 AM 60" });
+    const selectedButton = screen.getByRole("button", { name: "09:00 60" });
     expect(selectedButton).toHaveClass("bg-linear-to-r");
   });
 
@@ -142,7 +171,7 @@ describe("BookingModal", () => {
     renderWithProviders(
       <BookingModal {...defaultProps} onTimeChange={onTimeChange} />,
     );
-    const timeButton = screen.getByRole("button", { name: "9:00 AM - 10:00 AM 60" });
+    const timeButton = screen.getByRole("button", { name: "09:00 60" });
     fireEvent.click(timeButton);
     expect(onTimeChange).toHaveBeenCalledWith("09:00");
   });
@@ -247,13 +276,13 @@ describe("BookingModal", () => {
   });
 
   it("handles empty times array gracefully", () => {
-    const getEmptyDays = () => [
+    const emptyDays = [
       { title: "Monday", label: "Mon", value: "2024-01-01", times: [] },
       { title: "Tuesday", label: "Tue", value: "2024-01-02", times: [] },
       { title: "Wednesday", label: "Wed", value: "2024-01-03", times: [] },
     ];
     const { container } = renderWithProviders(
-      <BookingModal {...defaultProps} getNext7Days={getEmptyDays} />,
+      <BookingModal {...defaultProps} availableDates={emptyDays} />,
     );
     expect(container).toBeInTheDocument();
   });

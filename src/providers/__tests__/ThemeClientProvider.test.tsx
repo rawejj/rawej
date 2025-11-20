@@ -1,7 +1,7 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
 import { render, screen, fireEvent, waitFor } from "@testing-library/react";
-import ThemeClientProvider from "./ThemeClientProvider";
-import { ThemeContext } from "./ThemeContext";
+import ThemeClientProvider from "@/providers/ThemeClientProvider";
+import { ThemeContext } from "@/providers/ThemeContext";
 import React from "react";
 
 // Mock window.matchMedia for tests

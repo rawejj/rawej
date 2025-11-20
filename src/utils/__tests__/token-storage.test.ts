@@ -5,7 +5,7 @@ import {
   loadToken,
   clearToken,
   type TokenData,
-} from "./token-storage";
+} from "@/utils/token-storage";
 
 vi.mock("fs", async () => {
   const actual = vi.importActual<typeof import("fs")>("fs");

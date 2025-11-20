@@ -57,9 +57,9 @@ const BookingModal: React.FC<BookingModalProps> = ({
   // Reset step when modal opens
   React.useEffect(() => {
     if (show) {
-      setCurrentStep('product');
+      setCurrentStep(selectedProductId ? 'datetime' : 'product');
     }
-  }, [show]);
+  }, [show, selectedProductId]);
 
   const days = availableDates;
   const selectedDay = days.find((day) => day.value === selectedDate);

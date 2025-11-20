@@ -1,4 +1,5 @@
 export type LanguageKey = "en" | "de" | "fr" | "ku-sor" | "ku-kur" | "fa";
+export type Currency = "USD" | "EUR" | "IQD" | "TRY" | "IRR";
 
 export interface LanguageConfig {
   label: string;
@@ -6,6 +7,7 @@ export interface LanguageConfig {
   direction: "ltr" | "rtl";
   dateFormat: string;
   timezone: string;
+  currency: string;
 }
 
 export const languages: Record<LanguageKey, LanguageConfig> = {
@@ -15,6 +17,7 @@ export const languages: Record<LanguageKey, LanguageConfig> = {
     direction: "ltr",
     dateFormat: "MM/DD/YYYY",
     timezone: "UTC",
+    currency: "USD",
   },
   de: {
     label: "Deutsch",
@@ -22,6 +25,7 @@ export const languages: Record<LanguageKey, LanguageConfig> = {
     direction: "ltr",
     dateFormat: "DD.MM.YYYY",
     timezone: "Europe/Berlin",
+    currency: "EUR",
   },
   fr: {
     label: "French",
@@ -29,6 +33,7 @@ export const languages: Record<LanguageKey, LanguageConfig> = {
     direction: "ltr",
     dateFormat: "DD/MM/YYYY",
     timezone: "Europe/Paris",
+    currency: "EUR",
   },
   "ku-sor": {
     label: "Kurdi-Sorani",
@@ -36,6 +41,7 @@ export const languages: Record<LanguageKey, LanguageConfig> = {
     direction: "rtl",
     dateFormat: "YYYY/MM/DD",
     timezone: "Asia/Baghdad",
+    currency: "IQD",
   },
   "ku-kur": {
     label: "Kurdi-Kermanji",
@@ -43,6 +49,7 @@ export const languages: Record<LanguageKey, LanguageConfig> = {
     direction: "ltr",
     dateFormat: "YYYY-MM-DD",
     timezone: "Europe/Istanbul",
+    currency: "TRY",
   },
   fa: {
     locale: "fa-IR",
@@ -50,6 +57,7 @@ export const languages: Record<LanguageKey, LanguageConfig> = {
     direction: "rtl",
     dateFormat: "YYYY/MM/DD",
     timezone: "Asia/Tehran",
+    currency: "IRR",
   },
 };
 

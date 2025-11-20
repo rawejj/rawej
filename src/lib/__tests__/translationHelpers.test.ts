@@ -1,6 +1,6 @@
 import { describe, it, expect } from "vitest";
-import { getTranslation } from "./translationHelpers";
-import type { Translations } from "./translationHelpers";
+import { getTranslation } from "@/lib/translationHelpers";
+import type { Translations } from "@/lib/translationHelpers";
 
 describe("Translation Helpers", () => {
   const mockTranslations: Translations = {

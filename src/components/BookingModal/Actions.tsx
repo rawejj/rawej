@@ -23,7 +23,7 @@ const Actions: React.FC<ActionsProps> = ({
       <button
         className={`w-full py-4 rounded-3xl font-bold shadow-lg transition-all duration-300 text-lg border-2 ${
           selectedTime
-            ? "bg-linear-to-r from-purple-500 to-pink-400 text-white border-purple-500 hover:from-purple-600 hover:to-pink-500 hover:shadow-xl hover:shadow-purple-500/50 hover:border-purple-600"
+            ? "bg-linear-to-r from-purple-500 to-pink-400 text-white border-purple-500 hover:from-purple-600 hover:to-pink-500 hover:shadow-lg hover:shadow-purple-500/50 hover:border-purple-600 cursor-pointer"
             : "bg-gray-100 dark:bg-zinc-700 text-zinc-400 dark:text-zinc-500 border-gray-200 dark:border-zinc-600 cursor-not-allowed"
         }`}
         onClick={selectedTime ? onConfirm : undefined}

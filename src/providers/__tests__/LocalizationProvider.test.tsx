@@ -1,7 +1,7 @@
 import { render, screen } from "@testing-library/react";
-import { LocalizationClientProvider } from "./LocalizationClientProvider";
-import { useLocalization } from "./useLocalization";
-import { languages } from "./LocalizationProvider";
+import { LocalizationClientProvider } from "@/providers/LocalizationClientProvider";
+import { useLocalization } from "@/providers/useLocalization";
+import { languages } from "@/providers/LocalizationProvider";
 import { fireEvent } from "@testing-library/react";
 import { vi } from "vitest";
 

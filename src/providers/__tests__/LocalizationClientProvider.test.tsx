@@ -1,11 +1,11 @@
 import { render, screen, fireEvent, waitFor } from "@testing-library/react";
 import { vi } from "vitest";
-import { LocalizationClientProvider } from "./LocalizationClientProvider";
-import { LocalizationContext } from "./LocalizationContext";
-import { useLocalization } from "./useLocalization";
+import { LocalizationClientProvider } from "@/providers/LocalizationClientProvider";
+import { LocalizationContext } from "@/providers/LocalizationContext";
+import { useLocalization } from "@/providers/useLocalization";
 import { useRouter } from "next/navigation";
 import { usePathname } from "next/navigation";
-import { LanguageKey } from "./LocalizationProvider";
+import { LanguageKey } from "@/providers/LocalizationProvider";
 
 vi.mock("next/navigation");
 
@@ -52,6 +52,7 @@ describe("LocalizationClientProvider", () => {
               direction: "ltr",
               dateFormat: "MM/DD/YYYY",
               timezone: "UTC",
+              currency: "USD",
             },
             setLanguage: () => {},
           }}
@@ -76,6 +77,7 @@ describe("LocalizationClientProvider", () => {
               direction: "ltr",
               dateFormat: "DD/MM/YYYY",
               timezone: "Europe/Paris",
+              currency: "EUR",
             },
             setLanguage: () => {},
           }}
@@ -100,6 +102,7 @@ describe("LocalizationClientProvider", () => {
               direction: "ltr",
               dateFormat: "MM/DD/YYYY",
               timezone: "UTC",
+              currency: "USD",
             },
             setLanguage: () => {},
           }}
@@ -124,6 +127,7 @@ describe("LocalizationClientProvider", () => {
               direction: "ltr",
               dateFormat: "MM/DD/YYYY",
               timezone: "UTC",
+              currency: "USD",
             },
             setLanguage: () => {},
           }}

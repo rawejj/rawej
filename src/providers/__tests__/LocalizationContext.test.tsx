@@ -1,8 +1,8 @@
 import { describe, it, expect } from "vitest";
-import React, { useContext } from "react";
+import { useContext } from "react";
 import { render, screen } from "@testing-library/react";
-import { LocalizationContext } from "./LocalizationContext";
-import type { LocalizationContextValue } from "./LocalizationProvider";
+import { LocalizationContext } from "@/providers/LocalizationContext";
+import type { LocalizationContextValue } from "@/providers/LocalizationProvider";
 
 describe("LocalizationContext", () => {
   describe("context creation", () => {
@@ -36,6 +36,7 @@ describe("LocalizationContext", () => {
           direction: "ltr",
           dateFormat: "MM/DD/YYYY",
           timezone: "UTC",
+          currency: "USD",
         },
         setLanguage: () => {},
       };
@@ -63,6 +64,7 @@ describe("LocalizationContext", () => {
           direction: "rtl",
           dateFormat: "YYYY/MM/DD",
           timezone: "Asia/Tehran",
+          currency: "IRR",
         },
         setLanguage: () => {},
       };
@@ -91,6 +93,7 @@ describe("LocalizationContext", () => {
           direction: "ltr",
           dateFormat: "MM/DD/YYYY",
           timezone: "UTC",
+          currency: "USD",
         },
         setLanguage: () => {
           callCount++;
@@ -130,6 +133,7 @@ describe("LocalizationContext", () => {
           direction: "ltr",
           dateFormat: "MM/DD/YYYY",
           timezone: "UTC",
+          currency: "USD",
         },
         setLanguage: () => {},
       };
@@ -163,6 +167,7 @@ describe("LocalizationContext", () => {
           direction: "rtl",
           dateFormat: "YYYY/MM/DD",
           timezone: "Asia/Tehran",
+          currency: "IRR",
         },
         setLanguage: () => {},
       };
@@ -196,6 +201,7 @@ describe("LocalizationContext", () => {
           direction: "ltr",
           dateFormat: "DD.MM.YYYY",
           timezone: "Europe/Berlin",
+          currency: "EUR",
         },
         setLanguage: () => {},
       };
@@ -223,6 +229,7 @@ describe("LocalizationContext", () => {
           direction: "ltr",
           dateFormat: "DD/MM/YYYY",
           timezone: "Asia/Baghdad",
+          currency: "IQD",
         },
         setLanguage: () => {},
       };
@@ -269,6 +276,7 @@ describe("LocalizationContext", () => {
           direction: "ltr",
           dateFormat: "MM/DD/YYYY",
           timezone: "UTC",
+          currency: "USD",
         },
         setLanguage: () => {},
       };
@@ -305,6 +313,7 @@ describe("LocalizationContext", () => {
           direction: "ltr",
           dateFormat: "MM/DD/YYYY",
           timezone: "UTC",
+          currency: "USD",
         },
         setLanguage: () => {},
       };
@@ -317,6 +326,7 @@ describe("LocalizationContext", () => {
           direction: "ltr",
           dateFormat: "DD.MM.YYYY",
           timezone: "Europe/Berlin",
+          currency: "EUR",
         },
         setLanguage: () => {},
       };
@@ -356,6 +366,7 @@ describe("LocalizationContext", () => {
           direction: "ltr",
           dateFormat: "MM/DD/YYYY",
           timezone: "UTC",
+          currency: "USD",
         },
         setLanguage: () => {},
       };
@@ -368,6 +379,7 @@ describe("LocalizationContext", () => {
           direction: "rtl",
           dateFormat: "YYYY/MM/DD",
           timezone: "Asia/Tehran",
+          currency: "IRR",
         },
         setLanguage: () => {},
       };
@@ -401,6 +413,7 @@ describe("LocalizationContext", () => {
           direction: "ltr",
           dateFormat: "MM/DD/YYYY",
           timezone: "UTC",
+          currency: "USD",
         },
         setLanguage: () => {},
       };

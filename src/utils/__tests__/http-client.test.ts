@@ -1,13 +1,13 @@
 import { describe, it, expect, beforeEach, vi, afterEach, MockedFunction } from "vitest";
 
 vi.mock("@/utils/logger");
-vi.mock("./token-storage");
-vi.mock("./auth");
+vi.mock("@/utils/token-storage");
+vi.mock("@/utils/auth");
 
-import { httpClient } from "./http-client";
+import { httpClient } from "@/utils/http-client";
 import { logger } from "@/utils/logger";
-import { loadToken } from "./token-storage";
-import { fetchToken, refreshToken } from "./auth";
+import { loadToken } from "@/utils/token-storage";
+import { fetchToken, refreshToken } from "@/utils/auth";
 
 describe("HTTP Client", () => {
   beforeEach(() => {
@@ -188,7 +188,7 @@ describe("HTTP Client", () => {
 
   describe("SSL configuration in dev mode", () => {
     it("should disable SSL verification in development", async () => {
-      (process.env as any).NODE_ENV = "development";
+      vi.stubEnv("NODE_ENV", "development");
       const mockResponse = {
         ok: true,
         headers: new Headers({ "content-type": "application/json" }),
@@ -200,10 +200,12 @@ describe("HTTP Client", () => {
       await httpClient("/test");
 
       expect(process.env.NODE_TLS_REJECT_UNAUTHORIZED).toBe("0");
+      vi.unstubAllEnvs();
     });
 
     it("should enable SSL verification in production", async () => {
-      (process.env as any).NODE_ENV = "production";
+      vi.stubEnv("NODE_ENV", "production");
+
       const mockResponse = {
         ok: true,
         headers: new Headers({ "content-type": "application/json" }),
@@ -215,6 +217,8 @@ describe("HTTP Client", () => {
       await httpClient("/test");
 
       expect(process.env.NODE_TLS_REJECT_UNAUTHORIZED).toBeUndefined();
+
+      vi.unstubAllEnvs();
     });
   });
 

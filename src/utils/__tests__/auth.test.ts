@@ -1,13 +1,13 @@
 import { describe, it, expect, beforeEach, vi } from "vitest";
-import { isTokenValid, fetchToken, refreshToken } from "./auth";
-import { saveToken, loadToken, clearToken } from "./token-storage";
-import { httpClient } from "./http-client";
-import { logger } from "./logger";
-import type { TokenData } from "./token-storage";
+import { isTokenValid, fetchToken, refreshToken } from "@/utils/auth";
+import * as tokenStorageModule from "@/utils/token-storage";
+import * as httpClientModule from "@/utils/http-client";
+import * as loggerModule from "@/utils/logger";
+import type { TokenData } from "@/utils/token-storage";
 
-vi.mock("./http-client");
-vi.mock("./token-storage");
-vi.mock("./logger");
+vi.mock("@/utils/http-client");
+vi.mock("@/utils/token-storage");
+vi.mock("@/utils/logger");
 
 describe("Auth Utils", () => {
   const mockTokenData: TokenData = {
@@ -72,7 +72,7 @@ describe("Auth Utils", () => {
 
   describe("fetchToken", () => {
     it("fetches token from API and saves it", async () => {
-      vi.mocked(httpClient).mockResolvedValue({
+      vi.mocked(httpClientModule.httpClient).mockResolvedValue({
         accessToken: "new-access-token",
         refreshToken: "new-refresh-token",
         expiresIn: 3600,
@@ -81,7 +81,7 @@ describe("Auth Utils", () => {
       const result = await fetchToken();
 
       expect(result).toBe("new-access-token");
-      expect(saveToken).toHaveBeenCalledWith(
+      expect(vi.mocked(tokenStorageModule.saveToken)).toHaveBeenCalledWith(
         expect.objectContaining({
           accessToken: "new-access-token",
           refreshToken: "new-refresh-token",
@@ -90,32 +90,32 @@ describe("Auth Utils", () => {
     });
 
     it("uses default expiresIn of 3600 if not provided", async () => {
-      vi.mocked(httpClient).mockResolvedValue({
+      vi.mocked(httpClientModule.httpClient).mockResolvedValue({
         accessToken: "new-access-token",
         refreshToken: "new-refresh-token",
       });
 
       await fetchToken();
 
-      expect(saveToken).toHaveBeenCalledWith(
+      expect(vi.mocked(tokenStorageModule.saveToken)).toHaveBeenCalledWith(
         expect.objectContaining({
           expiresIn: expect.any(Number),
         }),
       );
-      const savedToken = vi.mocked(saveToken).mock.calls[0][0];
+      const savedToken = vi.mocked(tokenStorageModule.saveToken).mock.calls[0][0];
       const expectedExpiry = Date.now() + 3600 * 1000;
       expect(Math.abs(savedToken.expiresIn - expectedExpiry)).toBeLessThan(100);
     });
 
     it("calls correct API endpoint with credentials", async () => {
-      vi.mocked(httpClient).mockResolvedValue({
+      vi.mocked(httpClientModule.httpClient).mockResolvedValue({
         accessToken: "test",
         refreshToken: "test",
       });
 
       await fetchToken();
 
-      expect(httpClient).toHaveBeenCalledWith(
+      expect(vi.mocked(httpClientModule.httpClient)).toHaveBeenCalledWith(
         "https://api.example.com/auth/token",
         expect.objectContaining({
           method: "POST",
@@ -129,28 +129,28 @@ describe("Auth Utils", () => {
     });
 
     it("logs debug message before fetching", async () => {
-      vi.mocked(httpClient).mockResolvedValue({
+      vi.mocked(httpClientModule.httpClient).mockResolvedValue({
         accessToken: "test",
         refreshToken: "test",
       });
 
       await fetchToken();
 
-      expect(logger.debug).toHaveBeenCalledWith(
+      expect(vi.mocked(loggerModule.logger.debug)).toHaveBeenCalledWith(
         expect.stringContaining("Fetching token"),
         "Auth",
       );
     });
 
     it("logs info message after successful fetch", async () => {
-      vi.mocked(httpClient).mockResolvedValue({
+      vi.mocked(httpClientModule.httpClient).mockResolvedValue({
         accessToken: "test",
         refreshToken: "test",
       });
 
       await fetchToken();
 
-      expect(logger.info).toHaveBeenCalledWith(
+      expect(vi.mocked(loggerModule.logger.info)).toHaveBeenCalledWith(
         "Token fetched and saved",
         "Auth",
       );
@@ -158,17 +158,17 @@ describe("Auth Utils", () => {
 
     it("logs error and throws on API failure", async () => {
       const error = new Error("Network error");
-      vi.mocked(httpClient).mockRejectedValue(error);
+      vi.mocked(httpClientModule.httpClient).mockRejectedValue(error);
 
       await expect(fetchToken()).rejects.toThrow("Network error");
-      expect(logger.error).toHaveBeenCalledWith(error, "Auth - fetchToken");
+      expect(vi.mocked(loggerModule.logger.error)).toHaveBeenCalledWith(error, "Auth - fetchToken");
     });
   });
 
   describe("refreshToken", () => {
     it("refreshes token and saves new one", async () => {
-      vi.mocked(loadToken).mockReturnValue(mockTokenData);
-      vi.mocked(httpClient).mockResolvedValue({
+      vi.mocked(tokenStorageModule.loadToken).mockReturnValue(mockTokenData);
+      vi.mocked(httpClientModule.httpClient).mockResolvedValue({
         accessToken: "refreshed-access-token",
         refreshToken: "refreshed-refresh-token",
         expiresIn: 3600,
@@ -177,7 +177,7 @@ describe("Auth Utils", () => {
       const result = await refreshToken();
 
       expect(result).toBe("refreshed-access-token");
-      expect(saveToken).toHaveBeenCalledWith(
+      expect(vi.mocked(tokenStorageModule.saveToken)).toHaveBeenCalledWith(
         expect.objectContaining({
           accessToken: "refreshed-access-token",
           refreshToken: "refreshed-refresh-token",
@@ -186,15 +186,15 @@ describe("Auth Utils", () => {
     });
 
     it("retains old refresh token if not provided in response", async () => {
-      vi.mocked(loadToken).mockReturnValue(mockTokenData);
-      vi.mocked(httpClient).mockResolvedValue({
+      vi.mocked(tokenStorageModule.loadToken).mockReturnValue(mockTokenData);
+      vi.mocked(httpClientModule.httpClient).mockResolvedValue({
         accessToken: "new-access-token",
         expiresIn: 3600,
       });
 
       await refreshToken();
 
-      expect(saveToken).toHaveBeenCalledWith(
+      expect(vi.mocked(tokenStorageModule.saveToken)).toHaveBeenCalledWith(
         expect.objectContaining({
           refreshToken: mockTokenData.refreshToken,
         }),
@@ -202,37 +202,37 @@ describe("Auth Utils", () => {
     });
 
     it("throws error if no refresh token is available", async () => {
-      vi.mocked(loadToken).mockReturnValue(null);
+      vi.mocked(tokenStorageModule.loadToken).mockReturnValue(null);
 
       await expect(refreshToken()).rejects.toThrow(
         "No refresh token available",
       );
-      expect(logger.error).toHaveBeenCalledWith(
+      expect(vi.mocked(loggerModule.logger.error)).toHaveBeenCalledWith(
         expect.any(Error),
         "Auth - refreshAccessToken",
       );
     });
 
     it("clears token on refresh failure", async () => {
-      vi.mocked(loadToken).mockReturnValue(mockTokenData);
+      vi.mocked(tokenStorageModule.loadToken).mockReturnValue(mockTokenData);
       const error = new Error("Refresh failed");
-      vi.mocked(httpClient).mockRejectedValue(error);
+      vi.mocked(httpClientModule.httpClient).mockRejectedValue(error);
 
       await expect(refreshToken()).rejects.toThrow("Refresh failed");
 
-      expect(clearToken).toHaveBeenCalled();
+      expect(vi.mocked(tokenStorageModule.clearToken)).toHaveBeenCalled();
     });
 
     it("calls correct refresh endpoint with refresh token", async () => {
-      vi.mocked(loadToken).mockReturnValue(mockTokenData);
-      vi.mocked(httpClient).mockResolvedValue({
+      vi.mocked(tokenStorageModule.loadToken).mockReturnValue(mockTokenData);
+      vi.mocked(httpClientModule.httpClient).mockResolvedValue({
         accessToken: "new-access-token",
         refreshToken: "new-refresh-token",
       });
 
       await refreshToken();
 
-      expect(httpClient).toHaveBeenCalledWith(
+      expect(vi.mocked(httpClientModule.httpClient)).toHaveBeenCalledWith(
         "https://api.example.com/auth/refresh-token",
         expect.objectContaining({
           method: "POST",
@@ -245,43 +245,43 @@ describe("Auth Utils", () => {
     });
 
     it("logs debug message before refreshing", async () => {
-      vi.mocked(loadToken).mockReturnValue(mockTokenData);
-      vi.mocked(httpClient).mockResolvedValue({
+      vi.mocked(tokenStorageModule.loadToken).mockReturnValue(mockTokenData);
+      vi.mocked(httpClientModule.httpClient).mockResolvedValue({
         accessToken: "test",
         refreshToken: "test",
       });
 
       await refreshToken();
 
-      expect(logger.debug).toHaveBeenCalledWith(
+      expect(vi.mocked(loggerModule.logger.debug)).toHaveBeenCalledWith(
         "Refreshing access token",
         "Auth",
       );
     });
 
     it("logs info message after successful refresh", async () => {
-      vi.mocked(loadToken).mockReturnValue(mockTokenData);
-      vi.mocked(httpClient).mockResolvedValue({
+      vi.mocked(tokenStorageModule.loadToken).mockReturnValue(mockTokenData);
+      vi.mocked(httpClientModule.httpClient).mockResolvedValue({
         accessToken: "test",
         refreshToken: "test",
       });
 
       await refreshToken();
 
-      expect(logger.info).toHaveBeenCalledWith(
+      expect(vi.mocked(loggerModule.logger.info)).toHaveBeenCalledWith(
         "Access token refreshed and saved",
         "Auth",
       );
     });
 
     it("logs error on refresh failure", async () => {
-      vi.mocked(loadToken).mockReturnValue(mockTokenData);
+      vi.mocked(tokenStorageModule.loadToken).mockReturnValue(mockTokenData);
       const error = new Error("Network error");
-      vi.mocked(httpClient).mockRejectedValue(error);
+      vi.mocked(httpClientModule.httpClient).mockRejectedValue(error);
 
       await expect(refreshToken()).rejects.toThrow();
 
-      expect(logger.error).toHaveBeenCalledWith(
+      expect(vi.mocked(loggerModule.logger.error)).toHaveBeenCalledWith(
         error,
         "Auth - refreshAccessToken",
       );

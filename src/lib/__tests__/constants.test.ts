@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest";
-import { SUPPORTED_LANGUAGES, DEFAULT_LANGUAGE } from "./constants";
+import { SUPPORTED_LANGUAGES, DEFAULT_LANGUAGE } from "@/lib/constants";
 import type { LanguageKey } from "@/providers/LocalizationProvider";
 
 describe("Constants", () => {

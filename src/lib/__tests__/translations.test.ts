@@ -1,5 +1,5 @@
 import { describe, it, expect, beforeEach, vi, type Mock } from "vitest";
-import { loadTranslations } from "./translations";
+import { loadTranslations } from "@/lib/translations";
 import type { LanguageKey } from "@/providers/LocalizationProvider";
 import * as fsPromises from "fs/promises";
 

@@ -1,6 +1,6 @@
 import { describe, it, expect, beforeEach, vi } from "vitest";
 import { renderHook } from "@testing-library/react";
-import type { LocalizationContextValue } from "./LocalizationProvider";
+import type { LocalizationContextValue } from "@/providers/LocalizationProvider";
 
 // Create a mock implementation of useContext
 const mockUseContext = vi.fn();
@@ -15,7 +15,7 @@ vi.mock("react", async () => {
 });
 
 // Now import after mocking
-const { useLocalization } = await import("./useLocalization");
+const { useLocalization } = await import("@/providers/useLocalization");
 
 const defaultMockContextValue: LocalizationContextValue = {
   language: "en",
@@ -25,6 +25,7 @@ const defaultMockContextValue: LocalizationContextValue = {
     direction: "ltr",
     dateFormat: "MM/DD/YYYY",
     timezone: "UTC",
+    currency: "USD",
   },
   setLanguage: vi.fn(),
 };
@@ -88,6 +89,7 @@ describe("useLocalization hook", () => {
           direction: "rtl",
           dateFormat: "YYYY/MM/DD",
           timezone: "Asia/Tehran",
+          currency: "IRR",
         },
         setLanguage: vi.fn(),
       };
@@ -108,6 +110,7 @@ describe("useLocalization hook", () => {
           direction: "ltr",
           dateFormat: "DD.MM.YYYY",
           timezone: "Europe/Berlin",
+          currency: "EUR",
         },
         setLanguage: vi.fn(),
       };
@@ -154,6 +157,7 @@ describe("useLocalization hook", () => {
           direction: "ltr",
           dateFormat: "MM/DD/YYYY",
           timezone: "UTC",
+          currency: "USD",
         },
         setLanguage: setLanguageMock,
       };
@@ -176,6 +180,7 @@ describe("useLocalization hook", () => {
           direction: "ltr",
           dateFormat: "MM/DD/YYYY",
           timezone: "UTC",
+          currency: "USD",
         },
         setLanguage: setLanguageMock,
       };
@@ -209,6 +214,7 @@ describe("useLocalization hook", () => {
           direction: "rtl",
           dateFormat: "YYYY/MM/DD",
           timezone: "Asia/Tehran",
+          currency: "IRR",
         },
         setLanguage: vi.fn(),
       };
@@ -228,6 +234,7 @@ describe("useLocalization hook", () => {
           direction: "ltr",
           dateFormat: "DD/MM/YYYY",
           timezone: "Europe/Paris",
+          currency: "EUR",
         },
         setLanguage: vi.fn(),
       };

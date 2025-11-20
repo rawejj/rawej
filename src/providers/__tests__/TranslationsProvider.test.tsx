@@ -1,6 +1,6 @@
 import { describe, it, expect, vi } from "vitest";
 import { render, screen } from "@testing-library/react";
-import { TranslationsProvider, useTranslations } from "./TranslationsProvider";
+import { TranslationsProvider, useTranslations } from "@/providers/TranslationsProvider";
 import type { Translations } from "@/lib/translationHelpers";
 
 describe("TranslationsProvider", () => {

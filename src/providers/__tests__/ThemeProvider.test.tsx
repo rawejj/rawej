@@ -1,5 +1,5 @@
 import { render, screen } from "@testing-library/react";
-import { ThemeContext } from "./ThemeContext";
+import { ThemeContext } from "@/providers/ThemeContext";
 import React from "react";
 
 describe("ThemeProvider context", () => {

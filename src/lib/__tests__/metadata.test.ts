@@ -1,5 +1,5 @@
 import { describe, it, expect, beforeEach, vi } from "vitest";
-import { getTranslations, generateMetadata } from "./metadata";
+import { getTranslations, generateMetadata } from "@/lib/metadata";
 import type { LanguageKey } from "@/providers/LocalizationProvider";
 
 // Type for Twitter metadata to avoid 'any' usage

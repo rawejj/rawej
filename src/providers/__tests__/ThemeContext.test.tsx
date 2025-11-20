@@ -1,8 +1,8 @@
 import { describe, it, expect } from "vitest";
 import React, { useContext } from "react";
 import { render, screen, fireEvent } from "@testing-library/react";
-import { ThemeContext } from "./ThemeContext";
-import type { ThemeContextProps } from "./ThemeProvider";
+import { ThemeContext } from "@/providers/ThemeContext";
+import type { ThemeContextProps } from "@/providers/ThemeProvider";
 
 describe("ThemeContext", () => {
   describe("context creation", () => {

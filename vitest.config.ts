@@ -13,7 +13,7 @@ export default defineConfig({
     setupFiles: ["./setupTests.ts"],
     exclude: ["public/**", "node_modules/**"],
     coverage: {
-      exclude: ["public/**", "node_modules/**"],
+      exclude: ["public/**", "src/mocks/**", "src/constants/**", "node_modules/**"],
     },
   },
 });
