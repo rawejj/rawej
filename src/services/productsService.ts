@@ -37,7 +37,7 @@ class ProductsService {
         },
         next: {
           tags: ["products", `products-${userUuid}`],
-          revalidate: IS_DEV ? 1 : CONFIGS.apiCacheRevalidate,
+          revalidate: CONFIGS.apiCacheRevalidate,
         },
       });
       

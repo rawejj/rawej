@@ -1,6 +1,6 @@
 import Image from "next/image";
 import React from "react";
-import { Doctor } from "../BookingSection";
+import { Doctor } from "@/types/doctor";
 
 interface BookingModalHeaderProps {
   doctor: Doctor;

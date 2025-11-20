@@ -1,7 +1,7 @@
 import { render, screen, fireEvent, waitFor } from "@testing-library/react";
 
 import { vi } from "vitest";
-import type { Doctor } from "@/components/BookingSection";
+import type { Doctor } from "@/types/doctor";
 import BookingSection from "@/components/BookingSection";
 import { TranslationsProvider } from "@/providers/TranslationsProvider";
 import { ThemeContext } from "@/providers/ThemeContext";

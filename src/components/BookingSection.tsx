@@ -3,7 +3,7 @@
 import { BookingDoctorGrid } from "@/components/BookingDoctorGrid";
 import { useBookingSection } from "@/hooks/useBookingSection";
 import { Doctor } from "@/types/doctor";
-import { Controller } from "./BookingModal/Controller";
+import BookingModal from "@/components/BookingModal";
 
 export default function BookingSection({
   doctors: initialDoctors,
@@ -76,10 +76,9 @@ export default function BookingSection({
         onBook={openModal}
         translations={translations}
       />
-      <Controller
-        showModal={showModal}
+      <BookingModal
+        show={showModal}
         doctor={selectedDoctor}
-        availableDates={availableDates}
         selectedDate={selectedDate}
         selectedTime={selectedTime}
         confirmed={confirmed}
@@ -97,6 +96,7 @@ export default function BookingSection({
           setSelectedProductId(productId);
           setSelectedPriceId(priceId);
         }}
+        getNext7Days={() => availableDates}
       />
       {/* Modal animation */}
       <style>{`

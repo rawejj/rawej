@@ -1,4 +1,4 @@
-import type { Doctor } from "@/components/BookingSection";
+import type { Doctor } from "@/types/doctor";
 import { render, screen, fireEvent } from "@testing-library/react";
 import { vi } from "vitest";
 import DoctorCard from "@/components/DoctorCard";
@@ -35,7 +35,7 @@ describe("DoctorCard", () => {
     rating: 4.8,
     image: "/doctor1.jpg",
     bio: "Expert in heart health.",
-    callTypes: ["phone", "video", "voice"],
+    callTypes: ["phone", "video", "text"],
   };
 
   it("renders default doctor image if image is missing", () => {
@@ -60,7 +60,7 @@ describe("DoctorCard", () => {
     renderWithTranslations(<DoctorCard doctor={doctor} onBook={() => {}} />);
     expect(screen.getByText("Phone")).toBeInTheDocument();
     expect(screen.getByText("Video")).toBeInTheDocument();
-    expect(screen.getByText("Voice")).toBeInTheDocument();
+    expect(screen.getByText("Text")).toBeInTheDocument();
   });
 
   it("renders Book Appointment button", () => {
@@ -93,7 +93,7 @@ describe("DoctorCard", () => {
     );
     expect(screen.queryByText("Phone")).not.toBeInTheDocument();
     expect(screen.queryByText("Video")).not.toBeInTheDocument();
-    expect(screen.queryByText("Voice")).not.toBeInTheDocument();
+    expect(screen.queryByText("Text")).not.toBeInTheDocument();
   });
 
   it("does not render call type badges if callTypes is an empty array", () => {
@@ -112,7 +112,7 @@ describe("DoctorCard", () => {
     );
     expect(screen.queryByText("Phone")).not.toBeInTheDocument();
     expect(screen.queryByText("Video")).not.toBeInTheDocument();
-    expect(screen.queryByText("Voice")).not.toBeInTheDocument();
+    expect(screen.queryByText("Text")).not.toBeInTheDocument();
   });
 
   const baseDoctor: Doctor = {
@@ -123,7 +123,7 @@ describe("DoctorCard", () => {
     rating: 4.5,
     image: "/doctor-test.jpg",
     bio: "Test bio",
-    callTypes: ["phone", "video", "voice"],
+    callTypes: ["phone", "video", "text"],
   };
 
   it("renders correctly with only one callType", () => {

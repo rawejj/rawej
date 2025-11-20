@@ -2,25 +2,22 @@ import { NextRequest, NextResponse } from "next/server";
 import { logger } from "@/utils/logger";
 import { COMMON_HEADERS, createErrorResponse, ErrorResponse } from "@/utils/api-response";
 import { productsService } from "@/services/productsService";
+import { CONFIGS } from "@/constants/configs";
+import { mockProducts } from "@/mocks/products";
+import { Product } from "@/components/BookingModal/ProductSelector";
 
 interface RouteParams {
   params: Promise<{ uuid: string }>;
 }
 
-interface ProductPrice {
-  title: string;
-  price: number;
-  discount_percent: number;
-  discounted_amount: number;
-}
-
-interface Product {
-  slug: string;
-  title: string;
-  title_en: string;
-  summary: string;
-  description: string;
-  prices: ProductPrice[];
+/**
+ * Creates a mock products response
+ * @param uuid - User UUID (not used for mock data)
+ * @returns Mock products array
+ */
+function getMockProducts(): Product[] {
+  logger.info("Returning mock products data", "ProductsAPI");
+  return mockProducts;
 }
 
 /**
@@ -40,7 +37,7 @@ interface Product {
 export async function GET(
   request: NextRequest,
   context: RouteParams
-): Promise<NextResponse<Product[] | ErrorResponse>> {
+): Promise<NextResponse<{success: boolean, items: Product[]} | ErrorResponse>> {
   try {
     const { uuid } = await context.params;
 
@@ -55,11 +52,22 @@ export async function GET(
       "ProductsAPI"
     );
 
+    // Return mock data if fallback is enabled
+    if (CONFIGS.enableMockFallback) {
+      logger.info("Returning mock products data (ENABLE_MOCK_FALLBACK=true)", "ProductsAPI");
+      const mockResponse = getMockProducts();
+
+      return NextResponse.json({success: true, items: mockResponse}, {
+        status: 200,
+        headers: COMMON_HEADERS,
+      });
+    }
+
     // Fetch products from external API
     const products = await productsService.fetchAllByUser(uuid);
 
     // Return products with no-cache headers (dynamic data)
-    return NextResponse.json(products as unknown as Product[], {
+    return NextResponse.json({success: true, items: products as unknown as Product[]} , {
       status: 200,
       headers: COMMON_HEADERS,
     });

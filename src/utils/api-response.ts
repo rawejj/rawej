@@ -1,4 +1,5 @@
 import { CONFIGS } from "@/constants/configs";
+import { IS_DEV } from "@/lib/constants";
 import { NextResponse } from "next/server";
 import { PaginationParams } from "./pagination";
 

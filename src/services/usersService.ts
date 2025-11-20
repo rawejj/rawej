@@ -2,7 +2,6 @@ import { CONFIGS } from "@/constants/configs";
 import { httpClient } from "@/utils/http-client";
 import { logger } from "@/utils/logger";
 import { PaginationParams } from "@/utils/pagination";
-import { IS_DEV } from "@/lib/constants";
 
 export type TimeSlot = {
   start: string;
@@ -80,7 +79,7 @@ export class UsersService {
         },
         next: {
           tags: ["available-slots", `user-${uuid}`],
-          revalidate: IS_DEV ? 1 : CONFIGS.apiCacheRevalidate,
+          revalidate: CONFIGS.apiCacheRevalidate,
         },
       });
       logger.info("Availability fetched successfully", "UsersService");

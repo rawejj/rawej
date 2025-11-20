@@ -32,7 +32,7 @@ describe("HTTP Client", () => {
         ok: true,
         headers: new Headers({ "content-type": "application/json" }),
         json: vi.fn().mockResolvedValue(mockResponse),
-      } as Response);
+      } as unknown as Response);
 
       const result = await httpClient("https://api.example.com/test");
 
@@ -46,7 +46,7 @@ describe("HTTP Client", () => {
         ok: true,
         headers: new Headers({ "content-type": "text/plain" }),
         text: vi.fn().mockResolvedValue(mockResponse),
-      } as Response);
+      } as unknown as Response);
 
       const result = await httpClient("https://api.example.com/test");
 
@@ -188,7 +188,7 @@ describe("HTTP Client", () => {
 
   describe("SSL configuration in dev mode", () => {
     it("should disable SSL verification in development", async () => {
-      process.env.NODE_ENV = "development";
+      (process.env as any).NODE_ENV = "development";
       const mockResponse = {
         ok: true,
         headers: new Headers({ "content-type": "application/json" }),
@@ -203,7 +203,7 @@ describe("HTTP Client", () => {
     });
 
     it("should enable SSL verification in production", async () => {
-      process.env.NODE_ENV = "production";
+      (process.env as any).NODE_ENV = "production";
       const mockResponse = {
         ok: true,
         headers: new Headers({ "content-type": "application/json" }),

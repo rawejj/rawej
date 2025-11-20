@@ -1,7 +1,7 @@
 import { render, screen, fireEvent } from "@testing-library/react";
 import { vi } from "vitest";
 import BookingModal from "@/components/BookingModal";
-import type { Doctor } from "@/components/BookingSection";
+import type { Doctor } from "@/types/doctor";
 import { TranslationsProvider } from "@/providers/TranslationsProvider";
 import { ThemeContext } from "@/providers/ThemeContext";
 import enTranslations from "@/../public/locales/en.json";
@@ -234,7 +234,7 @@ describe("BookingModal", () => {
   it("renders all time slots", () => {
     renderWithProviders(<BookingModal {...defaultProps} />);
     mockTimes.forEach((time) => {
-      expect(screen.getByText(time)).toBeInTheDocument();
+      expect(screen.getByText(time.start)).toBeInTheDocument();
     });
   });
 

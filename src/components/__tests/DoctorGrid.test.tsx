@@ -1,7 +1,7 @@
 import { render, screen } from "@testing-library/react";
 import DoctorGrid from "@/components/DoctorGrid";
 import { TranslationsProvider } from "@/providers/TranslationsProvider";
-import { Doctor } from "@/components/BookingSection";
+import { Doctor } from "@/types/doctor";
 
 const mockTranslations = {
   "book appointment": "Book Appointment",

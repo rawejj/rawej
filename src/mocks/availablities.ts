@@ -1,54 +1,93 @@
 export const mockAvailabilities = {
-  meets: [
+  dates: [
     {
-      uuid: "969b7b0a-58ca-44df-8ea1-2cd7cdc517b5",
-      organizerId: "",
-      participants: [],
       title: "18th event",
-      description: "The first event",
-      color: "red",
-      start: "2025-10-18 06:00:00 +0000 UTC",
-      end: "2025-10-18 07:00:00 +0000 UTC",
+      label: "Fri Oct 18, 2025",
+      value: "2025-10-18",
+      times: [
+        {
+          start: "06:00",
+          end: "07:00",
+          duration: "60m"
+        }
+      ]
     },
     {
-      uuid: "76adfdea-c39e-4a87-a192-fa2696e48130",
-      organizerId: "",
-      participants: [],
       title: "test",
-      description: "",
-      color: "bg-purple-200 text-purple-900 bo",
-      start: "2025-10-08 06:00:00 +0000 UTC",
-      end: "2025-10-08 07:00:00 +0000 UTC",
+      label: "Tue Oct 08, 2025",
+      value: "2025-10-08",
+      times: [
+        {
+          start: "06:00",
+          end: "07:00",
+          duration: "60m"
+        }
+      ]
     },
     {
-      uuid: "0afd555a-fd9d-4069-a79b-b757031b1156",
-      organizerId: "",
-      participants: [],
       title: "Test",
-      description: "",
-      color: "yellow",
-      start: "2025-10-25 06:00:00 +0000 UTC",
-      end: "2025-10-25 07:00:00 +0000 UTC",
+      label: "Sat Oct 25, 2025",
+      value: "2025-10-25",
+      times: [
+        {
+          start: "06:00",
+          end: "07:00",
+          duration: "60m"
+        }
+      ]
     },
     {
-      uuid: "20276307-839f-41c6-9c0b-10d84f4d63ed",
-      organizerId: "",
-      participants: [],
       title: "test",
-      description: "",
-      color: "bg-purple-200 text-purple-900 bo",
-      start: "2025-10-09 06:00:00 +0000 UTC",
-      end: "2025-10-09 12:00:00 +0000 UTC",
+      label: "Wed Oct 09, 2025",
+      value: "2025-10-09",
+      times: [
+        {
+          start: "06:00",
+          end: "12:00",
+          duration: "360m"
+        }
+      ]
     },
     {
-      uuid: "1f5464e2-2981-44da-8db3-38ea07507869",
-      organizerId: "",
-      participants: [],
       title: "Test",
-      description: "Test desc",
-      color: "bg-purple-200 text-purple-900 bo",
-      start: "2025-11-05 07:00:00 +0000 UTC",
-      end: "2025-11-05 08:00:00 +0000 UTC",
+      label: "Wed Nov 05, 2025",
+      value: "2025-11-05",
+      times: [
+        {
+          start: "07:00",
+          end: "08:00",
+          duration: "60m"
+        }
+      ]
     },
-  ],
+    {
+      title: "Event2",
+      label: "Thu Nov 20, 2025",
+      value: "2025-11-20",
+      times: [
+        {
+          start: "08:00",
+          end: "09:00",
+          duration: "60m"
+        }
+      ]
+    },
+    {
+      title: "مصاحبه کاری",
+      label: "Fri Nov 21, 2025",
+      value: "2025-11-21",
+      times: [
+        {
+          start: "09:00",
+          end: "10:00",
+          duration: "60m"
+        },
+        {
+          start: "13:00",
+          end: "14:00",
+          duration: "60m"
+        }
+      ]
+    }
+  ]
 };

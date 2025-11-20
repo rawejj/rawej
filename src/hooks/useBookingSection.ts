@@ -53,8 +53,8 @@ export function useBookingSection(initialDoctors: Doctor[], hasMoreProp?: boolea
     try {
       const res = await fetch(`/api/v1/products/${uuid}`);
       const json = await res.json();
-      if (Array.isArray(json)) {
-        setProducts(json);
+      if (Array.isArray(json.items)) {
+        setProducts(json.items);
       } else {
         setProducts([]);
       }
