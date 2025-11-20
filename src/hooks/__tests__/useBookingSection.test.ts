@@ -3,6 +3,7 @@ import { vi } from "vitest";
 import { useBookingSection } from "../useBookingSection";
 import type { Doctor } from "@/types/doctor";
 import type { DateSlot } from "@/services/usersService";
+import { Product } from "@/components/BookingModal/ProductSelector";
 
 vi.stubGlobal("fetch", vi.fn());
 
@@ -27,7 +28,7 @@ describe("useBookingSection", () => {
 
   const mockDoctors: Doctor[] = [mockDoctor];
 
-  const mockProduct = {
+  const mockProduct: Product = {
     id: 1,
     title: "Video Consultation",
     slug: "video-consultation",
@@ -45,6 +46,7 @@ describe("useBookingSection", () => {
         price: 5000,
         discount_amount: 0,
         discount_percent: "0",
+        currency: "USD",
         created_at: "2023-01-01T00:00:00Z",
       },
     ],

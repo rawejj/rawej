@@ -17,7 +17,8 @@ interface RouteParams {
  */
 function getMockProducts(): Product[] {
   logger.info("Returning mock products data", "ProductsAPI");
-  return mockProducts;
+  
+  return mockProducts as unknown as Product[];
 }
 
 /**

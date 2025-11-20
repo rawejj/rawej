@@ -50,6 +50,7 @@ describe("BookingModal", () => {
           price: 100000,
           discount_amount: 0,
           discount_percent: "0",
+          currency: "USD",
           created_at: "2024-01-01T00:00:00Z",
         },
       ],

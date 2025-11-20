@@ -17,6 +17,7 @@ export const mockProducts = [
         price: 50000,
         discount_amount: 0,
         discount_percent: "0",
+        currency: "تومان",
         created_at: "2025-11-20T00:00:00Z"
       },
       {
@@ -26,6 +27,7 @@ export const mockProducts = [
         price: 80000,
         discount_amount: 5000,
         discount_percent: "6",
+        currency: "تومان",
         created_at: "2025-11-20T00:00:00Z"
       }
     ]
@@ -48,6 +50,7 @@ export const mockProducts = [
         price: 75000,
         discount_amount: 0,
         discount_percent: "0",
+        currency: "تومان",
         created_at: "2025-11-20T00:00:00Z"
       },
       {
@@ -57,6 +60,7 @@ export const mockProducts = [
         price: 120000,
         discount_amount: 10000,
         discount_percent: "8",
+        currency: "تومان",
         created_at: "2025-11-20T00:00:00Z"
       }
     ]
@@ -79,6 +83,7 @@ export const mockProducts = [
         price: 60000,
         discount_amount: 0,
         discount_percent: "0",
+        currency: "تومان",
         created_at: "2025-11-20T00:00:00Z"
       }
     ]
