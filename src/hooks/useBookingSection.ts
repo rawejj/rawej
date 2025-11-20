@@ -94,7 +94,6 @@ export function useBookingSection(initialDoctors: Doctor[], hasMoreProp?: boolea
     selectedDoctor,
     setSelectedDoctor,
     availableDates,
-    setAvailableDates,
     selectedDate,
     setSelectedDate,
     selectedTime,
@@ -120,5 +119,6 @@ export function useBookingSection(initialDoctors: Doctor[], hasMoreProp?: boolea
     observerRef,
     fetchMoreDoctors,
     fetchProducts,
+    setAvailableDates,
   };
 }

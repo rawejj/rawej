@@ -1,7 +1,7 @@
 import React from "react";
 import { useTranslations } from "@/providers/TranslationsProvider";
 
-interface BookingModalActionsProps {
+interface ActionsProps {
   selectedTime: string;
   confirmed: boolean;
   onConfirm: () => void;
@@ -9,7 +9,7 @@ interface BookingModalActionsProps {
   onBack?: () => void;
 }
 
-const BookingModalActions: React.FC<BookingModalActionsProps> = ({
+const Actions: React.FC<ActionsProps> = ({
   selectedTime,
   confirmed,
   onConfirm,
@@ -75,4 +75,4 @@ const BookingModalActions: React.FC<BookingModalActionsProps> = ({
   );
 };
 
-export default BookingModalActions;
+export default Actions;

@@ -2,11 +2,11 @@ import Image from "next/image";
 import React from "react";
 import { Doctor } from "@/types/doctor";
 
-interface BookingModalHeaderProps {
+interface HeaderProps {
   doctor: Doctor;
 }
 
-const BookingModalHeader: React.FC<BookingModalHeaderProps> = ({ doctor }) => {
+const Header: React.FC<HeaderProps> = ({ doctor }) => {
   return (
     <div className="flex items-center gap-3 mb-3 p-2 rounded-3xl bg-linear-to-r from-purple-50 to-pink-50 dark:from-purple-900/20 dark:to-pink-900/20 border border-purple-100 dark:border-purple-800/30">
       <div className="relative">
@@ -48,4 +48,4 @@ const BookingModalHeader: React.FC<BookingModalHeaderProps> = ({ doctor }) => {
   );
 };
 
-export default BookingModalHeader;
+export default Header;

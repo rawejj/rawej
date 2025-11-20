@@ -30,6 +30,7 @@ export default function BookingSection({
     confirmed,
     error,
     modalLoading,
+    setModalLoading,
     products,
     selectedProductId,
     selectedPriceId,
@@ -38,6 +39,7 @@ export default function BookingSection({
     setSelectedDoctor,
     setShowModal,
     fetchProducts,
+    setAvailableDates,
   } = useBookingSection(initialDoctors, hasMoreProp);
 
   // Modal handlers
@@ -62,8 +64,26 @@ export default function BookingSection({
     // Implement booking confirmation logic here
   };
 
-  const fetchAvailability = async (doctor?: Doctor) => {
-    // Implement fetch logic if needed
+  const fetchAvailability = async (doctorArg?: Doctor) => {
+    const doctor = doctorArg || selectedDoctor;
+    if (!doctor || !selectedProductId || !selectedPriceId) return;
+    try {
+      setModalLoading(true);
+      // You may want to pass type or priceId if needed by API
+      const res = await fetch(`/api/v1/users/${doctor.uuid}/availability?priceId=${selectedPriceId}`);
+      const json = await res.json();
+      if (Array.isArray(json)) {
+        // Set available dates for the modal
+        setSelectedDate(json[0]?.value || "");
+        setAvailableDates(json);
+      } else {
+        setAvailableDates([]);
+      }
+    } catch {
+      setAvailableDates([]);
+    } finally {
+      setModalLoading(false);
+    }
   };
 
   return (
@@ -96,7 +116,7 @@ export default function BookingSection({
           setSelectedProductId(productId);
           setSelectedPriceId(priceId);
         }}
-        getNext7Days={() => availableDates}
+        availableDates={availableDates}
       />
       {/* Modal animation */}
       <style>{`

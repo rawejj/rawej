@@ -1,13 +1,13 @@
 import React from "react";
 import { useTranslations } from "@/providers/TranslationsProvider";
 
-interface BookingModalTypeSelectorProps {
+interface TypeSelectorProps {
   consultantTypes: string[];
   selectedType: string;
   onTypeChange: (type: string) => void;
 }
 
-const BookingModalTypeSelector: React.FC<BookingModalTypeSelectorProps> = ({
+const TypeSelector: React.FC<TypeSelectorProps> = ({
   consultantTypes,
   selectedType,
   onTypeChange,
@@ -52,4 +52,4 @@ const BookingModalTypeSelector: React.FC<BookingModalTypeSelectorProps> = ({
   );
 };
 
-export default BookingModalTypeSelector;
+export default TypeSelector;

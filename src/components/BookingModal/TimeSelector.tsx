@@ -7,13 +7,13 @@ interface TimeSlot {
   duration: string;
 }
 
-interface BookingModalTimeSelectorProps {
+interface TimeSelectorProps {
   selectedTime: string;
   onTimeChange: (time: string) => void;
   times: TimeSlot[];
 }
 
-const BookingModalTimeSelector: React.FC<BookingModalTimeSelectorProps> = ({
+const TimeSelector: React.FC<TimeSelectorProps> = ({
   selectedTime,
   onTimeChange,
   times,
@@ -111,4 +111,4 @@ const BookingModalTimeSelector: React.FC<BookingModalTimeSelectorProps> = ({
   );
 };
 
-export default BookingModalTimeSelector;
+export default TimeSelector;

@@ -1,13 +1,13 @@
 import React, { useState } from "react";
 import Modal from "../Modal";
 import { useTranslations } from "@/providers/TranslationsProvider";
-import BookingModalHeader from "./Header";
-import BookingModalError from "./Error";
-import BookingModalLoading from "./Loading";
-import BookingModalNoAvailability from "./NoAvailability";
-import BookingModalDateSelector from "./DateSelector";
-import BookingModalTimeSelector from "./TimeSelector";
-import BookingModalActions from "./Actions";
+import Header from "./Header";
+import Error from "./Error";
+import Loading from "../Loading";
+import NoAvailability from "./NoAvailability";
+import DateSelector from "./DateSelector";
+import TimeSelector from "./TimeSelector";
+import Actions from "./Actions";
 import ProductSelector, { Product } from "./ProductSelector";
 import { Doctor } from "@/types/doctor";
 
@@ -22,7 +22,7 @@ interface BookingModalProps {
   onDateChange: (date: string) => void;
   onTimeChange: (time: string) => void;
   onConfirm: () => void;
-  getNext7Days: () => { title: string; label: string; value: string; times: { start: string; end: string; duration: string }[] }[];
+  availableDates: { title: string; label: string; value: string; times: { start: string; end: string; duration: string }[] }[];
   fetchAvailability?: () => void;
   loading?: boolean;
   products?: Product[];
@@ -41,7 +41,7 @@ const BookingModal: React.FC<BookingModalProps> = ({
   onDateChange,
   onTimeChange,
   onConfirm,
-  getNext7Days,
+  availableDates,
   error,
   fetchAvailability,
   loading = false,
@@ -50,43 +50,46 @@ const BookingModal: React.FC<BookingModalProps> = ({
   selectedPriceId,
   onProductSelect = () => {},
 }) => {
-
   const [currentStep, setCurrentStep] = useState<'product' | 'datetime'>('product');
   const { t } = useTranslations();
+
   // Reset step when modal opens
   React.useEffect(() => {
     if (show) {
       setCurrentStep('product');
     }
   }, [show]);
-  const days = getNext7Days();
+
+  const days = availableDates;
   const selectedDay = days.find((day) => day.value === selectedDate);
   const times = selectedDay?.times || [];
+
   // Retry handler for error state
   const handleRefresh = () => {
     if (fetchAvailability) {
       fetchAvailability();
     }
   };
+
   const isLoading = !error && loading;
   if (!show || !doctor) {
     return null;
   }
-  // Show loading spinner if products are loading and step is product
-  if (loading && currentStep === 'product') {
-    return (
-      <Modal show={true} onClose={onClose}>
-        <BookingModalLoading />
-      </Modal>
-    );
-  }
+
+  const handleBack = () => {
+    if (currentStep === 'datetime') {
+      setCurrentStep('product');
+    }
+  };
+
   return (
     <Modal show={show} onClose={onClose}>
-      <BookingModalHeader doctor={doctor} />
+      <Header doctor={doctor} />
+
       {error ? (
-        <BookingModalError error={error} onRefresh={handleRefresh} />
+        <Error error={error} onRefresh={handleRefresh} />
       ) : isLoading ? (
-        <BookingModalLoading />
+        <Loading />
       ) : (
         <>
           {currentStep === 'product' && products && products.length > 0 && (
@@ -95,10 +98,10 @@ const BookingModal: React.FC<BookingModalProps> = ({
                 products={products}
                 selectedProductId={selectedProductId}
                 selectedPriceId={selectedPriceId}
-                onSelect={(productId, priceId) => {
-                  if (onProductSelect) onProductSelect(productId, priceId);
+                onSelect={async (productId, priceId) => {
+                  if (onProductSelect) await onProductSelect(productId, priceId);
                   setCurrentStep('datetime');
-                  if (fetchAvailability) fetchAvailability();
+                  if (fetchAvailability) await fetchAvailability();
                 }}
               />
             </>
@@ -110,16 +113,18 @@ const BookingModal: React.FC<BookingModalProps> = ({
           )}
           {currentStep === 'datetime' && (
             <>
-              {Array.isArray(days) && days.length === 0 ? (
-                <BookingModalNoAvailability />
+              {loading ? (
+                <Loading />
+              ) : Array.isArray(days) && days.length === 0 ? (
+                <NoAvailability />
               ) : (
                 <>
-                  <BookingModalDateSelector
+                  <DateSelector
                     selectedDate={selectedDate}
                     onDateChange={onDateChange}
-                    getNext7Days={getNext7Days}
+                    availableDates={availableDates}
                   />
-                  <BookingModalTimeSelector
+                  <TimeSelector
                     selectedTime={selectedTime}
                     onTimeChange={onTimeChange}
                     times={times}
@@ -174,17 +179,31 @@ const BookingModal: React.FC<BookingModalProps> = ({
               )}
             </>
           )}
-          {currentStep !== 'product' && (
-            <BookingModalActions
-              selectedTime={selectedTime}
-              confirmed={confirmed}
-              onConfirm={onConfirm}
-              onClose={onClose}
-              onBack={currentStep === 'datetime' ? () => setCurrentStep('product') : undefined}
-            />
-          )}
+
+          {/* Wizard Navigation */}
+          <div className="flex justify-between mt-6">
+            {currentStep === 'datetime' && (
+              <button
+                onClick={handleBack}
+                className="px-4 py-2 bg-gray-200 dark:bg-zinc-700 text-gray-700 dark:text-zinc-200 rounded-lg hover:bg-gray-300 dark:hover:bg-zinc-600 transition-colors"
+              >
+                {t('buttons.back')}
+              </button>
+            )}
+            {currentStep === 'datetime' && (
+              <Actions
+                selectedTime={selectedTime}
+                confirmed={confirmed}
+                onConfirm={onConfirm}
+                onClose={onClose}
+                onBack={undefined}
+              />
+            )}
+          </div>
         </>
       )}
     </Modal>
   );
-};export default BookingModal;
+};
+
+export default BookingModal;

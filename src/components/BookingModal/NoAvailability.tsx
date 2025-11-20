@@ -1,7 +1,7 @@
 import React from "react";
 import { useTranslations } from "@/providers/TranslationsProvider";
 
-const BookingModalNoAvailability: React.FC = () => {
+const NoAvailability: React.FC = () => {
   const { t } = useTranslations();
 
   return (
@@ -30,4 +30,4 @@ const BookingModalNoAvailability: React.FC = () => {
   );
 };
 
-export default BookingModalNoAvailability;
+export default NoAvailability;

@@ -5,19 +5,19 @@ import { toJalaali } from "jalaali-js";
 import { LocalizationContext } from "@/providers/LocalizationContext";
 import { JALALI_MONTHS } from "@/lib/constants";
 
-interface BookingModalDateSelectorProps {
+interface DateSelectorProps {
   selectedDate: string;
   onDateChange: (date: string) => void;
-  getNext7Days: () => { title: string; label: string; value: string; times: { start: string; end: string; duration: string }[] }[];
+  availableDates: { title: string; label: string; value: string; times: { start: string; end: string; duration: string }[] }[];
 }
 
-const BookingModalDateSelector: React.FC<BookingModalDateSelectorProps> = ({
+const DateSelector: React.FC<DateSelectorProps> = ({
   selectedDate,
   onDateChange,
-  getNext7Days,
+  availableDates,
 }) => {
   const { t } = useTranslations();
-  const days = getNext7Days();
+  const days = availableDates;
   const localization = useContext(LocalizationContext);
   const lang = localization?.language || "en";
 
@@ -146,4 +146,4 @@ const BookingModalDateSelector: React.FC<BookingModalDateSelectorProps> = ({
   );
 };
 
-export default BookingModalDateSelector;
+export default DateSelector;

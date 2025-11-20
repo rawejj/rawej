@@ -1,6 +1,6 @@
 import React from "react";
 
-const BookingModalLoading: React.FC = () => {
+const Loading: React.FC = () => {
   return (
     <div className="mb-8 flex flex-col items-center justify-center py-8">
       <div className="relative mb-6">
@@ -16,4 +16,4 @@ const BookingModalLoading: React.FC = () => {
   );
 };
 
-export default BookingModalLoading;
+export default Loading;

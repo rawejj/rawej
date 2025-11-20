@@ -1,12 +1,12 @@
 import React from "react";
 import { useTranslations } from "@/providers/TranslationsProvider";
 
-interface BookingModalErrorProps {
+interface ErrorProps {
   error: string;
   onRefresh?: () => void;
 }
 
-const BookingModalError: React.FC<BookingModalErrorProps> = ({
+const Error: React.FC<ErrorProps> = ({
   error,
   onRefresh,
 }) => {
@@ -59,4 +59,4 @@ const BookingModalError: React.FC<BookingModalErrorProps> = ({
   );
 };
 
-export default BookingModalError;
+export default Error;
