@@ -91,9 +91,6 @@ const BookingModal: React.FC<BookingModalProps> = ({
         <>
           {currentStep === 'product' && products && products.length > 0 && (
             <>
-              <div className="mb-4 text-lg font-semibold text-purple-700 dark:text-pink-400">
-                {t('labels.select a product')}
-              </div>
               <ProductSelector
                 products={products}
                 selectedProductId={selectedProductId}

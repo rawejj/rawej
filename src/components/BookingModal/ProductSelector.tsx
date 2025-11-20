@@ -108,13 +108,18 @@ const ProductSelector: React.FC<ProductSelectorProps> = ({
                     className={`w-full flex items-center justify-between px-4 py-3 rounded-xl border transition-all duration-300 font-semibold text-sm shadow-sm hover:shadow-md transform hover:scale-105 cursor-pointer rtl:flex-row-reverse ltr:flex-row ${selectedProductId === product.id && selectedPriceId === price.id ? "bg-purple-500 text-white border-purple-600 shadow-purple-500/50" : "bg-white dark:bg-zinc-800 text-gray-700 dark:text-gray-300 border-gray-200 dark:border-zinc-600 hover:border-purple-300 dark:hover:border-purple-600 hover:bg-purple-50 dark:hover:bg-purple-900/20"}`}
                     onClick={() => onSelect(product.id, price.id)}
                   >
-                    <span>{price.title}</span>
                     <span className="flex items-center gap-2 rtl:flex-row-reverse ltr:flex-row">
-                      <span className="font-bold">{price.price.toLocaleString()} ریال</span>
-                      {price.discount_amount > 0 && (
-                        <span className="text-xs bg-green-100 dark:bg-green-900 text-green-700 dark:text-green-300 px-2 py-1 rounded-full">-{price.discount_percent}%</span>
+                      {price.discount_amount > 0 ? (
+                        <>
+                          <span className="font-bold text-green-700 dark:text-green-300">{(price.price - price.discount_amount).toLocaleString()} ریال</span>
+                          <span className="inline-block text-xs font-bold px-2 py-1 rounded-full bg-green-500 text-white shadow rtl:ml-2 ltr:mr-2" dir="ltr">{price.discount_percent}%</span>
+                          <span className="font-bold text-gray-400 line-through">{price.price.toLocaleString()} ریال</span>
+                        </>
+                      ) : (
+                        <span className="font-bold">{price.price.toLocaleString()} ریال</span>
                       )}
                     </span>
+                    <span>{price.title}</span>
                   </button>
                 ))}
               </div>
