@@ -19,7 +19,7 @@ const Actions: React.FC<ActionsProps> = ({
   const { t } = useTranslations();
 
   return (
-    <div className="space-y-2 mt-6">
+    <div className="mt-6 space-y-3">
       <button
         className={`w-full py-4 rounded-3xl font-bold shadow-lg transition-all duration-300 text-lg border-2 ${
           selectedTime
@@ -47,30 +47,35 @@ const Actions: React.FC<ActionsProps> = ({
           )}
         </div>
       </button>
-      {onBack && (
+      <div className="flex gap-3 justify-between">
+        {onBack && (
+          <button
+            className="px-6 py-3 rounded-3xl text-zinc-500 dark:text-zinc-400 hover:text-zinc-700 dark:hover:text-zinc-200 text-sm font-medium transition-all duration-200 hover:bg-zinc-50 dark:hover:bg-zinc-800/50 border border-transparent hover:border-zinc-200 dark:hover:border-zinc-700"
+            onClick={onBack}
+          >
+            <div className="flex items-center justify-center gap-2">
+              <svg className="w-4 h-4 ltr:hidden" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M7 7l7 7-7 7" />
+              </svg>
+              <svg className="w-4 h-4 rtl:hidden" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" />
+              </svg>
+              {t("buttons.back")}
+            </div>
+          </button>
+        )}
         <button
-          className="w-full py-3 rounded-3xl text-zinc-500 dark:text-zinc-400 hover:text-zinc-700 dark:hover:text-zinc-200 text-sm font-medium transition-all duration-200 hover:bg-zinc-50 dark:hover:bg-zinc-800/50 border border-transparent hover:border-zinc-200 dark:hover:border-zinc-700"
-          onClick={onBack}
+          className="px-6 py-3 rounded-3xl text-zinc-500 dark:text-zinc-400 hover:text-zinc-700 dark:hover:text-zinc-200 text-sm font-medium transition-all duration-200 hover:bg-zinc-50 dark:hover:bg-zinc-800/50 border border-transparent hover:border-zinc-200 dark:hover:border-zinc-700"
+          onClick={onClose}
         >
           <div className="flex items-center justify-center gap-2">
             <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" />
+              <path strokeLinecap="round" strokeLinejoin="round" d="M18 6L6 18M18 18L6 6" />
             </svg>
-            {t("buttons.back")}
+            {t("buttons.cancel")}
           </div>
         </button>
-      )}
-      <button
-        className="w-full py-3 rounded-3xl text-zinc-500 dark:text-zinc-400 hover:text-zinc-700 dark:hover:text-zinc-200 text-sm font-medium transition-all duration-200 hover:bg-zinc-50 dark:hover:bg-zinc-800/50 border border-transparent hover:border-zinc-200 dark:hover:border-zinc-700"
-        onClick={onClose}
-      >
-        <div className="flex items-center justify-center gap-2">
-          <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
-          </svg>
-          {t("buttons.cancel")}
-        </div>
-      </button>
+      </div>
     </div>
   );
 };

@@ -10,6 +10,7 @@ import TimeSelector from "./TimeSelector";
 import Actions from "./Actions";
 import ProductSelector, { Product } from "./ProductSelector";
 import { Doctor } from "@/types/doctor";
+import SelectedProductPrice from "./SelectedProductPrice";
 
 interface BookingModalProps {
   error?: string | null;
@@ -119,6 +120,11 @@ const BookingModal: React.FC<BookingModalProps> = ({
                 <NoAvailability />
               ) : (
                 <>
+                  <SelectedProductPrice
+                    products={products}
+                    selectedProductId={selectedProductId}
+                    selectedPriceId={selectedPriceId}
+                  />
                   <DateSelector
                     selectedDate={selectedDate}
                     onDateChange={onDateChange}
@@ -181,25 +187,15 @@ const BookingModal: React.FC<BookingModalProps> = ({
           )}
 
           {/* Wizard Navigation */}
-          <div className="flex justify-between mt-6">
-            {currentStep === 'datetime' && (
-              <button
-                onClick={handleBack}
-                className="px-4 py-2 bg-gray-200 dark:bg-zinc-700 text-gray-700 dark:text-zinc-200 rounded-lg hover:bg-gray-300 dark:hover:bg-zinc-600 transition-colors"
-              >
-                {t('buttons.back')}
-              </button>
-            )}
-            {currentStep === 'datetime' && (
-              <Actions
-                selectedTime={selectedTime}
-                confirmed={confirmed}
-                onConfirm={onConfirm}
-                onClose={onClose}
-                onBack={undefined}
-              />
-            )}
-          </div>
+          {currentStep === 'datetime' && (
+            <Actions
+              selectedTime={selectedTime}
+              confirmed={confirmed}
+              onConfirm={onConfirm}
+              onClose={onClose}
+              onBack={handleBack}
+            />
+          )}
         </>
       )}
     </Modal>
