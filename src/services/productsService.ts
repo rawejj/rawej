@@ -1,6 +1,5 @@
 import { Product } from "@/components/BookingModal/ProductSelector";
 import { CONFIGS } from "@/constants/configs";
-import { IS_DEV } from "@/lib/constants";
 import { httpClient } from "@/utils/http-client";
 import { logger } from "@/utils/logger";
 

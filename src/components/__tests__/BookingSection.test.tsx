@@ -7,7 +7,6 @@ import { TranslationsProvider } from "@/providers/TranslationsProvider";
 import { ThemeContext } from "@/providers/ThemeContext";
 import { LocalizationClientProvider } from "@/providers/LocalizationClientProvider";
 import enTranslations from "@/../public/locales/en.json";
-import { cursorTo } from "readline";
 
 global.fetch = vi.fn((input) => {
   // Default mock for availability API calls

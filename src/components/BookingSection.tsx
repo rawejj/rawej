@@ -18,7 +18,6 @@ export default function BookingSection({
     doctors,
     loading,
     hasMore,
-    fetchMoreDoctors,
     setSelectedDate,
     setSelectedTime,
     setSelectedProductId,
