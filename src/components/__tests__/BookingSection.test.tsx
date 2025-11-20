@@ -7,6 +7,7 @@ import { TranslationsProvider } from "@/providers/TranslationsProvider";
 import { ThemeContext } from "@/providers/ThemeContext";
 import { LocalizationClientProvider } from "@/providers/LocalizationClientProvider";
 import enTranslations from "@/../public/locales/en.json";
+import { cursorTo } from "readline";
 
 global.fetch = vi.fn((input) => {
   // Default mock for availability API calls
@@ -58,6 +59,7 @@ global.fetch = vi.fn((input) => {
                 price: 5000,
                 discount_amount: 0,
                 discount_percent: "0",
+                currency: "ریال",
                 created_at: "2023-01-01T00:00:00Z",
               },
             ],
@@ -300,6 +302,7 @@ describe("BookingSection", () => {
                     price: 5000,
                     discount_amount: 0,
                     discount_percent: "0",
+                    currency: "ریال",
                     created_at: "2023-01-01T00:00:00Z",
                   },
                 ],
@@ -504,6 +507,7 @@ describe("date and time selection", () => {
                     price: 5000,
                     discount_amount: 0,
                     discount_percent: "0",
+                    currency: "ریال",
                     created_at: "2023-01-01T00:00:00Z",
                   },
                 ],
@@ -725,6 +729,7 @@ describe("localization", () => {
                     price: 5000,
                     discount_amount: 0,
                     discount_percent: "0",
+                    currency: "ریال",
                     created_at: "2023-01-01T00:00:00Z",
                   },
                 ],
@@ -820,6 +825,7 @@ describe("modal state management", () => {
                     price: 5000,
                     discount_amount: 0,
                     discount_percent: "0",
+                    currency: "ریال",
                     created_at: "2023-01-01T00:00:00Z",
                   },
                 ],
@@ -942,6 +948,7 @@ describe("BookingSection edge cases", () => {
                     price: 5000,
                     discount_amount: 0,
                     discount_percent: "0",
+                    currency: "Eur",
                     created_at: "2023-01-01T00:00:00Z",
                   },
                 ],
@@ -972,7 +979,7 @@ describe("BookingSection edge cases", () => {
     const productButton = screen.queryAllByText((content) => content.replace(/\s+/g, " ").includes("Video Consultation"))[0];
     fireEvent.click(productButton);
     // Click the price button to complete product selection
-    const priceButton = screen.getByRole("button", { name: "5,000 ریالStandard" });
+    const priceButton = screen.getByRole("button", { name: "5,000 EurStandard" });
     fireEvent.click(priceButton);
     // Check modal opened by looking for Cancel button
     await waitFor(() => {
@@ -1045,6 +1052,7 @@ describe("BookingSection edge cases", () => {
                     price: 5000,
                     discount_amount: 0,
                     discount_percent: "0",
+                    currency: "USD",
                     created_at: "2023-01-01T00:00:00Z",
                   },
                 ],
@@ -1075,7 +1083,7 @@ describe("BookingSection edge cases", () => {
     const productButton = screen.queryAllByText((content) => content.replace(/\s+/g, " ").includes("Video Consultation"))[0];
     fireEvent.click(productButton);
     // Click the price button to complete product selection
-    const priceButton = screen.getByRole("button", { name: "5,000 ریالStandard" });
+    const priceButton = screen.getByRole("button", { name: "5,000 USDStandard" });
     fireEvent.click(priceButton);
     // Check modal opened by looking for Cancel button
     await waitFor(() => {

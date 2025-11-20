@@ -7,6 +7,7 @@ export interface Price {
   price: number;
   discount_amount: number;
   discount_percent: string;
+  currency: string;
   created_at: string;
 }
 
@@ -111,12 +112,12 @@ const ProductSelector: React.FC<ProductSelectorProps> = ({
                     <span className="flex items-center gap-2 rtl:flex-row-reverse ltr:flex-row">
                       {price.discount_amount > 0 ? (
                         <>
-                          <span className="font-bold text-green-700 dark:text-green-300">{(price.price - price.discount_amount).toLocaleString()} ریال</span>
+                          <span className="font-bold text-green-700 dark:text-green-300">{(price.price - price.discount_amount).toLocaleString()} {price.currency}</span>
                           <span className="inline-block text-xs font-bold px-2 py-1 rounded-full bg-green-500 text-white shadow rtl:ml-2 ltr:mr-2" dir="ltr">{price.discount_percent}%</span>
-                          <span className="font-bold text-gray-400 line-through">{price.price.toLocaleString()} ریال</span>
+                          <span className="font-bold text-gray-400 line-through">{price.price.toLocaleString()} {price.currency}</span>
                         </>
                       ) : (
-                        <span className="font-bold">{price.price.toLocaleString()} ریال</span>
+                        <span className="font-bold">{price.price.toLocaleString()} {price.currency}</span>
                       )}
                     </span>
                     <span>{price.title}</span>
