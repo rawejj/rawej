@@ -1,7 +1,7 @@
 name: Quality Pipeline
 
 env:
-  NODE_VERSION: '24'
+  NODE_VERSION: "24"
 
 permissions:
   actions: read
@@ -16,7 +16,7 @@ on:
 
 jobs:
   lint:
-    name: Lint
+    name: Lint & Type Check
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -24,7 +24,10 @@ jobs:
         with:
           node-version: ${{ env.NODE_VERSION }}
       - run: npm ci
-      - run: npm run lint
+      - name: ESLint check (no warnings)
+        run: npx eslint . --max-warnings=0
+      - name: TypeScript type check
+        run: npx tsc --noEmit
 
   test:
     name: Test
@@ -46,6 +49,10 @@ jobs:
         with:
           node-version: ${{ env.NODE_VERSION }}
       - run: npm ci
+      - name: TypeScript type check
+        run: npx tsc --noEmit
+      - name: ESLint check (no warnings)
+        run: npx eslint . --max-warnings=0
       - run: npm run coverage
       - name: Check Coverage >= 85%
         run: node scripts/check-coverage.js
@@ -54,7 +61,6 @@ jobs:
         with:
           name: coverage-report
           path: coverage/
-
 #   security:
 #     name: Security Audit
 #     runs-on: ubuntu-latest

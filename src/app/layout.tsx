@@ -20,7 +20,11 @@ export const metadata: Metadata = {
   description: "Book appointments with qualified doctors online",
 };
 
-export default function RootLayout({ children }: { children: React.ReactNode }) {
+export default function RootLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
   return (
     <html suppressHydrationWarning>
       <head>
@@ -39,11 +43,12 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           }}
         />
       </head>
-      <body suppressHydrationWarning className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
+      <body
+        suppressHydrationWarning
+        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+      >
         <LocalizationClientProvider>
-          <ThemeClientProvider>
-            {children}
-          </ThemeClientProvider>
+          <ThemeClientProvider>{children}</ThemeClientProvider>
         </LocalizationClientProvider>
       </body>
     </html>

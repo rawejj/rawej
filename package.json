@@ -12,6 +12,9 @@
     "coverage": "vitest run --coverage"
   },
   "dependencies": {
+    "dayjs": "^1.11.19",
+    "dayjs-jalali": "^0.0.2",
+    "jalaali-js": "^1.2.8",
     "next": "16.0.1",
     "react": "19.2.0",
     "react-dom": "19.2.0"
@@ -29,6 +32,7 @@
     "babel-plugin-react-compiler": "1.0.0",
     "eslint": "^9",
     "eslint-config-next": "16.0.1",
+    "eslint-config-prettier": "^10.1.8",
     "jsdom": "^27.1.0",
     "standard-version": "^9.5.0",
     "tailwindcss": "^4",

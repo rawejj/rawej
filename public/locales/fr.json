@@ -1,4 +1,8 @@
 {
+  "messages": {
+    "no availability slots": "Aucun créneau disponible pour la réservation.",
+    "loading error": "Erreur lors du chargement"
+  },
   "book appointment": "Prendre rendez-vous",
   "theme": {
     "light": "Clair",
@@ -21,11 +25,22 @@
   "buttons": {
     "confirm booking": "Confirmer la réservation",
     "booked": "Réservé",
-    "cancel": "Annuler"
+    "back": "Retour",
+    "cancel": "Annuler",
+    "retry": "Réessayer"
   },
   "labels": {
-    "select a date": "date à sélectionner",
-    "select a time": "heure à sélectionner"
+  "select a date": "date à sélectionner",
+  "select a time": "heure à sélectionner",
+  "select consultant type": "Type de consultation à sélectionner",
+  "selected time details": "Détails de l'heure sélectionnée",
+  "start time": "Heure de début",
+  "end time": "Heure de fin",
+  "duration": "Durée",
+  "morning": "Matin",
+  "afternoon": "Après-midi",
+  "evening": "Soir",
+  "no times": "Aucune heure disponible"
   },
   "weekdays": {
     "sun": "Dim",

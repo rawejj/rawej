@@ -1,25 +1,18 @@
-
 import ErrorMessage from "@/components/ErrorMessage";
 import Footer from "@/components/Footer";
 import Header from "@/components/Header";
 import { httpClient } from "@/utils/http-client";
-import BookingSection, { Doctor } from "@/components/BookingSection";
 import { DEFAULT_LANGUAGE } from "@/lib/constants";
 import { loadTranslations } from "@/lib/translations";
 import { TranslationsProvider } from "@/providers/TranslationsProvider";
-
-type DoctorsApiResponse = {
-  success: boolean;
-  data: Doctor[];
-  total: number;
-  page: number;
-  perPage: number;
-  pageCount: number;
-  source?: string;
-};
+import { CONFIGS } from "@/constants/configs";
+import { logger } from "@/utils/logger";
+import { PaginatedResponse } from "@/utils/api-response";
+import { Doctor } from "@/types/doctor";
+import BookingSection from "@/components/BookingSection";
 
 // Enable ISR: revalidate in the background
-export const revalidate = parseInt(process.env.ISR_REVALIDATE || '60', 10);
+export const revalidate = CONFIGS.isr.revalidateTime;
 
 export default async function Home() {
   // Always use default language (English)
@@ -29,17 +22,27 @@ export default async function Home() {
   let doctors: Doctor[] = [];
   let error: string | null = null;
   try {
-    const revalidateTime = parseInt(process.env.ISR_REVALIDATE || '60', 10);
-    const res = await httpClient(`${process.env.NEXT_PUBLIC_API_URL}/doctors?page=1&limit=9`, { 
-      next: { tags: ['doctors'], revalidate: revalidateTime }
-    });
-    if (typeof res === "object" && res !== null && "success" in res && "data" in res && Array.isArray((res as DoctorsApiResponse).data)) {
-      doctors = (res as DoctorsApiResponse).data;
+    const res = await httpClient(
+      `${CONFIGS.apiUrl}/users?page=1&limit=${CONFIGS.pagination.doctorsPerPage}`,
+      {
+        next: { tags: ["doctors"], revalidate: CONFIGS.isr.revalidateTime },
+      },
+    );
+    if (
+      typeof res === "object" &&
+      res !== null &&
+      "success" in res &&
+      "items" in res &&
+      Array.isArray((res as PaginatedResponse).items)
+    ) {
+      doctors = (res as PaginatedResponse).items as Doctor[];
     } else {
-      throw new Error(`Doctors data is not an array. Response: ${JSON.stringify(res)}`);
+      throw new Error(
+        `Doctors items is not an array. Response: ${JSON.stringify(res)}`,
+      );
     }
   } catch (err) {
-    console.error('Doctors API error:', err);
+    logger.error(err, "Doctors API fetch error");
     if (err instanceof Error) {
       error = err.message;
     } else {

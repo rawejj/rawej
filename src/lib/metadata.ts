@@ -1,6 +1,6 @@
-import { Metadata } from 'next';
-import { LanguageKey } from '@/providers/LocalizationProvider';
-import { SUPPORTED_LANGUAGES } from '@/lib/constants';
+import { Metadata } from "next";
+import { LanguageKey } from "@/providers/LocalizationProvider";
+import { SUPPORTED_LANGUAGES } from "@/lib/constants";
 
 type TranslationsType = {
   meta: {
@@ -24,13 +24,16 @@ export async function getTranslations(lang: string): Promise<TranslationsType> {
 
 export async function generateMetadata(lang: LanguageKey): Promise<Metadata> {
   const translations = await getTranslations(lang);
-  const baseUrl = process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000';
+  const baseUrl = process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000";
 
   // Build alternate languages dynamically
-  const alternateLanguages = SUPPORTED_LANGUAGES.reduce((acc, language) => {
-    acc[language] = `${baseUrl}/${language}`;
-    return acc;
-  }, {} as Record<string, string>);
+  const alternateLanguages = SUPPORTED_LANGUAGES.reduce(
+    (acc, language) => {
+      acc[language] = `${baseUrl}/${language}`;
+      return acc;
+    },
+    {} as Record<string, string>,
+  );
 
   return {
     title: translations.meta.title,
@@ -42,10 +45,10 @@ export async function generateMetadata(lang: LanguageKey): Promise<Metadata> {
       url: `${baseUrl}/${lang}`,
       siteName: translations.meta.title,
       locale: lang,
-      type: 'website',
+      type: "website",
     },
     twitter: {
-      card: 'summary_large_image',
+      card: "summary_large_image",
       title: translations.meta.title,
       description: translations.meta.description,
     },

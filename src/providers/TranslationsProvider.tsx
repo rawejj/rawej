@@ -1,14 +1,16 @@
 "use client";
 
-import { createContext, useContext, ReactNode } from 'react';
-import { Translations, getTranslation } from '@/lib/translationHelpers';
+import { createContext, useContext, ReactNode } from "react";
+import { Translations, getTranslation } from "@/lib/translationHelpers";
 
 interface TranslationsContextValue {
   translations: Translations;
   t: (key: string, fallback?: string) => string;
 }
 
-const TranslationsContext = createContext<TranslationsContextValue | undefined>(undefined);
+const TranslationsContext = createContext<TranslationsContextValue | undefined>(
+  undefined,
+);
 
 interface TranslationsProviderProps {
   children: ReactNode;
@@ -19,8 +21,12 @@ interface TranslationsProviderProps {
  * Client-side provider that receives translations from server component
  * This follows Next.js 13+ best practices: load on server, provide to client
  */
-export function TranslationsProvider({ children, translations }: TranslationsProviderProps) {
-  const t = (key: string, fallback?: string) => getTranslation(translations, key, fallback);
+export function TranslationsProvider({
+  children,
+  translations,
+}: TranslationsProviderProps) {
+  const t = (key: string, fallback?: string) =>
+    getTranslation(translations, key, fallback);
 
   const value: TranslationsContextValue = {
     translations,
@@ -42,7 +48,7 @@ export function TranslationsProvider({ children, translations }: TranslationsPro
 export function useTranslations() {
   const context = useContext(TranslationsContext);
   if (!context) {
-    throw new Error('useTranslations must be used within TranslationsProvider');
+    throw new Error("useTranslations must be used within TranslationsProvider");
   }
   return context;
 }

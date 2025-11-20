@@ -7,11 +7,13 @@ This project uses **server-side first** localization following Next.js 13+ App R
 ## Architecture
 
 ### Server Components (RSC)
+
 - Load translations from file system using `loadTranslations(lang)`
 - Pass translations to client via `TranslationsProvider`
 - No JavaScript overhead for translation loading
 
 ### Client Components
+
 - Receive translations via React Context
 - Use `useTranslations()` hook to access translations
 - Support nested keys with dot notation (e.g., `t('theme.dark')`)
@@ -37,12 +39,12 @@ src/
 ### Server Component
 
 ```tsx
-import { loadTranslations } from '@/lib/translations';
-import { TranslationsProvider } from '@/providers/TranslationsProvider';
+import { loadTranslations } from "@/lib/translations";
+import { TranslationsProvider } from "@/providers/TranslationsProvider";
 
 export default async function Page({ params }: { params: { lang: string } }) {
   const translations = await loadTranslations(params.lang as LanguageKey);
-  
+
   return (
     <TranslationsProvider translations={translations}>
       <YourClientComponents />
@@ -54,17 +56,17 @@ export default async function Page({ params }: { params: { lang: string } }) {
 ### Client Component
 
 ```tsx
-'use client';
+"use client";
 
-import { useTranslations } from '@/providers/TranslationsProvider';
+import { useTranslations } from "@/providers/TranslationsProvider";
 
 export function MyComponent() {
   const { t } = useTranslations();
-  
+
   return (
     <div>
-      <h1>{t('welcome')}</h1>
-      <button>{t('theme.dark')}</button>
+      <h1>{t("welcome")}</h1>
+      <button>{t("theme.dark")}</button>
     </div>
   );
 }
@@ -92,7 +94,7 @@ Located in `public/locales/{lang}.json`:
 ✅ **Type Safety**: TypeScript support throughout  
 ✅ **Simple**: No complex i18n library configuration  
 ✅ **Server-First**: Aligns with Next.js 13+ philosophy  
-✅ **Flexible**: Supports nested translation keys  
+✅ **Flexible**: Supports nested translation keys
 
 ## Language Switching
 
