@@ -2,11 +2,11 @@
 import { vi } from "vitest";
 
 import { render } from "@testing-library/react";
-import Header from "./Header";
+import Header from "@/components/Header";
 import { LocalizationClientProvider } from "@/providers/LocalizationClientProvider";
 import { ThemeContext } from "@/providers/ThemeContext";
 import { TranslationsProvider } from "@/providers/TranslationsProvider";
-import enTranslations from "../../public/locales/en.json";
+import enTranslations from "@/../public/locales/en.json";
 import React from "react";
 
 vi.mock("next/navigation", () => ({

@@ -17,7 +17,7 @@ export const SUPPORTED_LANGUAGES: LanguageKey[] = [
 /**
  * Default language
  */
-export const DEFAULT_LANGUAGE: LanguageKey = "en";
+export const DEFAULT_LANGUAGE: LanguageKey = (process.env.NEXT_PUBLIC_FALLBACK_LANGUAGE as LanguageKey) || "en";
 
 /**
  * Jalali (Persian) month names

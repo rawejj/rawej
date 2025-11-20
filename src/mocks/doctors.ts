@@ -1,5 +1,3 @@
-// src/mocks/doctors.ts
-
 export const mockDoctors = [
   {
     id: 1,

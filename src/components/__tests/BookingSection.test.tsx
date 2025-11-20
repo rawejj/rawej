@@ -1,8 +1,8 @@
 import { render, screen, fireEvent, waitFor } from "@testing-library/react";
 
 import { vi } from "vitest";
-import type { Doctor } from "./BookingSection";
-import BookingSection from "./BookingSection";
+import type { Doctor } from "@/components/BookingSection";
+import BookingSection from "@/components/BookingSection";
 import { TranslationsProvider } from "@/providers/TranslationsProvider";
 import { ThemeContext } from "@/providers/ThemeContext";
 import { LocalizationClientProvider } from "@/providers/LocalizationClientProvider";
@@ -122,7 +122,7 @@ describe("BookingSection", () => {
     vi.spyOn(global, "fetch").mockImplementation((input) => {
       if (
         typeof input === "string" &&
-        input.includes("/api/v1/doctors/uuid-99/availability")
+        input.includes("/api/v1/users/uuid-99/availability")
       ) {
         return Promise.resolve({
           ok: true,
@@ -353,7 +353,7 @@ describe("date and time selection", () => {
     vi.spyOn(global, "fetch").mockImplementation((input) => {
       if (
         typeof input === "string" &&
-        input.includes("/api/v1/doctors/uuid-1/availability")
+        input.includes("/api/v1/users/uuid-1/availability")
       ) {
         return Promise.resolve({
           ok: true,
@@ -435,7 +435,7 @@ describe("localization", () => {
     vi.spyOn(global, "fetch").mockImplementation((input) => {
       if (
         typeof input === "string" &&
-        input.includes("/api/v1/doctors/uuid-1/availability")
+        input.includes("/api/v1/users/uuid-1/availability")
       ) {
         return Promise.resolve({
           ok: true,
@@ -476,8 +476,8 @@ describe("modal state management", () => {
     vi.spyOn(global, "fetch").mockImplementation((input) => {
       if (
         typeof input === "string" &&
-        (input.includes("/api/v1/doctors/uuid-1/availability") ||
-          input.includes("/api/v1/doctors/uuid-2/availability"))
+        (input.includes("/api/v1/users/uuid-1/availability") ||
+          input.includes("/api/v1/users/uuid-2/availability"))
       ) {
         return Promise.resolve({
           ok: true,
@@ -594,7 +594,7 @@ describe("BookingSection edge cases", () => {
     vi.spyOn(global, "fetch").mockImplementation((input) => {
       if (
         typeof input === "string" &&
-        input.includes("/api/v1/doctors/uuid-1/availability")
+        input.includes("/api/v1/users/uuid-1/availability")
       ) {
         return Promise.resolve({
           ok: true,

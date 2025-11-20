@@ -1,5 +1,5 @@
 import { render } from "@testing-library/react";
-import DoctorCardSkeleton from "./DoctorCardSkeleton";
+import DoctorCardSkeleton from "@/components/DoctorCardSkeleton";
 
 describe("DoctorCardSkeleton", () => {
   it("renders skeleton container", () => {

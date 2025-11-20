@@ -1,7 +1,7 @@
 {
   "messages": {
     "no availability slots": "Demek bo rezervasyon nayê dîtin.",
-    "error loading availability": "Çewtiya barkirina berdestiyê."
+    "loading error": "Çewtiya barkirina."
   },
   "book appointment": "Nobeyê bigire",
   "theme": {
@@ -25,12 +25,22 @@
   "buttons": {
     "confirm booking": "Bixweberê pejirandinê",
     "booked": "Reservasyon kirin",
+    "back": "Vegere",
     "cancel": "Bişkojkê",
     "retry": "Dîsa biceribîne"
   },
   "labels": {
-    "select a date": "Dîrokê hilbijêre",
-    "select a time": "Demê hilbijêre"
+  "select a date": "Dîrokê hilbijêre",
+  "select a time": "Demê hilbijêre",
+  "select consultant type": "Cureya şawirmendiyê hilbijêre",
+  "selected time details": "Hêrguliyên demê yê hilbijartî",
+  "start time": "Demê destpêkê",
+  "end time": "Demê qedandî",
+  "duration": "Demjimêr",
+  "morning": "Sibe",
+  "afternoon": "Nîvro",
+  "evening": "Êvar",
+  "no times": "Dem tune ye"
   },
   "weekdays": {
     "sun": "Yekşem",

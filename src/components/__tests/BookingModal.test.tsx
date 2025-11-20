@@ -1,7 +1,7 @@
 import { render, screen, fireEvent } from "@testing-library/react";
 import { vi } from "vitest";
-import BookingModal from "./BookingModal";
-import type { Doctor } from "./BookingSection";
+import BookingModal from "@/components/BookingModal";
+import type { Doctor } from "@/components/BookingSection";
 import { TranslationsProvider } from "@/providers/TranslationsProvider";
 import { ThemeContext } from "@/providers/ThemeContext";
 import enTranslations from "@/../public/locales/en.json";
@@ -41,9 +41,9 @@ describe("BookingModal", () => {
   ];
 
   const getNext7Days = () => [
-    { label: "Mon", value: "2024-01-01", times: mockTimes },
-    { label: "Tue", value: "2024-01-02", times: mockTimes },
-    { label: "Wed", value: "2024-01-03", times: mockTimes },
+    { title: "Monday", label: "Mon", value: "2024-01-01", times: mockTimes },
+    { title: "Tuesday", label: "Tue", value: "2024-01-02", times: mockTimes },
+    { title: "Wednesday", label: "Wed", value: "2024-01-03", times: mockTimes },
   ];
 
   const defaultProps = {
@@ -248,9 +248,9 @@ describe("BookingModal", () => {
 
   it("handles empty times array gracefully", () => {
     const getEmptyDays = () => [
-      { label: "Mon", value: "2024-01-01", times: [] },
-      { label: "Tue", value: "2024-01-02", times: [] },
-      { label: "Wed", value: "2024-01-03", times: [] },
+      { title: "Monday", label: "Mon", value: "2024-01-01", times: [] },
+      { title: "Tuesday", label: "Tue", value: "2024-01-02", times: [] },
+      { title: "Wednesday", label: "Wed", value: "2024-01-03", times: [] },
     ];
     const { container } = renderWithProviders(
       <BookingModal {...defaultProps} getNext7Days={getEmptyDays} />,

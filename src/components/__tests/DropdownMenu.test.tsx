@@ -1,6 +1,6 @@
 import { render, screen, fireEvent } from "@testing-library/react";
 import { vi } from "vitest";
-import { DropdownMenu } from "./DropdownMenu";
+import { DropdownMenu } from "@/components/DropdownMenu";
 
 describe("DropdownMenu", () => {
   const defaultProps = {

@@ -1,7 +1,7 @@
 {
   "messages": {
     "no availability slots": "زمانی برای رزرو موجود نیست.",
-    "error loading availability": "خطا در بارگذاری دسترسی."
+    "loading error": "خطا در بارگذاری"
   },
   "book appointment": "رزرو نوبت",
   "theme": {
@@ -25,12 +25,22 @@
   "buttons": {
     "confirm booking": "تأیید رزرو",
     "booked": "رزرو شده",
+    "back": "بازگشت",
     "cancel": "لغو",
     "retry": "تلاش مجدد"
   },
   "labels": {
     "select a date": "انتخاب تاریخ",
-    "select a time": "انتخاب زمان"
+    "select a time": "انتخاب زمان",
+    "select consultant type": "انتخاب نوع مشاوره",
+    "selected time details": "جزئیات زمان انتخاب شده",
+    "start time": "زمان شروع",
+    "end time": "زمان پایان",
+    "duration": "مدت زمان",
+    "morning": "صبح",
+    "afternoon": "بعدازظهر",
+    "evening": "شب",
+    "no times": "زمانی موجود نیست"
   },
   "weekdays": {
     "sun": "یکشنبه",

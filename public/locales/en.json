@@ -1,7 +1,7 @@
 {
   "messages": {
     "no availability slots": "No available slots for booking.",
-    "error loading availability": "Error loading availability."
+    "loading error": "Loading error."
   },
   "book appointment": "Book Appointment",
   "theme": {
@@ -25,12 +25,22 @@
   "buttons": {
     "confirm booking": "Confirm Booking",
     "booked": "Booked!",
+    "back": "Back",
     "cancel": "Cancel",
     "retry": "Retry"
   },
   "labels": {
-    "select a date": "Select a Date",
-    "select a time": "Select a Time"
+  "select a date": "Select a Date",
+  "select a time": "Select a Time",
+  "select consultant type": "Select Consultant Type",
+  "selected time details": "Selected Time Details",
+  "start time": "Start Time",
+  "end time": "End Time",
+  "duration": "Duration",
+  "morning": "Morning",
+  "afternoon": "Afternoon",
+  "evening": "Evening",
+  "no times": "No times available"
   },
   "weekdays": {
     "sun": "Sun",

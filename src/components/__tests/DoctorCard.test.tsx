@@ -1,7 +1,7 @@
 import type { Doctor } from "@/components/BookingSection";
 import { render, screen, fireEvent } from "@testing-library/react";
 import { vi } from "vitest";
-import DoctorCard from "./DoctorCard";
+import DoctorCard from "@/components/DoctorCard";
 import { TranslationsProvider } from "@/providers/TranslationsProvider";
 
 const mockTranslations = {

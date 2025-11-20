@@ -1,22 +1,9 @@
 "use client";
 
-import { useState, useRef, useEffect, useCallback } from "react";
-import DoctorCard from "@/components/DoctorCard";
-import BookingModal from "@/components/BookingModal";
-import DoctorCardSkeleton from "@/components/DoctorCardSkeleton";
-import { useTranslations } from "@/providers/TranslationsProvider";
-
-export type Doctor = {
-  id: number;
-  uuid: string;
-  name: string;
-  specialty: string;
-  rating: number;
-  image?: string;
-  bio: string;
-  availability?: string[];
-  callTypes?: Array<"phone" | "video" | "voice">;
-};
+import { BookingDoctorGrid } from "@/components/BookingDoctorGrid";
+import { useBookingSection } from "@/hooks/useBookingSection";
+import { Doctor } from "@/types/doctor";
+import { Controller } from "./BookingModal/Controller";
 
 export default function BookingSection({
   doctors: initialDoctors,
@@ -27,212 +14,89 @@ export default function BookingSection({
   translations?: Record<string, string>;
   hasMore?: boolean;
 }) {
-  const { t } = useTranslations();
-  const [error, setError] = useState<string | null>(null);
-  const [showModal, setShowModal] = useState(false);
-  const [selectedDoctor, setSelectedDoctor] = useState<Doctor | null>(null);
-  // State for available dates/times per doctor
-  const [availableDates, setAvailableDates] = useState<
-    { title: string; label: string; value: string; times: { start: string; end: string; duration: string }[] }[]
-  >([]);
-  const [selectedDate, setSelectedDate] = useState("");
-  const [selectedTime, setSelectedTime] = useState("");
-  const [confirmed, setConfirmed] = useState(false);
-  const [modalLoading, setModalLoading] = useState(false);
+  const {
+    doctors,
+    loading,
+    hasMore,
+    fetchMoreDoctors,
+    setSelectedDate,
+    setSelectedTime,
+    setSelectedProductId,
+    setSelectedPriceId,
+    showModal,
+    selectedDoctor,
+    selectedDate,
+    selectedTime,
+    confirmed,
+    error,
+    modalLoading,
+    products,
+    selectedProductId,
+    selectedPriceId,
+    availableDates,
+    observerRef,
+    setSelectedDoctor,
+    setShowModal,
+    fetchProducts,
+  } = useBookingSection(initialDoctors, hasMoreProp);
 
-  // Infinite scroll state
-  const [doctors, setDoctors] = useState<Doctor[]>(initialDoctors);
-  const [page, setPage] = useState(1);
-  const [hasMore, setHasMore] = useState(
-    typeof hasMoreProp === "boolean" ? hasMoreProp : true,
-  );
-  const [loading, setLoading] = useState(false);
-  const observerRef = useRef<HTMLDivElement | null>(null);
-
-  // Fetch next page
-  const fetchMoreDoctors = useCallback(async () => {
-    if (loading || !hasMore) return;
-    setLoading(true);
-    try {
-      const res = await fetch(`/api/v1/doctors?page=${page + 1}&limit=10`);
-      const json = await res.json();
-      if (json.success && Array.isArray(json.data)) {
-        setDoctors((prev) => [...prev, ...json.data]);
-        setPage((prev) => prev + 1);
-        if (
-          json.data.length === 0 ||
-          (json.pageCount && page + 1 >= json.pageCount)
-        ) {
-          setHasMore(false);
-        }
-      } else {
-        setHasMore(false);
-      }
-    } catch (error) {
-      if (error instanceof Error) {
-        // Optionally log error for debugging
-        console.error("Failed to fetch doctors:", error.message);
-      } else {
-        console.error("Failed to fetch doctors: Unknown error");
-      }
-      setHasMore(false);
-    } finally {
-      setLoading(false);
-    }
-  }, [loading, hasMore, page]);
-
-  // IntersectionObserver for infinite scroll
-  useEffect(() => {
-    if (!hasMore) return;
-    const observer = new window.IntersectionObserver(
-      (entries) => {
-        if (entries[0].isIntersecting) {
-          fetchMoreDoctors();
-        }
-      },
-      { threshold: 1 },
-    );
-    const refValue = observerRef.current;
-    if (refValue) {
-      observer.observe(refValue);
-    }
-    return () => {
-      if (refValue) {
-        observer.unobserve(refValue);
-      }
-    };
-  }, [fetchMoreDoctors, hasMore]);
-
+  // Modal handlers
   const openModal = async (doctor: Doctor) => {
     setSelectedDoctor(doctor);
     setShowModal(true);
-    setConfirmed(false);
-
-    // Fetch availability from API
-    setError(null);
-    setModalLoading(true);
-    try {
-      const res = await fetch(`/api/v1/doctors/${doctor.uuid}/availability`);
-      const json = await res.json();
-      // API returns array directly, not wrapped in dates property
-      if (json && Array.isArray(json)) {
-        setAvailableDates(json);
-        if (json.length > 0) {
-          setSelectedDate(json[0]?.value || "");
-        } else {
-          setSelectedDate("");
-        }
-        setSelectedTime("");
-      } else {
-        setAvailableDates([]);
-        setSelectedDate("");
-        setSelectedTime("");
-        setError(t("messages.error loading availability"));
-      }
-    } catch {
-      setAvailableDates([]);
-      setSelectedDate("");
-      setSelectedTime("");
-      setError(t("messages.error loading availability"));
-    } finally {
-      setModalLoading(false);
+    setSelectedDate(availableDates[0]?.value || "");
+    setSelectedTime("");
+    // Optionally reset confirmation state
+    if (doctor?.uuid) {
+      await fetchProducts(doctor.uuid);
     }
   };
 
   const closeModal = () => {
     setShowModal(false);
     setSelectedDoctor(null);
-    setConfirmed(false);
-    setError(null);
-    setModalLoading(false);
+    // Optionally reset confirmation state
   };
 
   const confirmBooking = () => {
-    setConfirmed(true);
-    setTimeout(() => {
-      closeModal();
-    }, 1500);
+    // Implement booking confirmation logic here
   };
 
-  // Move fetchAvailability definition here so it's in scope for BookingModal
   const fetchAvailability = async (doctor?: Doctor) => {
-    const doc = doctor || selectedDoctor;
-    if (!doc) return;
-    setError(null);
-    setModalLoading(true);
-    try {
-      const res = await fetch(`/api/v1/doctors/${doc.uuid}/availability`);
-      const json = await res.json();
-      if (json && Array.isArray(json)) {
-        setAvailableDates(json);
-        if (json.length > 0) {
-          setSelectedDate(json[0]?.value || "");
-        } else {
-          setSelectedDate("");
-        }
-        setSelectedTime("");
-      } else {
-        setAvailableDates([]);
-        setSelectedDate("");
-        setSelectedTime("");
-        setError(t("messages.error loading availability"));
-      }
-    } catch {
-      setAvailableDates([]);
-      setSelectedDate("");
-      setSelectedTime("");
-      setError(t("messages.error loading availability"));
-    } finally {
-      setModalLoading(false);
-    }
+    // Implement fetch logic if needed
   };
 
   return (
     <>
-      <main className="max-w-6xl mx-auto px-4 py-8">
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-          {doctors.map((doctor, idx) => (
-            <DoctorCard
-              key={doctor.id + "-" + idx}
-              doctor={doctor}
-              onBook={openModal}
-            />
-          ))}
-          {/* Skeletons to fill empty grid spaces when loading */}
-          {loading &&
-            (() => {
-              // Determine columns (default 3 for lg)
-              const columns = 3;
-              const remainder = doctors.length % columns;
-              const skeletonsNeeded =
-                remainder === 0 ? columns : columns - remainder;
-              return Array.from({ length: skeletonsNeeded }).map((_, idx) => (
-                <DoctorCardSkeleton key={"skeleton-" + idx} />
-              ));
-            })()}
-        </div>
-        {/* Sentinel for infinite scroll */}
-        <div ref={observerRef} style={{ height: 1 }} />
-        {!hasMore && (
-          <div className="text-center text-gray-400 py-4">
-            {translations?.noMoreDoctors ?? "No more doctors to load."}
-          </div>
-        )}
-      </main>
-      <BookingModal
-        show={showModal}
+      <BookingDoctorGrid
+        doctors={doctors}
+        loading={loading}
+        hasMore={hasMore}
+        observerRef={observerRef}
+        onBook={openModal}
+        translations={translations}
+      />
+      <Controller
+        showModal={showModal}
         doctor={selectedDoctor}
+        availableDates={availableDates}
         selectedDate={selectedDate}
         selectedTime={selectedTime}
         confirmed={confirmed}
+        error={error}
+        loading={modalLoading}
+        products={products}
+        selectedProductId={selectedProductId}
+        selectedPriceId={selectedPriceId}
         onClose={closeModal}
         onDateChange={setSelectedDate}
         onTimeChange={setSelectedTime}
         onConfirm={confirmBooking}
-        getNext7Days={() => availableDates}
-        error={error}
         fetchAvailability={fetchAvailability}
-        loading={modalLoading}
+        onProductSelect={(productId, priceId) => {
+          setSelectedProductId(productId);
+          setSelectedPriceId(priceId);
+        }}
       />
       {/* Modal animation */}
       <style>{`

@@ -6,6 +6,7 @@ interface BookingModalActionsProps {
   confirmed: boolean;
   onConfirm: () => void;
   onClose: () => void;
+  onBack?: () => void;
 }
 
 const BookingModalActions: React.FC<BookingModalActionsProps> = ({
@@ -13,6 +14,7 @@ const BookingModalActions: React.FC<BookingModalActionsProps> = ({
   confirmed,
   onConfirm,
   onClose,
+  onBack,
 }) => {
   const { t } = useTranslations();
 
@@ -45,6 +47,19 @@ const BookingModalActions: React.FC<BookingModalActionsProps> = ({
           )}
         </div>
       </button>
+      {onBack && (
+        <button
+          className="w-full py-3 rounded-3xl text-zinc-500 dark:text-zinc-400 hover:text-zinc-700 dark:hover:text-zinc-200 text-sm font-medium transition-all duration-200 hover:bg-zinc-50 dark:hover:bg-zinc-800/50 border border-transparent hover:border-zinc-200 dark:hover:border-zinc-700"
+          onClick={onBack}
+        >
+          <div className="flex items-center justify-center gap-2">
+            <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" />
+            </svg>
+            {t("buttons.back")}
+          </div>
+        </button>
+      )}
       <button
         className="w-full py-3 rounded-3xl text-zinc-500 dark:text-zinc-400 hover:text-zinc-700 dark:hover:text-zinc-200 text-sm font-medium transition-all duration-200 hover:bg-zinc-50 dark:hover:bg-zinc-800/50 border border-transparent hover:border-zinc-200 dark:hover:border-zinc-700"
         onClick={onClose}

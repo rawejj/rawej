@@ -1,7 +1,7 @@
 {
   "messages": {
     "no availability slots": "کاتێک بۆ پێشنیارکردن بەردەست نییە.",
-    "error loading availability": "هەڵە لە بارکردنی بەردەستی."
+    "loading error": "هەڵە لە بارکردن"
   },
   "book appointment": "نۆبە گرتن",
   "theme": {
@@ -25,12 +25,22 @@
   "buttons": {
     "confirm booking": "پەسندکردنی نۆبە",
     "booked": "رێکخراوە",
+    "back": "گەڕانەوە",
     "cancel": "باشکەوتن",
     "retry": "دوبارە"
   },
   "labels": {
-    "select a date": "هەڵبژاردەنی ڕۆژ",
-    "select a time": "هەڵبژاردەنی کات"
+  "select a date": "هەلبژاردنی ڕۆژ",
+  "select a time": "هەلبژاردنی کات",
+  "select consultant type": "هەلبژاردنی جۆری ڕاوێژکار",
+  "selected time details": "وردەکارییەکانی کاتی هەلبژێردراو",
+  "start time": "کاتی دەستپێکردن",
+  "end time": "کاتی کۆتایی",
+  "duration": "ماوە",
+  "morning": "بەیانی",
+  "afternoon": "نیوەڕۆ",
+  "evening": "ئێوارە",
+  "no times": "کات بەردەست نییە"
   },
   "weekdays": {
     "sun": "یەکشهەم",

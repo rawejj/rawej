@@ -1,7 +1,7 @@
 {
   "messages": {
     "no availability slots": "Keine verfügbaren Buchungszeiten.",
-    "error loading availability": "Fehler beim Laden der Verfügbarkeit."
+    "loading error": "Fehler beim Laden"
   },
   "book appointment": "Termin buchen",
   "theme": {
@@ -25,12 +25,22 @@
   "buttons": {
     "confirm booking": "Buchung bestätigen",
     "booked": "Reserviert",
+    "back": "Zurück",
     "cancel": "Abbrechen",
     "retry": "Wiederholen"
   },
   "labels": {
-    "select a date": "Datum auswählen",
-    "select a time": "Uhrzeit auswählen"
+  "select a date": "Datum auswählen",
+  "select a time": "Uhrzeit auswählen",
+  "select consultant type": "Beratungstyp auswählen",
+  "selected time details": "Ausgewählte Zeitdetails",
+  "start time": "Startzeit",
+  "end time": "Endzeit",
+  "duration": "Dauer",
+  "morning": "Morgen",
+  "afternoon": "Nachmittag",
+  "evening": "Abend",
+  "no times": "Keine Zeiten verfügbar"
   },
   "weekdays": {
     "sun": "So",

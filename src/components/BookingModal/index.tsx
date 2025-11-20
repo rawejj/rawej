@@ -1,5 +1,4 @@
-import React from "react";
-import { Doctor } from "../BookingSection";
+import React, { useState } from "react";
 import { useTranslations } from "@/providers/TranslationsProvider";
 import BookingModalHeader from "./Header";
 import BookingModalError from "./Error";
@@ -8,6 +7,8 @@ import BookingModalNoAvailability from "./NoAvailability";
 import BookingModalDateSelector from "./DateSelector";
 import BookingModalTimeSelector from "./TimeSelector";
 import BookingModalActions from "./Actions";
+import ProductSelector, { Product } from "./ProductSelector";
+import { Doctor } from "@/types/doctor";
 
 interface BookingModalProps {
   error?: string | null;
@@ -23,6 +24,10 @@ interface BookingModalProps {
   getNext7Days: () => { title: string; label: string; value: string; times: { start: string; end: string; duration: string }[] }[];
   fetchAvailability?: () => void;
   loading?: boolean;
+  products?: Product[];
+  selectedProductId?: number;
+  selectedPriceId?: number;
+  onProductSelect?: (productId: number, priceId: number) => void;
 }
 
 const BookingModal: React.FC<BookingModalProps> = ({
@@ -39,8 +44,20 @@ const BookingModal: React.FC<BookingModalProps> = ({
   error,
   fetchAvailability,
   loading = false,
+  products = [],
+  selectedProductId,
+  selectedPriceId,
+  onProductSelect = () => {},
 }) => {
+
+  const [currentStep, setCurrentStep] = useState<'product' | 'datetime'>('product');
   const { t } = useTranslations();
+  // Reset step when modal opens
+  React.useEffect(() => {
+    if (show) {
+      setCurrentStep('product');
+    }
+  }, [show]);
   const days = getNext7Days();
   const selectedDay = days.find((day) => day.value === selectedDate);
   const times = selectedDay?.times || [];
@@ -54,15 +71,44 @@ const BookingModal: React.FC<BookingModalProps> = ({
   if (!show || !doctor) {
     return null;
   }
+  // Show loading spinner if products are loading and step is product
+  if (loading && currentStep === 'product') {
+    return (
+      <div className="fixed inset-0 z-9999 flex items-center justify-center bg-black/50 backdrop-blur-md" onClick={onClose}>
+        <div className="w-full max-w-sm sm:max-w-md md:max-w-lg lg:max-w-xl mx-4 rounded-3xl bg-white dark:bg-zinc-900 p-4 animate-slide-up max-h-[85vh] overflow-y-auto relative" onClick={e => e.stopPropagation()}>
+          <BookingModalLoading />
+        </div>
+      </div>
+    );
+  }
   return (
     <div
       className="fixed inset-0 z-9999 flex items-center justify-center bg-black/50 backdrop-blur-md"
       onClick={onClose}
     >
       <div
-        className="w-full max-w-sm sm:max-w-md md:max-w-lg lg:max-w-xl mx-4 rounded-3xl bg-linear-to-br from-white via-white to-gray-50 dark:from-zinc-900 dark:via-zinc-900 dark:to-zinc-800 p-4 shadow-2xl shadow-purple-500/10 dark:shadow-pink-500/10 border border-gray-200/50 dark:border-zinc-700/50 animate-slide-up max-h-[85vh] overflow-y-auto"
+        className="w-full max-w-sm sm:max-w-md md:max-w-lg lg:max-w-xl mx-4 rounded-3xl bg-linear-to-br from-white via-white to-gray-50 dark:from-zinc-900 dark:via-zinc-900 dark:to-zinc-800 p-4 shadow-2xl shadow-purple-500/10 dark:shadow-pink-500/10 border border-gray-200/50 dark:border-zinc-700/50 animate-slide-up max-h-[85vh] overflow-y-auto relative"
         onClick={(e) => e.stopPropagation()}
       >
+        <button
+          type="button"
+          aria-label={t('buttons.cancel')}
+          onClick={onClose}
+          className="absolute top-4 left-4 z-10 p-2 rounded-full bg-white/80 dark:bg-zinc-900/80 border border-gray-200 dark:border-zinc-700 shadow hover:bg-red-100 dark:hover:bg-red-900/40 transition-colors"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 20 20"
+            fill="currentColor"
+            className="w-5 h-5 text-red-500"
+          >
+            <path
+              fillRule="evenodd"
+              d="M10 8.586l4.95-4.95a1 1 0 111.414 1.414L11.414 10l4.95 4.95a1 1 0 01-1.414 1.414L10 11.414l-4.95 4.95a1 1 0 01-1.414-1.414L8.586 10l-4.95-4.95A1 1 0 115.05 3.636L10 8.586z"
+              clipRule="evenodd"
+            />
+          </svg>
+        </button>
         <BookingModalHeader doctor={doctor} />
         {error ? (
           <BookingModalError error={error} onRefresh={handleRefresh} />
@@ -72,22 +118,97 @@ const BookingModal: React.FC<BookingModalProps> = ({
           <BookingModalNoAvailability />
         ) : (
           <>
-            <BookingModalDateSelector
-              selectedDate={selectedDate}
-              onDateChange={onDateChange}
-              getNext7Days={getNext7Days}
-            />
-            <BookingModalTimeSelector
-              selectedTime={selectedTime}
-              onTimeChange={onTimeChange}
-              times={times}
-            />
-            <BookingModalActions
-              selectedTime={selectedTime}
-              confirmed={confirmed}
-              onConfirm={onConfirm}
-              onClose={onClose}
-            />
+            {currentStep === 'product' && products && products.length > 0 && (
+              <>
+                <div className="mb-4 text-lg font-semibold text-purple-700 dark:text-pink-400">
+                  {t('labels.select a product')}
+                </div>
+                <ProductSelector
+                  products={products}
+                  selectedProductId={selectedProductId}
+                  selectedPriceId={selectedPriceId}
+                  onSelect={(productId, priceId) => {
+                    if (onProductSelect) onProductSelect(productId, priceId);
+                    setCurrentStep('datetime');
+                    if (fetchAvailability) fetchAvailability();
+                  }}
+                />
+              </>
+            )}
+            {currentStep === 'product' && (!products || products.length === 0) && (
+              <div className="mb-4 text-lg font-semibold text-purple-700 dark:text-pink-400 text-center">
+                {t('labels.no products available')}
+              </div>
+            )}
+            {currentStep === 'datetime' && (
+              <>
+                <BookingModalDateSelector
+                  selectedDate={selectedDate}
+                  onDateChange={onDateChange}
+                  getNext7Days={getNext7Days}
+                />
+                <BookingModalTimeSelector
+                  selectedTime={selectedTime}
+                  onTimeChange={onTimeChange}
+                  times={times}
+                />
+                <div
+                  className={`mt-4 px-4 py-3 bg-linear-to-r from-slate-50 to-slate-100 dark:from-zinc-800/50 dark:to-zinc-700/50 rounded-2xl border border-slate-200/60 dark:border-zinc-700/60 shadow-sm transition-all duration-300 ${selectedTime ? '' : 'opacity-0 pointer-events-none select-none'}`}
+                  style={{ minHeight: 56 }}
+                >
+                  {selectedTime ? (
+                    <>
+                      <div className="flex items-center gap-3 text-sm font-medium text-slate-700 dark:text-slate-200 mb-2">
+                        <div className="w-4 h-4 rounded-full bg-blue-500/20 flex items-center justify-center">
+                          <svg
+                            className="w-2.5 h-2.5 text-blue-600 dark:text-blue-400"
+                            fill="none"
+                            stroke="currentColor"
+                            strokeWidth="2"
+                            viewBox="0 0 24 24"
+                          >
+                            <circle cx="12" cy="12" r="10" />
+                            <polyline points="12,6 12,12 16,14" />
+                          </svg>
+                        </div>
+                        <span className="text-blue-700 dark:text-blue-300">{t('labels.selected time details')}</span>
+                      </div>
+                      <div className="flex items-center gap-2 overflow-x-auto">
+                        {(() => {
+                          const selectedTimeSlot = times.find(time => time.start === selectedTime);
+                          if (!selectedTimeSlot) return null;
+                          return (
+                            <>
+                              <div className="shrink-0 px-3 py-2 bg-white dark:bg-zinc-800 rounded-lg border border-slate-200 dark:border-zinc-600 shadow-sm">
+                                <div className="text-xs text-slate-500 dark:text-slate-400">{t('labels.start time')}</div>
+                                <div className="text-sm font-semibold text-slate-800 dark:text-slate-200">{selectedTimeSlot.start}</div>
+                              </div>
+                              <div className="shrink-0 px-3 py-2 bg-white dark:bg-zinc-800 rounded-lg border border-slate-200 dark:border-zinc-600 shadow-sm">
+                                <div className="text-xs text-slate-500 dark:text-slate-400">{t('labels.end time')}</div>
+                                <div className="text-sm font-semibold text-slate-800 dark:text-slate-200">{selectedTimeSlot.end}</div>
+                              </div>
+                              <div className="shrink-0 px-3 py-2 bg-white dark:bg-zinc-800 rounded-lg border border-slate-200 dark:border-zinc-600 shadow-sm">
+                                <div className="text-xs text-slate-500 dark:text-slate-400">{t('labels.duration')}</div>
+                                <div className="text-sm font-semibold text-slate-800 dark:text-slate-200">{selectedTimeSlot.duration}</div>
+                              </div>
+                            </>
+                          );
+                        })()}
+                      </div>
+                    </>
+                  ) : null}
+                </div>
+              </>
+            )}
+            {currentStep !== 'product' && (
+              <BookingModalActions
+                selectedTime={selectedTime}
+                confirmed={confirmed}
+                onConfirm={onConfirm}
+                onClose={onClose}
+                onBack={currentStep === 'datetime' ? () => setCurrentStep('product') : undefined}
+              />
+            )}
           </>
         )}
       </div>

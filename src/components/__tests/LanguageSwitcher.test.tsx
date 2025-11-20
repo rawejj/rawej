@@ -1,6 +1,6 @@
 import { describe, it, expect, beforeEach, vi } from "vitest";
 import { render, screen, fireEvent, waitFor } from "@testing-library/react";
-import { LanguageSwitcher } from "./LanguageSwitcher";
+import { LanguageSwitcher } from "@/components/LanguageSwitcher";
 import { useLocalization } from "@/providers/useLocalization";
 import { ThemeContext } from "@/providers/ThemeContext";
 import React from "react";

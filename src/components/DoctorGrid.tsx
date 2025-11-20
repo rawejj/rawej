@@ -3,7 +3,7 @@
 import React from "react";
 import DoctorCard from "./DoctorCard";
 import DoctorCardSkeleton from "./DoctorCardSkeleton";
-import type { Doctor } from "@/components/BookingSection";
+import { Doctor } from "@/types/doctor";
 
 interface DoctorGridProps {
   doctors: Doctor[];

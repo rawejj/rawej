@@ -2,7 +2,7 @@ import { render, screen, fireEvent } from "@testing-library/react";
 import { ThemeContext } from "@/providers/ThemeContext";
 import { TranslationsProvider } from "@/providers/TranslationsProvider";
 import { vi } from "vitest";
-import { ThemeSwitcher } from "./ThemeSwitcher";
+import { ThemeSwitcher } from "@/components/ThemeSwitcher";
 import { Theme } from "@/providers/ThemeProvider";
 
 const mockTranslations = {

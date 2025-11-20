@@ -1,8 +1,7 @@
 import Image from "next/image";
 import React from "react";
 import { useTranslations } from "@/providers/TranslationsProvider";
-import type { Doctor } from "@/components/BookingSection";
-
+import { Doctor } from "@/types/doctor";
 interface DoctorCardProps {
   doctor: Doctor;
   onBook: (doctor: Doctor) => void;
