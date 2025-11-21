@@ -26,6 +26,7 @@ interface BookingModalProps {
   availableDates: { title: string; label: string; value: string; times: { start: string; end: string; duration: string }[] }[];
   fetchAvailability?: () => void;
   loading?: boolean;
+  confirming?: boolean; // New prop for confirmation loading overlay
   products?: Product[];
   selectedProductId?: number;
   selectedPriceId?: number;
@@ -46,6 +47,7 @@ const BookingModal: React.FC<BookingModalProps> = ({
   error,
   fetchAvailability,
   loading = false,
+  confirming = false, // New prop for confirmation loading overlay
   products = [],
   selectedProductId,
   selectedPriceId,
@@ -182,6 +184,18 @@ const BookingModal: React.FC<BookingModalProps> = ({
                     ) : null}
                   </div>
                 </>
+              )}
+
+              {/* Confirmation Loading Overlay */}
+              {confirming && (
+                <div className="absolute inset-0 bg-white/80 dark:bg-zinc-900/80 backdrop-blur-sm flex items-center justify-center z-10 rounded-2xl">
+                  <div className="flex flex-col items-center gap-3">
+                    <div className="w-8 h-8 border-4 border-blue-200 dark:border-blue-800 border-t-blue-600 dark:border-t-blue-400 rounded-full animate-spin"></div>
+                    <p className="text-sm font-medium text-slate-700 dark:text-slate-300">
+                      {t('labels.processing payment')}
+                    </p>
+                  </div>
+                </div>
               )}
             </>
           )}
