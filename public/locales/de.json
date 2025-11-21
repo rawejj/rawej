@@ -41,7 +41,9 @@
   "morning": "Morgen",
   "afternoon": "Nachmittag",
   "evening": "Abend",
-  "no times": "Keine Zeiten verfügbar"
+  "no times": "Keine Zeiten verfügbar",
+  "processing payment": "Zahlung wird verarbeitet",
+  "no products available": "Keine Produkte verfügbar"
   },
   "weekdays": {
     "sun": "So",

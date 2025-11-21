@@ -41,7 +41,9 @@
     "morning": "صبح",
     "afternoon": "بعدازظهر",
     "evening": "شب",
-    "no times": "زمانی موجود نیست"
+    "no times": "زمانی موجود نیست",
+    "processing payment": "در حال پردازش پرداخت",
+    "no products available": "محصولی موجود نیست"
   },
   "weekdays": {
     "sun": "یکشنبه",

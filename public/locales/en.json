@@ -41,7 +41,9 @@
   "morning": "Morning",
   "afternoon": "Afternoon",
   "evening": "Evening",
-  "no times": "No times available"
+  "no times": "No times available",
+  "processing payment": "Processing Payment",
+  "no products available": "No products available"
   },
   "weekdays": {
     "sun": "Sun",

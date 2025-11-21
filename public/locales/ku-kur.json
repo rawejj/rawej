@@ -41,7 +41,9 @@
   "morning": "Sibe",
   "afternoon": "Nîvro",
   "evening": "Êvar",
-  "no times": "Dem tune ye"
+  "no times": "Dem tune ye",
+  "processing payment": "Pere tê hilberandin",
+  "no products available": "Hilber tune ne"
   },
   "weekdays": {
     "sun": "Yekşem",

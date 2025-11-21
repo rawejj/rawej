@@ -3,31 +3,31 @@ export const mockProducts = [
     id: 1,
     slug: "chat-consultation",
     slug_old: "chat-consultation",
-    title: "مشاوره متنی",
+    title: "Chat",
     title_en: "Chat Consultation",
-    summary: "مشاوره آنلاین از طریق چت متنی",
-    description: "در این نوع مشاوره، می‌توانید از طریق چت متنی با پزشک خود ارتباط برقرار کنید و سوالات خود را بپرسید.",
+    summary: "Online consultation via text chat",
+    description: "In this type of consultation, you can communicate with your doctor through text chat and ask your questions.",
     display_rank: 1,
     created_at: "2025-11-20T00:00:00Z",
     prices: [
       {
         id: 1,
         product_id: 1,
-        title: "مشاوره ۳۰ دقیقه‌ای",
-        price: 50000,
+        title: "30-minute Consultation",
+        price: 500,
         discount_amount: 0,
         discount_percent: "0",
-        currency: "تومان",
+        currency: "USD",
         created_at: "2025-11-20T00:00:00Z"
       },
       {
         id: 2,
         product_id: 1,
-        title: "مشاوره ۶۰ دقیقه‌ای",
-        price: 80000,
-        discount_amount: 5000,
-        discount_percent: "6",
-        currency: "تومان",
+        title: "60-minute Consultation",
+        price: 800,
+        discount_amount: 0,
+        discount_percent: "0",
+        currency: "USD",
         created_at: "2025-11-20T00:00:00Z"
       }
     ]
@@ -36,31 +36,31 @@ export const mockProducts = [
     id: 2,
     slug: "video-consultation",
     slug_old: "video-consultation",
-    title: "مشاوره تصویری",
+    title: "Video Consultation",
     title_en: "Video Consultation",
-    summary: "مشاوره آنلاین از طریق تماس تصویری",
-    description: "در این نوع مشاوره، می‌توانید از طریق تماس تصویری با پزشک خود صحبت کنید و مشاوره دریافت کنید.",
+    summary: "Online consultation via video call",
+    description: "In this type of consultation, you can talk to your doctor through a video call and receive advice.",
     display_rank: 2,
     created_at: "2025-11-20T00:00:00Z",
     prices: [
       {
         id: 3,
         product_id: 2,
-        title: "مشاوره ۳۰ دقیقه‌ای",
-        price: 75000,
+        title: "30-minute Consultation",
+        price: 75,
         discount_amount: 0,
         discount_percent: "0",
-        currency: "تومان",
+        currency: "USD",
         created_at: "2025-11-20T00:00:00Z"
       },
       {
         id: 4,
         product_id: 2,
-        title: "مشاوره ۶۰ دقیقه‌ای",
-        price: 120000,
+        title: "60-minute Consultation",
+        price: 1200,
         discount_amount: 10000,
         discount_percent: "8",
-        currency: "تومان",
+        currency: "USD",
         created_at: "2025-11-20T00:00:00Z"
       }
     ]
@@ -69,21 +69,21 @@ export const mockProducts = [
     id: 3,
     slug: "scheduled-phone-consultation",
     slug_old: "scheduled-phone-consultation",
-    title: "مشاوره تلفنی برنامه‌ریزی شده",
+    title: "Scheduled Phone Consultation",
     title_en: "Scheduled Phone Consultation",
-    summary: "مشاوره تلفنی در زمان تعیین شده",
-    description: "مشاوره تلفنی در زمان مشخص شده با پزشک متخصص.",
+    summary: "Scheduled phone consultation",
+    description: "Scheduled phone consultation with a specialist doctor.",
     display_rank: 3,
     created_at: "2025-11-20T00:00:00Z",
     prices: [
       {
         id: 5,
         product_id: 3,
-        title: "مشاوره ۳۰ دقیقه‌ای",
-        price: 60000,
+        title: "30-minute Consultation",
+        price: 600,
         discount_amount: 0,
         discount_percent: "0",
-        currency: "تومان",
+        currency: "USD",
         created_at: "2025-11-20T00:00:00Z"
       }
     ]

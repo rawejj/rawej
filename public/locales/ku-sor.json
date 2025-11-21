@@ -41,7 +41,9 @@
   "morning": "بەیانی",
   "afternoon": "نیوەڕۆ",
   "evening": "ئێوارە",
-  "no times": "کات بەردەست نییە"
+  "no times": "کات بەردەست نییە",
+  "processing payment": "پارەدانەکە لە کاردایە",
+  "no products available": "هیچ بەرهەمێک بەردەست نییە"
   },
   "weekdays": {
     "sun": "یەکشهەم",

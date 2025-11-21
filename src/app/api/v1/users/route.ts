@@ -77,15 +77,21 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
       return NextResponse.json(mockResponse);
     }
 
-    // Fetch from external API
-    const data = await usersService.fetchDoctors(paginationParams);
-    const parsedData = parseExternalApiResponse(data, paginationParams);
-  
-    return createCachedResponse({
-      success: true,
-      ...parsedData,
-      source: "api",
-    });
+    // Try to fetch from external API, fall back to mock data if it fails
+    try {
+      const data = await usersService.fetchDoctors(paginationParams);
+      const parsedData = parseExternalApiResponse(data, paginationParams);
+    
+      return createCachedResponse({
+        success: true,
+        ...parsedData,
+        source: "api",
+      });
+    } catch (fetchError) {
+      logger.warn(`Failed to fetch from external API, falling back to mock data: ${fetchError}`, "DoctorsAPI");
+      const mockResponse = getMockDoctorsResponse(paginationParams);
+      return NextResponse.json(mockResponse);
+    }
   } catch (error) {
     logger.error(error, "DoctorsAPI - GET");
 

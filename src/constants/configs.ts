@@ -8,6 +8,7 @@ export const CONFIGS = {
   enableMockFallback: process.env.ENABLE_MOCK_FALLBACK === "true",
   meetApiUrl: process.env.MEET_API,
   apiUrl: process.env.NEXT_PUBLIC_API_URL,
+  disableSslVerification: process.env.APP_ENV === "development",
   
   // Cache Configuration
   apiCacheRevalidate: parseInt(process.env.API_CACHE_REVALIDATE || "300", 10),
