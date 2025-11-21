@@ -27,4 +27,11 @@ export const CONFIGS = {
     maxLimit: 100,
     doctorsPerPage: 9, // For home page
   },
+
+  // Analytics Configuration
+  analytics: {
+    gaMeasurementId: process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID,
+    gscVerificationCode: process.env.NEXT_PUBLIC_GSC_VERIFICATION_CODE,
+  },
 } as const;
+

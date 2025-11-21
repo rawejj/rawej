@@ -9,6 +9,9 @@ import { CONFIGS } from "@/constants/configs";
 import { PaginatedResponse } from "@/utils/api-response";
 import { Doctor } from "@/types/doctor";
 import BookingSection from "@/components/BookingSection";
+import { CookieConsentProvider } from "@/providers/CookieConsentProvider";
+import GoogleAnalytics from "@/components/GoogleAnalytics";
+import GoogleSearchConsole from "@/components/GoogleSearchConsole";
 
 interface PageParams {
   params: Promise<{ lang: string }>;
@@ -113,15 +116,23 @@ export default async function Home() {
   const [doctors, error] = await fetchDoctors();
 
   return (
-    <div className="min-h-screen flex flex-col bg-linear-to-br from-blue-100 via-purple-100 to-pink-100 dark:from-zinc-900 dark:via-zinc-800 dark:to-zinc-700 font-sans">
-      <main className="flex-1">
-        {error ? (
-          <ErrorMessage error={error} />
-        ) : (
-          <BookingSection doctors={doctors} />
-        )}
-      </main>
-      <Footer />
-    </div>
+    <CookieConsentProvider>
+      <div className="min-h-screen flex flex-col bg-linear-to-br from-blue-100 via-purple-100 to-pink-100 dark:from-zinc-900 dark:via-zinc-800 dark:to-zinc-700 font-sans">
+        <main className="flex-1">
+          {error ? (
+            <ErrorMessage error={error} />
+          ) : (
+            <BookingSection doctors={doctors} />
+          )}
+        </main>
+        <Footer />
+      </div>
+      {CONFIGS.analytics.gaMeasurementId && (
+        <GoogleAnalytics measurementId={CONFIGS.analytics.gaMeasurementId} />
+      )}
+      {CONFIGS.analytics.gscVerificationCode && (
+        <GoogleSearchConsole verificationCode={CONFIGS.analytics.gscVerificationCode} />
+      )}
+    </CookieConsentProvider>
   );
 }

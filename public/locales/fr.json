@@ -64,5 +64,27 @@
     "oct": "Oct",
     "nov": "Nov",
     "dec": "Déc"
+  },
+  "cookieConsent": {
+    "title": "Préférences de cookies",
+    "description": "Nous utilisons des cookies pour améliorer votre expérience. Vous pouvez choisir quels cookies accepter.",
+    "acceptAll": "Tout accepter",
+    "acceptSelected": "Accepter la sélection",
+    "rejectAll": "Tout refuser",
+    "customize": "Personnaliser",
+    "categories": {
+      "essential": {
+        "title": "Cookies essentiels",
+        "description": "Nécessaires au bon fonctionnement du site web."
+      },
+      "analytics": {
+        "title": "Cookies d'analyse",
+        "description": "Nous aident à comprendre comment vous utilisez notre site web."
+      },
+      "marketing": {
+        "title": "Cookies de marketing",
+        "description": "Utilisés pour diffuser des publicités personnalisées."
+      }
+    }
   }
 }

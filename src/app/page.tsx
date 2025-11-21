@@ -5,6 +5,9 @@ import { httpClient } from "@/utils/http-client";
 import { DEFAULT_LANGUAGE } from "@/lib/constants";
 import { loadTranslations } from "@/lib/translations";
 import { TranslationsProvider } from "@/providers/TranslationsProvider";
+import { CookieConsentProvider } from "@/providers/CookieConsentProvider";
+import GoogleAnalytics from "@/components/GoogleAnalytics";
+import GoogleSearchConsole from "@/components/GoogleSearchConsole";
 import { CONFIGS } from "@/constants/configs";
 import { logger } from "@/utils/logger";
 import { PaginatedResponse } from "@/utils/api-response";
@@ -12,7 +15,7 @@ import { Doctor } from "@/types/doctor";
 import BookingSection from "@/components/BookingSection";
 
 // Enable ISR: revalidate in the background
-export const revalidate = CONFIGS.isr.revalidateTime;
+export const revalidate = 60;
 
 export default async function Home() {
   // Always use default language (English)
@@ -51,17 +54,25 @@ export default async function Home() {
   }
   return (
     <TranslationsProvider translations={translations}>
-      <div className="min-h-screen flex flex-col bg-linear-to-br from-blue-100 via-purple-100 to-pink-100 dark:from-zinc-900 dark:via-zinc-800 dark:to-zinc-700 font-sans">
-        <Header />
-        <main className="flex-1">
-          {error ? (
-            <ErrorMessage error={error} />
-          ) : (
-            <BookingSection doctors={doctors} />
-          )}
-        </main>
-        <Footer />
-      </div>
+      <CookieConsentProvider>
+        <div className="min-h-screen flex flex-col bg-linear-to-br from-blue-100 via-purple-100 to-pink-100 dark:from-zinc-900 dark:via-zinc-800 dark:to-zinc-700 font-sans">
+          <Header />
+          <main className="flex-1">
+            {error ? (
+              <ErrorMessage error={error} />
+            ) : (
+              <BookingSection doctors={doctors} />
+            )}
+          </main>
+          <Footer />
+        </div>
+        {CONFIGS.analytics.gaMeasurementId && (
+          <GoogleAnalytics measurementId={CONFIGS.analytics.gaMeasurementId} />
+        )}
+        {CONFIGS.analytics.gscVerificationCode && (
+          <GoogleSearchConsole verificationCode={CONFIGS.analytics.gscVerificationCode} />
+        )}
+      </CookieConsentProvider>
     </TranslationsProvider>
   );
 }

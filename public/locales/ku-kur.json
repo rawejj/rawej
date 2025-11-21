@@ -64,5 +64,27 @@
     "oct": "Cotmeh",
     "nov": "Mijdar",
     "dec": "Kanûn"
+  },
+  "cookieConsent": {
+    "title": "Vebijêrkên Cookie",
+    "description": "Em cookieyan bikar tînin da ku ezmûna we baştir bikin. Hûn dikarin hilbijêrin ka kîjan cookieyan qebûl bikin.",
+    "acceptAll": "Hemûyan qebûl bike",
+    "acceptSelected": "Yên hilbijartî qebûl bike",
+    "rejectAll": "Hemûyan red bike",
+    "customize": "Taybet bike",
+    "categories": {
+      "essential": {
+        "title": "Cookieyên Pêwîst",
+        "description": "Ji bo ku malper baş bixebite pêwîst e."
+      },
+      "analytics": {
+        "title": "Cookieyên Analîzê",
+        "description": "Alîkariya me dike ku em fêm bikin ka hûn çawa malpera me bikar tînin."
+      },
+      "marketing": {
+        "title": "Cookieyên Kirrûbirrê",
+        "description": "Ji bo şandina reklamên kesane têne bikaranîn."
+      }
+    }
   }
 }
