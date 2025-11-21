@@ -180,7 +180,7 @@ describe("BookingModal", () => {
   it("disables confirm button when no time is selected", () => {
     renderWithProviders(<BookingModal {...defaultProps} selectedTime="" />);
     const confirmButton = screen.getByRole("button", {
-      name: /Confirm Booking|Booked!/i,
+      name: /Confirm and Pay|Booked!/i,
     });
     expect(confirmButton).toBeDisabled();
   });
@@ -190,7 +190,7 @@ describe("BookingModal", () => {
       <BookingModal {...defaultProps} selectedTime="09:00" />,
     );
     const confirmButton = screen.getByRole("button", {
-      name: /Confirm Booking/i,
+      name: /Confirm and Pay/i,
     });
     expect(confirmButton).not.toBeDisabled();
   });
@@ -205,7 +205,7 @@ describe("BookingModal", () => {
       />,
     );
     const confirmButton = screen.getByRole("button", {
-      name: /Confirm Booking/i,
+      name: /Confirm and Pay/i,
     });
     fireEvent.click(confirmButton);
     expect(onConfirm).toHaveBeenCalled();

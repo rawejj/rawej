@@ -641,8 +641,8 @@ describe("date and time selection", () => {
     // Now check for time slots or modal is open
     await waitFor(() => {
       // Use flexible matcher for time slot buttons
-      const timeButton1 = screen.queryByRole("button", { name: /9:00.*9:30/i });
-      const timeButton2 = screen.queryByRole("button", { name: /10:00.*10:30/i });
+      const timeButton1 = screen.queryByRole("button", { name: /09:00/i });
+      const timeButton2 = screen.queryByRole("button", { name: /10:00/i });
       const cancelBtn = screen.queryByRole("button", { name: "Cancel" });
       // Modal is open if Cancel button exists
       expect(cancelBtn !== null || timeButton1 !== null || timeButton2 !== null).toBe(true);
@@ -862,11 +862,11 @@ describe("modal state management", () => {
       const selectTimeLabel = screen.queryByText((content) => content.toLowerCase().includes("select a time"));
       expect(selectTimeLabel).toBeNull();
       // Use flexible matcher for time slot button
-      const timeButton = screen.queryByRole("button", { name: /9:00.*9:30/i });
+      const timeButton = screen.queryByRole("button", { name: /09:00/i });
       expect(timeButton).toBeNull();
     });
     // Click the time slot button
-    const timeButton = screen.queryByRole("button", { name: /9:00.*9:30/i });
+    const timeButton = screen.queryByRole("button", { name: /09:00/i });
     if (timeButton) fireEvent.click(timeButton);
     const cancelButton = screen.getByRole("button", { name: "Cancel" });
     fireEvent.click(cancelButton);
@@ -1091,7 +1091,7 @@ describe("BookingSection edge cases", () => {
       ).toBeInTheDocument();
     });
     // Use flexible matcher for time slot button
-    const timeButton = screen.queryByRole("button", { name: /9:00.*9:30/i });
+    const timeButton = screen.queryByRole("button", { name: /09:00/i });
     if (timeButton) {
       fireEvent.click(timeButton);
       const confirmButton = screen.queryByRole("button", { name: /confirm/i });

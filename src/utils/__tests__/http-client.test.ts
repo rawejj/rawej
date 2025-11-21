@@ -188,7 +188,12 @@ describe("HTTP Client", () => {
 
   describe("SSL configuration in dev mode", () => {
     it("should disable SSL verification in development", async () => {
-      vi.stubEnv("NODE_ENV", "development");
+      const configsModule = await import("@/constants/configs");
+      Object.defineProperty(configsModule.CONFIGS, 'disableSslVerification', {
+        value: true,
+        writable: true,
+      });
+
       const mockResponse = {
         ok: true,
         headers: new Headers({ "content-type": "application/json" }),
@@ -197,14 +202,17 @@ describe("HTTP Client", () => {
       const mockFetch = vi.mocked(fetch);
       mockFetch.mockResolvedValue(mockResponse as unknown as Response);
 
-      await httpClient("/test");
+      await httpClient("https://api.example.com/test");
 
       expect(process.env.NODE_TLS_REJECT_UNAUTHORIZED).toBe("0");
-      vi.unstubAllEnvs();
     });
 
     it("should enable SSL verification in production", async () => {
-      vi.stubEnv("NODE_ENV", "production");
+      const configsModule = await import("@/constants/configs");
+      Object.defineProperty(configsModule.CONFIGS, 'disableSslVerification', {
+        value: false,
+        writable: true,
+      });
 
       const mockResponse = {
         ok: true,
@@ -214,11 +222,9 @@ describe("HTTP Client", () => {
       const mockFetch = vi.mocked(fetch);
       mockFetch.mockResolvedValue(mockResponse as unknown as Response);
 
-      await httpClient("/test");
+      await httpClient("https://api.example.com/test");
 
       expect(process.env.NODE_TLS_REJECT_UNAUTHORIZED).toBeUndefined();
-
-      vi.unstubAllEnvs();
     });
   });
 

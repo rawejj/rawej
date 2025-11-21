@@ -23,6 +23,7 @@
     "keywords": "پزیشک، نۆبە، گرتنی ئۆنلاین، پزیشکی دووربین، تەندروستی"
   },
   "buttons": {
+    "confirm and pay": "پەسندکردن و پارەدان",
     "confirm booking": "پەسندکردنی نۆبە",
     "booked": "رێکخراوە",
     "back": "گەڕانەوە",
@@ -40,7 +41,9 @@
   "morning": "بەیانی",
   "afternoon": "نیوەڕۆ",
   "evening": "ئێوارە",
-  "no times": "کات بەردەست نییە"
+  "no times": "کات بەردەست نییە",
+  "processing payment": "پارەدانەکە لە کاردایە",
+  "no products available": "هیچ بەرهەمێک بەردەست نییە"
   },
   "weekdays": {
     "sun": "یەکشهەم",
@@ -64,5 +67,27 @@
     "oct": "گەڵاڕێزان",
     "nov": "سەرماوەز",
     "dec": "بەفرانبار"
+  },
+  "cookieConsent": {
+    "title": "هەلبژاردنەکانی Cookie",
+    "description": "ئێمە cookie بەکاردەهێنین بۆ باشترکردنی ئەزموونی تۆ. دەتوانیت هەلبژێریت کام cookie قبوڵ بکەیت.",
+    "acceptAll": "هەمووی قبوڵ بکە",
+    "acceptSelected": "هەلبژێردراوەکان قبوڵ بکە",
+    "rejectAll": "هەمووی ڕەت بکەرەوە",
+    "customize": "دەستکاری بکە",
+    "categories": {
+      "essential": {
+        "title": "Cookie پێویستەکان",
+        "description": "پێویستە بۆ کارکردنی باشی ماڵپەڕ."
+      },
+      "analytics": {
+        "title": "Cookie تحلیلەکان",
+        "description": "یارمەتی ئێمە دەدات بزانین چۆن ماڵپەڕەکەمان بەکاردەهێنیت."
+      },
+      "marketing": {
+        "title": "Cookie بازرگانیەکان",
+        "description": "بەکاردەهێنرێت بۆ ناردنی ڕیکلامە کەسیکراوەکان."
+      }
+    }
   }
 }

@@ -48,7 +48,9 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
         <LocalizationClientProvider>
-          <ThemeClientProvider>{children}</ThemeClientProvider>
+          <ThemeClientProvider>
+            {children}
+          </ThemeClientProvider>
         </LocalizationClientProvider>
       </body>
     </html>
