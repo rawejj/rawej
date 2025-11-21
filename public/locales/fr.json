@@ -23,6 +23,7 @@
     "keywords": "médecin, rendez-vous, réservation en ligne, télémédecine, santé"
   },
   "buttons": {
+    "confirm and pay": "Confirmer et payer",
     "confirm booking": "Confirmer la réservation",
     "booked": "Réservé",
     "back": "Retour",

@@ -24,7 +24,7 @@ interface BookingModalProps {
   onTimeChange: (time: string) => void;
   onConfirm: () => void;
   availableDates: { title: string; label: string; value: string; times: { start: string; end: string; duration: string }[] }[];
-  fetchAvailability?: () => void;
+  fetchAvailability?: (doctor?: Doctor, productId?: number, priceId?: number) => void;
   loading?: boolean;
   confirming?: boolean; // New prop for confirmation loading overlay
   products?: Product[];
@@ -102,9 +102,14 @@ const BookingModal: React.FC<BookingModalProps> = ({
                 selectedProductId={selectedProductId}
                 selectedPriceId={selectedPriceId}
                 onSelect={async (productId, priceId) => {
-                  if (onProductSelect) await onProductSelect(productId, priceId);
+                  if (onProductSelect) {
+                    await onProductSelect(productId, priceId);
+                  }
+                  
                   setCurrentStep('datetime');
-                  if (fetchAvailability) await fetchAvailability();
+                  if (fetchAvailability) {
+                    await fetchAvailability(undefined, productId, priceId);
+                  }
                 }}
               />
             </>

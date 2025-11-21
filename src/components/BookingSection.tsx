@@ -4,6 +4,8 @@ import { BookingDoctorGrid } from "@/components/BookingDoctorGrid";
 import { useBookingSection } from "@/hooks/useBookingSection";
 import { Doctor } from "@/types/doctor";
 import BookingModal from "@/components/BookingModal";
+import { useState } from "react";
+import dayjs from "dayjs";
 
 export default function BookingSection({
   doctors: initialDoctors,
@@ -41,6 +43,8 @@ export default function BookingSection({
     setAvailableDates,
   } = useBookingSection(initialDoctors, hasMoreProp);
 
+  const [confirming, setConfirming] = useState(false);
+
   // Modal handlers
   const openModal = async (doctor: Doctor) => {
     setSelectedDoctor(doctor);
@@ -59,17 +63,50 @@ export default function BookingSection({
     // Optionally reset confirmation state
   };
 
-  const confirmBooking = () => {
-    // Implement booking confirmation logic here
+
+  const confirmBooking = async () => {
+    if (!selectedDoctor || !selectedPriceId || !selectedDate || !selectedTime) {
+      alert("Please select all required fields.");
+      return;
+    }
+    setConfirming(true);
+    try {
+      // Combine date and time into a timezone-aware ISO datetime string
+      const selectedDateTime = dayjs(`${selectedDate} ${selectedTime}`).toISOString();
+
+      const res = await fetch("/api/v1/pay", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          doctorUuid: selectedDoctor.uuid,
+          productPriceId: selectedPriceId,
+          selectedDateTime: selectedDateTime, // Send as combined timezone-aware datetime
+          timezone: Intl.DateTimeFormat().resolvedOptions().timeZone, // Include user's timezone
+        }),
+      });
+
+      if (!res.ok) {
+        throw new Error("Payment failed");
+      }
+      
+      window.location.href = (await res.json()).redirectUrl;
+    } catch (err: Error | unknown) {
+      setConfirming(false);
+      alert("Payment error: " + (err instanceof Error ? err.message : String(err)));
+    }
   };
 
-  const fetchAvailability = async (doctorArg?: Doctor) => {
+  const fetchAvailability = async (doctorArg?: Doctor, productId?: number, priceId?: number) => {
     const doctor = doctorArg || selectedDoctor;
-    if (!doctor || !selectedProductId || !selectedPriceId) return;
+    const prodId = productId || selectedProductId;
+    const prId = priceId || selectedPriceId;
+    if (!doctor || !prodId || !prId) return;
     try {
       setModalLoading(true);
       // You may want to pass type or priceId if needed by API
-      const res = await fetch(`/api/v1/users/${doctor.uuid}/availability?priceId=${selectedPriceId}`);
+      const res = await fetch(`/api/v1/users/${doctor.uuid}/availability?priceId=${prId}`);
       const json = await res.json();
       if (Array.isArray(json)) {
         // Set available dates for the modal
@@ -110,6 +147,7 @@ export default function BookingSection({
         onDateChange={setSelectedDate}
         onTimeChange={setSelectedTime}
         onConfirm={confirmBooking}
+        confirming={confirming}
         fetchAvailability={fetchAvailability}
         onProductSelect={(productId, priceId) => {
           setSelectedProductId(productId);

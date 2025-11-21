@@ -23,6 +23,7 @@
     "keywords": "Arzt, Termin, Online-Buchung, Telemedizin, Gesundheitswesen"
   },
   "buttons": {
+    "confirm and pay": "Bestätigen und Bezahlen",
     "confirm booking": "Buchung bestätigen",
     "booked": "Reserviert",
     "back": "Zurück",

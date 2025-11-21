@@ -23,6 +23,7 @@
     "keywords": "doctor, appointment, online booking, telemedicine, healthcare"
   },
   "buttons": {
+    "confirm and pay": "Confirm and Pay",
     "confirm booking": "Confirm Booking",
     "booked": "Booked!",
     "back": "Back",
