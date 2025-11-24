@@ -6,6 +6,7 @@ import { Doctor } from "@/types/doctor";
 import BookingModal from "@/components/BookingModal";
 import { useState } from "react";
 import dayjs from "dayjs";
+import Modal from "@/components/Modal";
 
 export default function BookingSection({
   doctors: initialDoctors,
@@ -44,6 +45,10 @@ export default function BookingSection({
   } = useBookingSection(initialDoctors, hasMoreProp);
 
   const [confirming, setConfirming] = useState(false);
+  // State for message modal
+  const [showMessageModal, setShowMessageModal] = useState(false);
+  const [messageModalText, setMessageModalText] = useState("");
+  const [messageModalType, setMessageModalType] = useState<"error" | "success" | "warning" | "info">("info");
 
   // Modal handlers
   const openModal = async (doctor: Doctor) => {
@@ -66,7 +71,9 @@ export default function BookingSection({
 
   const confirmBooking = async () => {
     if (!selectedDoctor || !selectedPriceId || !selectedDate || !selectedTime) {
-      alert("Please select all required fields.");
+      setMessageModalText("Please select all required fields.");
+      setMessageModalType("warning");
+      setShowMessageModal(true);
       return;
     }
     setConfirming(true);
@@ -94,7 +101,9 @@ export default function BookingSection({
       window.location.href = (await res.json()).redirectUrl;
     } catch (err: Error | unknown) {
       setConfirming(false);
-      alert("Payment error: " + (err instanceof Error ? err.message : String(err)));
+      setMessageModalText("Payment error: " + (err instanceof Error ? err.message : String(err)));
+      setMessageModalType("error");
+      setShowMessageModal(true);
     }
   };
 
@@ -155,6 +164,15 @@ export default function BookingSection({
         }}
         availableDates={availableDates}
       />
+      {/* Reusable message modal */}
+      <Modal
+        show={showMessageModal}
+        onClose={() => setShowMessageModal(false)}
+        type={messageModalType}
+        variant="message"
+      >
+        <div>{messageModalText}</div>
+      </Modal>
       {/* Modal animation */}
       <style>{`
         .animate-slide-up { animation: slideUp 0.3s cubic-bezier(.4,2,.6,1) both; }
