@@ -43,7 +43,9 @@
   "evening": "Soir",
   "no times": "Aucune heure disponible",
   "processing payment": "Traitement du paiement",
-  "no products available": "Aucun produit disponible"
+  "no products available": "Aucun produit disponible",
+  "please select all required fields": "Veuillez sélectionner tous les champs requis.",
+  "payment error": "Erreur de paiement: "
   },
   "weekdays": {
     "sun": "Dim",

@@ -91,7 +91,7 @@ export async function POST(
       },
       body: JSON.stringify({
         orderId: orderResponse.return.orderId,
-        // callbackUrl: CONFIGS.paymentCallbackUrl ?? 'https://example.com/payment-callback',
+        callback: '',
       }),
     });
 

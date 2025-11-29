@@ -43,7 +43,9 @@
   "evening": "Abend",
   "no times": "Keine Zeiten verfügbar",
   "processing payment": "Zahlung wird verarbeitet",
-  "no products available": "Keine Produkte verfügbar"
+  "no products available": "Keine Produkte verfügbar",
+  "please select all required fields": "Bitte wählen Sie alle erforderlichen Felder aus.",
+  "payment error": "Zahlungsfehler: "
   },
   "weekdays": {
     "sun": "So",

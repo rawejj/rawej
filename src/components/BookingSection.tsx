@@ -7,6 +7,7 @@ import BookingModal from "@/components/BookingModal";
 import { useState } from "react";
 import dayjs from "dayjs";
 import Modal from "@/components/Modal";
+import { useTranslations } from "@/providers/TranslationsProvider";
 
 export default function BookingSection({
   doctors: initialDoctors,
@@ -50,6 +51,8 @@ export default function BookingSection({
   const [messageModalText, setMessageModalText] = useState("");
   const [messageModalType, setMessageModalType] = useState<"error" | "success" | "warning" | "info">("info");
 
+  const { t } = useTranslations();
+
   // Modal handlers
   const openModal = async (doctor: Doctor) => {
     setSelectedDoctor(doctor);
@@ -71,7 +74,7 @@ export default function BookingSection({
 
   const confirmBooking = async () => {
     if (!selectedDoctor || !selectedPriceId || !selectedDate || !selectedTime) {
-      setMessageModalText("Please select all required fields.");
+      setMessageModalText(t("labels.please select all required fields"));
       setMessageModalType("warning");
       setShowMessageModal(true);
       return;
@@ -101,7 +104,7 @@ export default function BookingSection({
       window.location.href = (await res.json()).redirectUrl;
     } catch (err: Error | unknown) {
       setConfirming(false);
-      setMessageModalText("Payment error: " + (err instanceof Error ? err.message : String(err)));
+      setMessageModalText(t("labels.payment error") + (err instanceof Error ? err.message : String(err)));
       setMessageModalType("error");
       setShowMessageModal(true);
     }

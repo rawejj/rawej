@@ -43,7 +43,9 @@
   "evening": "Evening",
   "no times": "No times available",
   "processing payment": "Processing Payment",
-  "no products available": "No products available"
+  "no products available": "No products available",
+  "please select all required fields": "Please select all required fields.",
+  "payment error": "Payment error: "
   },
   "weekdays": {
     "sun": "Sun",

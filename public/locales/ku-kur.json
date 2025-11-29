@@ -43,7 +43,9 @@
   "evening": "Êvar",
   "no times": "Dem tune ye",
   "processing payment": "Pere tê hilberandin",
-  "no products available": "Hilber tune ne"
+  "no products available": "Hilber tune ne",
+  "please select all required fields": "Ji kerema xwe hemû qadên pêwîst hilbijêrin.",
+  "payment error": "Çewtiya pere: "
   },
   "weekdays": {
     "sun": "Yekşem",

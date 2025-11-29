@@ -43,7 +43,9 @@
   "evening": "ئێوارە",
   "no times": "کات بەردەست نییە",
   "processing payment": "پارەدانەکە لە کاردایە",
-  "no products available": "هیچ بەرهەمێک بەردەست نییە"
+  "no products available": "هیچ بەرهەمێک بەردەست نییە",
+  "please select all required fields": "تکایە هەموو خانە پێویستەکان هەلبژێرە.",
+  "payment error": "هەڵەی پارەدان: "
   },
   "weekdays": {
     "sun": "یەکشهەم",

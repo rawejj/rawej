@@ -61,17 +61,20 @@ export async function httpClient<T = unknown>(
 
   try {
     if (!res.ok) {
-      // Try to parse error as JSON, fallback to text
+      // Get response text first, then try to parse as JSON
+      const responseText = await res.text();
       let error: unknown;
       let message: string;
       try {
-        error = await res.json();
+        error = JSON.parse(responseText);
         message =
           error && typeof error === "object" && "message" in error
             ? (error.message as string)
             : "";
       } catch {
-        message = await res.text();
+        // If not JSON, use the text directly
+        error = responseText;
+        message = responseText;
       }
       logger.error(
         `HTTP error ${res.status}: ${typeof error === "string" ? error : JSON.stringify(error)}`,
