@@ -24,7 +24,7 @@ describe("Auth Utils", () => {
 
   beforeEach(() => {
     vi.clearAllMocks();
-    process.env.MEET_API = "https://api.example.com";
+    process.env.REMOTE_API_URL = "https://api.example.com";
     process.env.MEET_API_USER = "testuser";
     process.env.MEET_API_PASSWORD = "testpass";
   });

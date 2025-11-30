@@ -6,7 +6,11 @@
 export const CONFIGS = {
   // API Configuration
   enableMockFallback: process.env.ENABLE_MOCK_FALLBACK === "true",
-  meetApiUrl: process.env.MEET_API,
+  remoteApi: {
+    url: process.env.REMOTE_API_URL,
+    user: process.env.REMOTE_API_USER,
+    password: process.env.REMOTE_API_PASSWORD,
+  },
   apiUrl: process.env.NEXT_PUBLIC_API_URL,
   disableSslVerification: process.env.APP_ENV === "development",
   

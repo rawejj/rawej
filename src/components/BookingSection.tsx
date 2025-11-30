@@ -4,6 +4,7 @@ import { BookingDoctorGrid } from "@/components/BookingDoctorGrid";
 import { useBookingSection } from "@/hooks/useBookingSection";
 import { Doctor } from "@/types/doctor";
 import BookingModal from "@/components/BookingModal";
+import SignInModal from "@/components/SignInModal";
 import { useState } from "react";
 import dayjs from "dayjs";
 import Modal from "@/components/Modal";
@@ -31,6 +32,7 @@ export default function BookingSection({
     selectedDate,
     selectedTime,
     confirmed,
+    setConfirmed,
     error,
     modalLoading,
     setModalLoading,
@@ -50,15 +52,35 @@ export default function BookingSection({
   const [showMessageModal, setShowMessageModal] = useState(false);
   const [messageModalText, setMessageModalText] = useState("");
   const [messageModalType, setMessageModalType] = useState<"error" | "success" | "warning" | "info">("info");
+  // State for sign in modal
+  const [showSignInModal, setShowSignInModal] = useState(false);
 
   const { t } = useTranslations();
 
   // Modal handlers
   const openModal = async (doctor: Doctor) => {
+    // Check authentication by calling /auth/me
+    try {
+      const response = await fetch("/api/v1/auth/me", {
+        method: "GET",
+        credentials: "include", // Include cookies
+      });
+      if (!response.ok) {
+        setShowSignInModal(true);
+        return;
+      }
+    } catch {
+      setShowSignInModal(true);
+      return;
+    }
+
     setSelectedDoctor(doctor);
     setShowModal(true);
     setSelectedDate(availableDates[0]?.value || "");
     setSelectedTime("");
+    setSelectedProductId(undefined);
+    setSelectedPriceId(undefined);
+    setConfirmed(false);
     // Optionally reset confirmation state
     if (doctor?.uuid) {
       await fetchProducts(doctor.uuid);
@@ -165,6 +187,7 @@ export default function BookingSection({
           setSelectedProductId(productId);
           setSelectedPriceId(priceId);
         }}
+        onCancelConfirming={() => setConfirming(false)}
         availableDates={availableDates}
       />
       {/* Reusable message modal */}
@@ -176,6 +199,11 @@ export default function BookingSection({
       >
         <div>{messageModalText}</div>
       </Modal>
+      {/* Sign In Modal */}
+      <SignInModal
+        show={showSignInModal}
+        onClose={() => setShowSignInModal(false)}
+      />
       {/* Modal animation */}
       <style>{`
         .animate-slide-up { animation: slideUp 0.3s cubic-bezier(.4,2,.6,1) both; }

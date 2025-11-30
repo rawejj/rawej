@@ -21,11 +21,11 @@ class ProductsService {
   * @returns Array of products
   */
   async fetchAllByUser(userUuid: string): Promise<Product[]> {
-    if (!CONFIGS.meetApiUrl) {
-      throw new Error("MEET_API environment variable is not configured");
+    if (!CONFIGS.remoteApi.url) {
+      throw new Error("REMOTE_API_URL environment variable is not configured");
     }
     
-    const apiUrl = `${CONFIGS.meetApiUrl}/products/meets/${userUuid}`;
+    const apiUrl = `${CONFIGS.remoteApi.url}/products/meets/${userUuid}`;
     logger.debug(`Fetching meet products from ${apiUrl}`, "ProductsAPI");
     
     try {

@@ -54,7 +54,7 @@ export async function POST(
       });
     }
 
-    const ordersApiUrl = CONFIGS.meetApiUrl + '/orders';
+    const ordersApiUrl = CONFIGS.remoteApi.url + '/orders';
     logger.info(`Creating order for doctorUuid=${doctorUuid}, productPriceId=${productPriceId}`, "PaymentAPI");
 
     const orderResponse: ExternalOrderApiResponse = await httpClient(ordersApiUrl, {
@@ -79,7 +79,7 @@ export async function POST(
       });
     }
 
-    const paymentApiUrl = CONFIGS.meetApiUrl + '/payment';
+    const paymentApiUrl = CONFIGS.remoteApi.url + '/payment';
     // Here you would call your payment provider or business logic
     // For now, just log and return success
     logger.info(`Payment request: doctorUuid=${doctorUuid}, productPriceId=${productPriceId}, selectedDateTime=${selectedDateTime}, timezone=${timezone}`, "PaymentAPI");

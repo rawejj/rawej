@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { logger } from "@/utils/logger";
-import { httpClient } from "@/utils/http-client";
+import { authService } from "@/services/authService";
+import { CONFIGS } from "@/constants/configs";
 
 interface User {
   id: string;
@@ -31,23 +32,16 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
     }
 
     // Call /auth/me to get user info using the token
-    const apiBase = process.env.MEET_API;
+    const apiBase = CONFIGS.remoteApi.url;
     if (!apiBase) {
-      logger.error("MEET_API environment variable not set", "AuthCallback");
+      logger.error("REMOTE_API_URL environment variable not set", "AuthCallback");
       return NextResponse.json(
         { success: false, error: "Server configuration error" },
         { status: 500 }
       );
     }
 
-    const meUrl = `${apiBase}/auth/me`;
-    const user: User = await httpClient<User>(meUrl, {
-      method: "GET",
-      headers: {
-        "Authorization": `Bearer ${token}`,
-      },
-      skipAuthRetry: true, // Don't use stored tokens for this request
-    });
+    const user: User = await authService.fetchUser(token);
     logger.info(`User authenticated: ${user.id}`, "AuthCallback");
 
 

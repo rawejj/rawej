@@ -31,21 +31,21 @@
     "retry": "Retry"
   },
   "labels": {
-  "select a date": "Select a Date",
-  "select a time": "Select a Time",
-  "select consultant type": "Select Consultant Type",
-  "selected time details": "Selected Time Details",
-  "start time": "Start Time",
-  "end time": "End Time",
-  "duration": "Duration",
-  "morning": "Morning",
-  "afternoon": "Afternoon",
-  "evening": "Evening",
-  "no times": "No times available",
-  "processing payment": "Processing Payment",
-  "no products available": "No products available",
-  "please select all required fields": "Please select all required fields.",
-  "payment error": "Payment error: "
+    "select a date": "Select a Date",
+    "select a time": "Select a Time",
+    "select consultant type": "Select Consultant Type",
+    "selected time details": "Selected Time Details",
+    "start time": "Start Time",
+    "end time": "End Time",
+    "duration": "Duration",
+    "morning": "Morning",
+    "afternoon": "Afternoon",
+    "evening": "Evening",
+    "no times": "No times available",
+    "processing payment": "Processing Payment",
+    "no products available": "No products available",
+    "please select all required fields": "Please select all required fields.",
+    "payment error": "Payment error: "
   },
   "weekdays": {
     "sun": "Sun",
@@ -91,5 +91,12 @@
         "description": "Used to deliver personalized advertisements."
       }
     }
+  },
+  "auth": {
+    "sign in": "Sign In",
+    "mobile number": "Mobile Number",
+    "enter mobile number": "Enter your mobile number",
+    "submit": "Sign In",
+    "failed to sign in": "Failed to sign in. Please try again."
   }
 }

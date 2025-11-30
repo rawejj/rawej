@@ -8,7 +8,7 @@ interface HeaderProps {
 
 const Header: React.FC<HeaderProps> = ({ doctor }) => {
   return (
-    <div className="flex items-center gap-3 mb-3 p-2 rounded-3xl bg-linear-to-r from-purple-50 to-pink-50 dark:from-purple-900/20 dark:to-pink-900/20 border border-purple-100 dark:border-purple-800/30">
+    <div className="flex items-center gap-3 mb-3 mt-3 p-2 rounded-3xl bg-linear-to-r from-purple-50 to-pink-50 dark:from-purple-900/20 dark:to-pink-900/20 border border-purple-100 dark:border-purple-800/30">
       <div className="relative">
         <Image
           src={doctor.image || "/images/default-doctor.svg"}

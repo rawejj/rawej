@@ -7,6 +7,7 @@ import {
   clearToken,
   TokenData,
 } from "@/utils/token-storage";
+import { CONFIGS } from "@/constants/configs";
 
 export function isTokenValid(token: TokenData | null): boolean {
   return (
@@ -18,7 +19,11 @@ export function isTokenValid(token: TokenData | null): boolean {
 }
 
 export async function fetchToken(): Promise<string> {
-  const apiBase = process.env.MEET_API;
+  const apiBase = CONFIGS.remoteApi.url;
+  if (!apiBase) {
+    throw new Error("REMOTE_API_URL environment variable is not configured");
+  }
+  
   const tokenUrl = `${apiBase}/auth/token`;
   logger.debug(`Fetching token from ${tokenUrl}`, "Auth");
   try {
@@ -30,8 +35,8 @@ export async function fetchToken(): Promise<string> {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
-        username: process.env.MEET_API_USER,
-        password: process.env.MEET_API_PASSWORD,
+        username: CONFIGS.remoteApi.user,
+        password: CONFIGS.remoteApi.password,
       }),
       skipAuthRetry: true,
     });
@@ -51,7 +56,10 @@ export async function fetchToken(): Promise<string> {
 }
 
 export async function refreshToken(): Promise<string> {
-  const apiBase = process.env.MEET_API;
+  const apiBase = CONFIGS.remoteApi.url;
+  if (!apiBase) {
+    throw new Error("REMOTE_API_URL environment variable is not configured");
+  }
   const refreshUrl = `${apiBase}/auth/refresh-token`;
   logger.debug("Refreshing access token", "Auth");
   const token = loadToken();

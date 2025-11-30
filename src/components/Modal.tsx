@@ -22,8 +22,8 @@ export default function Modal({ show, onClose, children, type = "info", variant 
   else if (type === "warning") { borderColor = "#f5a623"; icon = "⚠️"; }
 
   return (
-    <div className="modal-overlay">
-      <div className="modal-content" style={variant === "message" ? { borderTop: `6px solid ${borderColor}` } : {}}>
+    <div className="modal-overlay" onClick={onClose}>
+      <div className="modal-content max-h-[85vh]" style={variant === "message" ? { borderTop: `6px solid ${borderColor}` } : {}} onClick={(e) => e.stopPropagation()}>
         <button className="modal-close" onClick={onClose} aria-label="Close">×</button>
         {variant === "message" && <div className="modal-icon" style={{ fontSize: "2rem", marginBottom: "0.5rem" }}>{icon}</div>}
         <div>{children}</div>
