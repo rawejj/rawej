@@ -1,14 +1,6 @@
 import { NextResponse } from "next/server";
 import { logger } from "@/utils/logger";
-import { authService } from "@/services/authService";
-import { cookies } from "next/headers";
 import { CONFIGS } from "@/constants/configs";
-
-interface User {
-  id: string;
-  name: string;
-  email: string;
-}
 
 /**
  * POST /api/v1/auth/logout

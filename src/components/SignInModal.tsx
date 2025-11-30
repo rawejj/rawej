@@ -23,7 +23,6 @@ export default function SignInModal({ show, onClose, onSuccess }: SignInModalPro
   const [otp, setOtp] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [otpId, setOtpId] = useState<string | undefined>();
   const [resendDisabled, setResendDisabled] = useState(false);
   const [countdown, setCountdown] = useState(0);
   const otpInputRef = useRef<HTMLInputElement>(null);
@@ -70,7 +69,6 @@ export default function SignInModal({ show, onClose, onSuccess }: SignInModalPro
       const data = await response.json();
 
       if (data.success) {
-        setOtpId(data.otpId);
         setStep("otp");
         setError(null);
         setCountdown(120);
@@ -131,7 +129,6 @@ export default function SignInModal({ show, onClose, onSuccess }: SignInModalPro
     setMobileNumber("");
     setOtp("");
     setError(null);
-    setOtpId(undefined);
     setCountdown(0);
     setResendDisabled(false);
   };

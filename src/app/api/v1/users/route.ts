@@ -70,28 +70,22 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
       "DoctorsAPI"
     );
 
-    // Return mock data if fallback is enabled
+    // Return mock data if mock mode is enabled
     if (CONFIGS.enableMockFallback) {
       logger.info("Returning mock data (ENABLE_MOCK_FALLBACK=true)", "DoctorsAPI");
       const mockResponse = getMockDoctorsResponse(paginationParams);
       return NextResponse.json(mockResponse);
     }
 
-    // Try to fetch from external API, fall back to mock data if it fails
-    try {
-      const data = await usersService.fetchDoctors(paginationParams);
-      const parsedData = parseExternalApiResponse(data, paginationParams);
-    
-      return createCachedResponse({
-        success: true,
-        ...parsedData,
-        source: "api",
-      });
-    } catch (fetchError) {
-      logger.warn(`Failed to fetch from external API, falling back to mock data: ${fetchError}`, "DoctorsAPI");
-      const mockResponse = getMockDoctorsResponse(paginationParams);
-      return NextResponse.json(mockResponse);
-    }
+    // Fetch from external API
+    const data = await usersService.fetchDoctors(paginationParams);
+    const parsedData = parseExternalApiResponse(data, paginationParams);
+  
+    return createCachedResponse({
+      success: true,
+      ...parsedData,
+      source: "api",
+    });
   } catch (error) {
     logger.error(error, "DoctorsAPI - GET");
 

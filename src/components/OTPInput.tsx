@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect, forwardRef } from "react";
+import React, { useRef, useMemo, forwardRef } from "react";
 
 interface OTPInputProps {
   value: string;
@@ -8,14 +8,12 @@ interface OTPInputProps {
 }
 
 const OTPInput = forwardRef<HTMLInputElement, OTPInputProps>(({ value, onChange, length = 4, className = "" }, ref) => {
-  const [otp, setOtp] = useState<string[]>(Array(length).fill(""));
   const inputRefs = useRef<(HTMLInputElement | null)[]>(Array(length).fill(null));
 
-  useEffect(() => {
-    // Sync with external value
+  const otp = useMemo(() => {
     const newOtp = value.split("").slice(0, length);
     while (newOtp.length < length) newOtp.push("");
-    setOtp(newOtp);
+    return newOtp;
   }, [value, length]);
 
   const handleChange = (index: number, inputValue: string) => {
@@ -26,7 +24,6 @@ const OTPInput = forwardRef<HTMLInputElement, OTPInputProps>(({ value, onChange,
     for (let i = 0; i < digits.length; i++) {
       newOtp[index + i] = digits[i];
     }
-    setOtp(newOtp);
     onChange(newOtp.join(""));
 
     // Auto-focus next input
@@ -43,7 +40,6 @@ const OTPInput = forwardRef<HTMLInputElement, OTPInputProps>(({ value, onChange,
       if (otp[index]) {
         // Clear current digit and move left
         newOtp[index] = "";
-        setOtp(newOtp);
         onChange(newOtp.join(""));
         if (index > 0) {
           setTimeout(() => inputRefs.current[index - 1]?.focus(), 0);
@@ -59,7 +55,6 @@ const OTPInput = forwardRef<HTMLInputElement, OTPInputProps>(({ value, onChange,
     e.preventDefault();
     const paste = e.clipboardData.getData("text").replace(/\D/g, "").slice(0, length);
     const newOtp = paste.split("").concat(Array(length - paste.length).fill(""));
-    setOtp(newOtp);
     onChange(newOtp.join(""));
   };
 

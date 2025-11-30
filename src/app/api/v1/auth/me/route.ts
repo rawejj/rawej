@@ -1,15 +1,8 @@
 import { NextResponse } from "next/server";
 import { logger } from "@/utils/logger";
 import { cookies } from "next/headers";
-import { httpClient } from "@/utils/http-client";
 import { CONFIGS } from "@/constants/configs";
 import { authService } from "@/services/authService";
-
-interface User {
-  id: string;
-  name: string;
-  email: string;
-}
 
 /**
  * GET /api/v1/auth/me

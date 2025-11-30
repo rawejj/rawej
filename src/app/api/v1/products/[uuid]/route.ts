@@ -53,7 +53,7 @@ export async function GET(
       "ProductsAPI"
     );
 
-    // Return mock data if fallback is enabled
+    // Return mock data if mock mode is enabled
     if (CONFIGS.enableMockFallback) {
       logger.info("Returning mock products data (ENABLE_MOCK_FALLBACK=true)", "ProductsAPI");
       const mockResponse = getMockProducts();
@@ -64,24 +64,14 @@ export async function GET(
       });
     }
 
-    // Try to fetch products from external API, fall back to mock data if it fails
-    try {
-      const products = await productsService.fetchAllByUser(uuid);
+    // Fetch products from external API
+    const products = await productsService.fetchAllByUser(uuid);
 
-      // Return products with no-cache headers (dynamic data)
-      return NextResponse.json({success: true, items: products as unknown as Product[]} , {
-        status: 200,
-        headers: COMMON_HEADERS,
-      });
-    } catch (fetchError) {
-      logger.warn(`Failed to fetch from external API, falling back to mock data: ${fetchError}`, "ProductsAPI");
-      const mockResponse = getMockProducts();
-
-      return NextResponse.json({success: true, items: mockResponse}, {
-        status: 200,
-        headers: COMMON_HEADERS,
-      });
-    }
+    // Return products with no-cache headers (dynamic data)
+    return NextResponse.json({success: true, items: products as unknown as Product[]} , {
+      status: 200,
+      headers: COMMON_HEADERS,
+    });
   } catch (error) {
     logger.error(error, "ProductsAPI - GET");
 

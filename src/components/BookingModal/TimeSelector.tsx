@@ -52,7 +52,7 @@ const TimeSelector: React.FC<TimeSelectorProps> = ({
             <button
               key={time.start}
               onClick={() => onTimeChange(time.start)}
-              className={`group p-2 text-sm font-semibold rounded-3xl border-2 transition-all duration-200 hover:shadow-md focus:outline-none focus:ring-2 focus:ring-purple-400 dark:focus:ring-pink-400 ${
+              className={`group p-2 text-sm font-semibold rounded-3xl border-2 transition-all duration-200 hover:shadow-md focus:outline-none focus:ring-2 focus:ring-purple-400 dark:focus:ring-pink-400 cursor-pointer ${
                 selectedTime === time.start
                   ? "bg-linear-to-r from-purple-500 to-pink-400 text-white border-purple-600 shadow-md shadow-purple-500/20"
                   : "bg-white dark:bg-zinc-800 text-gray-700 dark:text-gray-300 border-gray-200 dark:border-zinc-600 hover:border-purple-300 dark:hover:border-purple-600 hover:bg-purple-50 dark:hover:bg-purple-900/20 hover:scale-102"

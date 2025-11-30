@@ -1,20 +1,7 @@
 import { CONFIGS } from "@/constants/configs";
+import { User } from "@/types/user";
 import { httpClient } from "@/utils/http-client";
 import { logger } from "@/utils/logger";
-
-export interface User {
-  id: string;
-  uuid: string;
-  username: string;
-  email: string;
-  roles: string[];
-  countryCode: string;
-  mobile: string | null;
-  firstName: string | null;
-  lastName: string | null;
-  gender: string;
-  birthdate: string | null;
-}
 
 export class AuthService {
   /**

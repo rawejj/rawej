@@ -2,13 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { logger } from "@/utils/logger";
 import { authService } from "@/services/authService";
 import { CONFIGS } from "@/constants/configs";
-
-interface User {
-  id: string;
-  name: string;
-  email: string;
-  // Add other user fields as needed
-}
+import { User } from "@/types/user";
 
 /**
  * GET /api/v1/auth/callback
@@ -21,6 +15,7 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
   try {
     const { searchParams } = new URL(request.url);
     const token = searchParams.get("token");
+    const exp = parseInt(searchParams.get("exp") || "3600", 10);
     const lang = searchParams.get("lang") || "";
 
     if (!token) {
@@ -41,16 +36,14 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
       );
     }
 
-    const user: User = await authService.fetchUser(token);
-    logger.info(`User authenticated: ${user.id}`, "AuthCallback");
-
-    const response = NextResponse.redirect(new URL(`/${lang}`, request.url)); // Redirect to language-specific home
     const appName = (CONFIGS.app.name || "Rawej").toLowerCase();
+    const response = NextResponse.redirect(new URL(`/${lang}`, request.url));
+
     response.cookies.set(`${appName}_access_token`, token, {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",
       sameSite: "lax",
-      maxAge: 3600, // 1 hour
+      maxAge: exp, // 1 hour
     });
 
     logger.info("Auth callback successful, token set", "AuthCallback");

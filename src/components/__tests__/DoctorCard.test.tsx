@@ -41,7 +41,7 @@ describe("DoctorCard", () => {
 
   it("renders default doctor image if image is missing", () => {
     renderWithTranslations(
-      <DoctorCard doctor={{ ...baseDoctor, image: "" }} onBook={() => {}} />,
+      <DoctorCard doctor={{ ...baseDoctor, image: "" }} onBook={async () => {}} />,
     );
     const img = screen.getByRole("img");
     expect(img).toHaveAttribute(
@@ -51,7 +51,7 @@ describe("DoctorCard", () => {
   });
 
   it("renders doctor name, specialty, and bio", () => {
-    renderWithTranslations(<DoctorCard doctor={doctor} onBook={() => {}} />);
+    renderWithTranslations(<DoctorCard doctor={doctor} onBook={async () => {}} />);
     expect(screen.getByText("Dr. Alice Smith")).toBeInTheDocument();
     expect(screen.getByText("Cardiology")).toBeInTheDocument();
     expect(screen.getByText("Expert in heart health.")).toBeInTheDocument();
@@ -92,7 +92,7 @@ describe("DoctorCard", () => {
       bio: "Skin care specialist.",
     };
     renderWithTranslations(
-      <DoctorCard doctor={doctorNoCall} onBook={() => {}} />,
+      <DoctorCard doctor={doctorNoCall} onBook={async () => {}} />,
     );
     expect(screen.queryByText("Phone")).not.toBeInTheDocument();
     expect(screen.queryByText("Video")).not.toBeInTheDocument();
@@ -111,7 +111,7 @@ describe("DoctorCard", () => {
       callTypes: [],
     };
     renderWithTranslations(
-      <DoctorCard doctor={doctorEmptyCall} onBook={() => {}} />,
+      <DoctorCard doctor={doctorEmptyCall} onBook={async () => {}} />,
     );
     expect(screen.queryByText("Phone")).not.toBeInTheDocument();
     expect(screen.queryByText("Video")).not.toBeInTheDocument();
@@ -133,7 +133,7 @@ describe("DoctorCard", () => {
     renderWithTranslations(
       <DoctorCard
         doctor={{ ...baseDoctor, callTypes: ["phone"] }}
-        onBook={() => {}}
+        onBook={async () => {}}
       />,
     );
     expect(screen.getByText("Phone")).toBeInTheDocument();
@@ -143,7 +143,7 @@ describe("DoctorCard", () => {
 
   it("renders correctly with no bio", () => {
     renderWithTranslations(
-      <DoctorCard doctor={{ ...baseDoctor, bio: "" }} onBook={() => {}} />,
+      <DoctorCard doctor={{ ...baseDoctor, bio: "" }} onBook={async () => {}} />,
     );
     // Should still render the card, but bio is empty
     expect(screen.getByText("Dr. Test")).toBeInTheDocument();
@@ -154,7 +154,7 @@ describe("DoctorCard", () => {
   it("renders default doctor image if image is undefined", () => {
     const doctorNoImage: Doctor = { ...baseDoctor, image: undefined };
     renderWithTranslations(
-      <DoctorCard doctor={doctorNoImage} onBook={() => {}} />,
+      <DoctorCard doctor={doctorNoImage} onBook={async () => {}} />,
     );
     const img = screen.getByRole("img");
     expect(img).toHaveAttribute(
@@ -178,7 +178,7 @@ describe("DoctorCard", () => {
 
   it("falls back to default image on image load error", () => {
     renderWithTranslations(
-      <DoctorCard doctor={baseDoctor} onBook={() => {}} />,
+      <DoctorCard doctor={baseDoctor} onBook={async () => {}} />,
     );
     const img = screen.getByRole("img");
     fireEvent.error(img);
