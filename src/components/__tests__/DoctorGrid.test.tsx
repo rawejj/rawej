@@ -46,7 +46,7 @@ describe("DoctorGrid", () => {
 
   it("renders doctor cards when not loading", () => {
     renderWithTranslations(
-      <DoctorGrid doctors={doctors} onBook={() => {}} loading={false} />,
+      <DoctorGrid doctors={doctors} onBook={async () => {}} loading={false} />,
     );
     expect(screen.getByText("Dr. Alice Smith")).toBeInTheDocument();
     expect(screen.getByText("Dr. Bob Jones")).toBeInTheDocument();
@@ -54,7 +54,7 @@ describe("DoctorGrid", () => {
 
   it("renders skeletons when loading", () => {
     renderWithTranslations(
-      <DoctorGrid doctors={[]} onBook={() => {}} loading={true} />,
+      <DoctorGrid doctors={[]} onBook={async () => {}} loading={true} />,
     );
     // Should render at least one skeleton
     expect(

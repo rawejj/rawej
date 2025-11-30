@@ -1,6 +1,6 @@
 import { logger } from "@/utils/logger";
 import { loadToken } from "@/utils/token-storage";
-import { fetchToken, refreshToken, isTokenValid } from "@/utils/auth";
+import { fetchToken, refreshToken } from "@/utils/auth";
 import { CONFIGS } from "@/constants/configs";
 import { cookies } from "next/headers";
 

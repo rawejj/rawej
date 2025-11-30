@@ -1,8 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { logger } from "@/utils/logger";
-import { authService } from "@/services/authService";
 import { CONFIGS } from "@/constants/configs";
-import { User } from "@/types/user";
 
 /**
  * GET /api/v1/auth/callback

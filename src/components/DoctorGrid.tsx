@@ -7,7 +7,7 @@ import { Doctor } from "@/types/doctor";
 
 interface DoctorGridProps {
   doctors: Doctor[];
-  onBook: (doctor: Doctor) => void;
+  onBook: (doctor: Doctor) => Promise<void>;
   loading?: boolean;
 }
 

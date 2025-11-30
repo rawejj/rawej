@@ -3,11 +3,13 @@ import { describe, it, expect, beforeEach, vi, afterEach, MockedFunction } from 
 vi.mock("@/utils/logger");
 vi.mock("@/utils/token-storage");
 vi.mock("@/utils/auth");
+vi.mock("next/headers");
 
 import { httpClient } from "@/utils/http-client";
 import { logger } from "@/utils/logger";
 import { loadToken } from "@/utils/token-storage";
 import { fetchToken, refreshToken } from "@/utils/auth";
+import { cookies } from "next/headers";
 
 describe("HTTP Client", () => {
   beforeEach(() => {
@@ -17,6 +19,14 @@ describe("HTTP Client", () => {
     vi.mocked(loadToken).mockReturnValue(null);
     vi.mocked(fetchToken).mockResolvedValue("mock-token");
     vi.mocked(refreshToken).mockResolvedValue("refreshed-token");
+    const mockCookieStore = {
+      get: vi.fn().mockReturnValue(null),
+      getAll: vi.fn().mockReturnValue([]),
+      has: vi.fn().mockReturnValue(false),
+      size: 0,
+      [Symbol.iterator]: vi.fn(),
+    };
+    vi.mocked(cookies).mockResolvedValue(mockCookieStore as unknown as any);
     vi.stubGlobal("fetch", vi.fn());
   });
 
@@ -114,6 +124,7 @@ describe("HTTP Client", () => {
         status: 404,
         headers: new Headers({ "content-type": "application/json" }),
         json: vi.fn().mockResolvedValue({ error: "Not Found" }),
+        text: vi.fn().mockResolvedValue('{"error": "Not Found"}'),
       } as unknown as Response);
 
       await expect(httpClient("https://api.example.com/test")).rejects.toThrow(
@@ -128,6 +139,7 @@ describe("HTTP Client", () => {
         status: 500,
         headers: new Headers({ "content-type": "application/json" }),
         json: vi.fn().mockResolvedValue({ error: "Internal Server Error" }),
+        text: vi.fn().mockResolvedValue('{"error": "Internal Server Error"}'),
       } as unknown as Response);
 
       try {

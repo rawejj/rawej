@@ -3,11 +3,13 @@ import { isTokenValid, fetchToken, refreshToken } from "@/utils/auth";
 import * as tokenStorageModule from "@/utils/token-storage";
 import * as httpClientModule from "@/utils/http-client";
 import * as loggerModule from "@/utils/logger";
+import * as configsModule from "@/constants/configs";
 import type { TokenData } from "@/utils/token-storage";
 
 vi.mock("@/utils/http-client");
 vi.mock("@/utils/token-storage");
 vi.mock("@/utils/logger");
+vi.mock("@/constants/configs");
 
 describe("Auth Utils", () => {
   const mockTokenData: TokenData = {
@@ -27,6 +29,16 @@ describe("Auth Utils", () => {
     process.env.REMOTE_API_URL = "https://api.example.com";
     process.env.MEET_API_USER = "testuser";
     process.env.MEET_API_PASSWORD = "testpass";
+    
+    // Mock CONFIGS
+    vi.mocked(configsModule).CONFIGS = {
+      ...vi.mocked(configsModule).CONFIGS,
+      remoteApi: {
+        url: "https://api.example.com",
+        user: "testuser",
+        password: "testpass",
+      },
+    };
   });
 
   describe("isTokenValid", () => {

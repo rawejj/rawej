@@ -58,14 +58,14 @@ describe("DoctorCard", () => {
   });
 
   it("shows call type badges at top right", () => {
-    renderWithTranslations(<DoctorCard doctor={doctor} onBook={() => {}} />);
+    renderWithTranslations(<DoctorCard doctor={doctor} onBook={async () => {}} />);
     expect(screen.getByText("Phone")).toBeInTheDocument();
     expect(screen.getByText("Video")).toBeInTheDocument();
     expect(screen.getByText("Text")).toBeInTheDocument();
   });
 
   it("renders Book Appointment button", () => {
-    renderWithTranslations(<DoctorCard doctor={doctor} onBook={() => {}} />);
+    renderWithTranslations(<DoctorCard doctor={doctor} onBook={async () => {}} />);
     expect(
       screen.getByRole("button", { name: /book appointment/i }),
     ).toBeInTheDocument();
