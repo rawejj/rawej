@@ -54,6 +54,7 @@ export default function BookingSection({
   const [messageModalType, setMessageModalType] = useState<"error" | "success" | "warning" | "info">("info");
   // State for sign in modal
   const [showSignInModal, setShowSignInModal] = useState(false);
+  const [pendingDoctor, setPendingDoctor] = useState<Doctor | null>(null);
 
   const { t } = useTranslations();
 
@@ -66,10 +67,12 @@ export default function BookingSection({
         credentials: "include", // Include cookies
       });
       if (!response.ok) {
+        setPendingDoctor(doctor);
         setShowSignInModal(true);
         return;
       }
     } catch {
+      setPendingDoctor(doctor);
       setShowSignInModal(true);
       return;
     }
@@ -203,6 +206,22 @@ export default function BookingSection({
       <SignInModal
         show={showSignInModal}
         onClose={() => setShowSignInModal(false)}
+        onSuccess={async () => {
+          if (pendingDoctor) {
+            setSelectedDoctor(pendingDoctor);
+            setShowModal(true);
+            setSelectedDate(availableDates[0]?.value || "");
+            setSelectedTime("");
+            setSelectedProductId(undefined);
+            setSelectedPriceId(undefined);
+            setConfirmed(false);
+            if (pendingDoctor.uuid) {
+              await fetchProducts(pendingDoctor.uuid);
+            }
+            setPendingDoctor(null);
+          }
+          setShowSignInModal(false);
+        }}
       />
       {/* Modal animation */}
       <style>{`

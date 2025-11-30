@@ -28,7 +28,11 @@
     "booked": "رێکخراوە",
     "back": "گەڕانەوە",
     "cancel": "باشکەوتن",
-    "retry": "دوبارە"
+    "retry": "دوبارە",
+    "loading": "بارکردن...",
+    "processing": "پردازش...",
+    "sending": "ناردن...",
+    "verifying": "پشکنین..."
   },
   "labels": {
   "select a date": "هەلبژاردنی ڕۆژ",
@@ -91,5 +95,29 @@
         "description": "بەکاردەهێنرێت بۆ ناردنی ڕیکلامە کەسیکراوەکان."
       }
     }
+  },
+  "auth": {
+    "sign in": "چوونەژوورەوە",
+    "mobile number": "ژمارەی مۆبایل",
+    "enter mobile number": "ژمارەی مۆبایلی خۆت بنووسە",
+    "submit": "چوونەژوورەوە",
+    "failed to sign in": "چوونەژوورەوە سەرکەوتوو نەبوو. تکایە دووبارە هەوڵ بدە.",
+    "send otp": "ناردنی کۆدی OTP",
+    "enter otp": "کۆدی نێردراو بۆ ژمارەکە بنووسە",
+    "otp code": "کۆدی OTP",
+    "verify": "پشکنین",
+    "failed to send otp": "ناردنی کۆدی OTP سەرکەوتوو نەبوو. تکایە دووبارە هەوڵ بدە.",
+    "failed to verify otp": "پشکنینی کۆدی OTP سەرکەوتوو نەبوو. تکایە دووبارە هەوڵ بدە.",
+    "invalid otp": "کۆدی OTP نادروستە. تکایە دووبارە هەوڵ بدە.",
+    "phone number and otp required": "ژمارەی تەلەفۆن و کۆدی OTP پێویستە",
+    "invalid otp format": "فۆرماتی کۆدی OTP نادروستە",
+    "phone number and country code required": "ژمارەی تەلەفۆن و کۆدی وڵات پێویستە",
+    "invalid country code format": "فۆرماتی کۆدی وڵات نادروستە",
+    "invalid phone number format": "فۆرماتی ژمارەی تەلەفۆن نادروستە"
+  },
+  "dropdown": {
+    "select": "هەڵبژێرە...",
+    "search": "گەڕان",
+    "no options found": "هیچ هەڵبژاردەیەک نەدۆزرایەوە"
   }
 }

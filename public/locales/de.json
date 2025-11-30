@@ -28,7 +28,11 @@
     "booked": "Reserviert",
     "back": "Zurück",
     "cancel": "Abbrechen",
-    "retry": "Wiederholen"
+    "retry": "Wiederholen",
+    "loading": "Lädt...",
+    "processing": "Verarbeitet...",
+    "sending": "Sendet...",
+    "verifying": "Überprüft..."
   },
   "labels": {
   "select a date": "Datum auswählen",
@@ -91,5 +95,29 @@
         "description": "Werden verwendet, um personalisierte Werbung zu liefern."
       }
     }
+  },
+  "auth": {
+    "sign in": "Anmelden",
+    "mobile number": "Handynummer",
+    "enter mobile number": "Geben Sie Ihre Handynummer ein",
+    "submit": "Anmelden",
+    "failed to sign in": "Anmeldung fehlgeschlagen. Bitte versuchen Sie es erneut.",
+    "send otp": "OTP senden",
+    "enter otp": "Geben Sie den Bestätigungscode ein.",
+    "otp code": "OTP-Code",
+    "verify": "Überprüfen",
+    "failed to send otp": "OTP konnte nicht gesendet werden. Bitte versuchen Sie es erneut.",
+    "failed to verify otp": "OTP konnte nicht überprüft werden. Bitte versuchen Sie es erneut.",
+    "invalid otp": "Ungültiger OTP. Bitte versuchen Sie es erneut.",
+    "phone number and otp required": "Telefonnummer und OTP sind erforderlich",
+    "invalid otp format": "Ungültiges OTP-Format",
+    "phone number and country code required": "Telefonnummer und Ländercode sind erforderlich",
+    "invalid country code format": "Ungültiges Ländercode-Format",
+    "invalid phone number format": "Ungültiges Telefonnummernformat"
+  },
+  "dropdown": {
+    "select": "Auswählen...",
+    "search": "Suchen",
+    "no options found": "Keine Optionen gefunden"
   }
 }

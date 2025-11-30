@@ -23,12 +23,16 @@
     "keywords": "médecin, rendez-vous, réservation en ligne, télémédecine, santé"
   },
   "buttons": {
-    "confirm and pay": "Confirmer et payer",
-    "confirm booking": "Confirmer la réservation",
-    "booked": "Réservé",
+    "confirm and pay": "Confirmer et Payer",
+    "confirm booking": "Confirmer la Réservation",
+    "booked": "Réservé !",
     "back": "Retour",
     "cancel": "Annuler",
-    "retry": "Réessayer"
+    "retry": "Réessayer",
+    "loading": "Chargement...",
+    "processing": "Traitement...",
+    "sending": "Envoi...",
+    "verifying": "Vérification..."
   },
   "labels": {
   "select a date": "date à sélectionner",
@@ -91,5 +95,29 @@
         "description": "Utilisés pour diffuser des publicités personnalisées."
       }
     }
+  },
+  "auth": {
+    "sign in": "Se Connecter",
+    "mobile number": "Numéro de Mobile",
+    "enter mobile number": "Entrez votre numéro de mobile",
+    "submit": "Se Connecter",
+    "failed to sign in": "Échec de la connexion. Veuillez réessayer.",
+    "send otp": "Envoyer OTP",
+    "enter otp": "Saisissez le code de vérification",
+    "otp code": "Code OTP",
+    "verify": "Vérifier",
+    "failed to send otp": "Échec de l'envoi de l'OTP. Veuillez réessayer.",
+    "failed to verify otp": "Échec de la vérification de l'OTP. Veuillez réessayer.",
+    "invalid otp": "OTP invalide. Veuillez réessayer.",
+    "phone number and otp required": "Le numéro de téléphone et l'OTP sont requis",
+    "invalid otp format": "Format d'OTP invalide",
+    "phone number and country code required": "Le numéro de téléphone et le code pays sont requis",
+    "invalid country code format": "Format de code pays invalide",
+    "invalid phone number format": "Format de numéro de téléphone invalide"
+  },
+  "dropdown": {
+    "select": "Sélectionner...",
+    "search": "Rechercher",
+    "no options found": "Aucune option trouvée"
   }
 }

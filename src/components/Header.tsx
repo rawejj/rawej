@@ -1,14 +1,17 @@
 "use client";
 
-import React from "react";
+import React, { useState } from "react";
 import { useLocalization } from "@/providers/useLocalization";
 import { ThemeSwitcher } from "./ThemeSwitcher";
 import { LanguageSwitcher } from "./LanguageSwitcher";
+import UserAvatar from "./UserAvatar";
+import SignInModal from "./SignInModal";
 
 const Header: React.FC = () => {
   const { config } = useLocalization();
   const isRtl = config.direction === "rtl";
-  // const [showSignIn, setShowSignIn] = React.useState(false);
+  const [showSignIn, setShowSignIn] = useState(false);
+  const [refetchTrigger, setRefetchTrigger] = useState(0);
 
   return (
     <>
@@ -22,17 +25,12 @@ const Header: React.FC = () => {
         <div
           className={`flex items-center gap-3 ${isRtl ? "flex-row-reverse" : "flex-row"}`}
         >
-          {/* <button
-            onClick={() => setShowSignIn(true)}
-            className="px-4 py-2 text-sm font-medium text-white bg-purple-600 hover:bg-purple-700 rounded-lg transition-colors"
-          >
-            {t("auth.sign in", "Sign In")}
-          </button> */}
           <LanguageSwitcher />
           <ThemeSwitcher />
+          <UserAvatar onSignIn={() => setShowSignIn(true)} refetchTrigger={refetchTrigger} />
         </div>
       </header>
-      {/* <SignInModal show={showSignIn} onClose={() => setShowSignIn(false)} /> */}
+      <SignInModal show={showSignIn} onClose={() => setShowSignIn(false)} onSuccess={() => setRefetchTrigger(prev => prev + 1)} />
     </>
   );
 };

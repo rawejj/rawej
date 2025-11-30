@@ -3,6 +3,7 @@ import { render, screen, fireEvent } from "@testing-library/react";
 import { vi } from "vitest";
 import DoctorCard from "@/components/DoctorCard";
 import { TranslationsProvider } from "@/providers/TranslationsProvider";
+import { act } from "@testing-library/react";
 
 const mockTranslations = {
   "book appointment": "Book Appointment",
@@ -70,11 +71,13 @@ describe("DoctorCard", () => {
     ).toBeInTheDocument();
   });
 
-  it("calls onBook when Book Appointment button is clicked", () => {
-    const onBookMock = vi.fn();
+  it("calls onBook when Book Appointment button is clicked", async () => {
+    const onBookMock = vi.fn().mockResolvedValue(undefined);
     renderWithTranslations(<DoctorCard doctor={doctor} onBook={onBookMock} />);
     const button = screen.getByRole("button", { name: /book appointment/i });
-    button.click();
+    await act(async () => {
+      fireEvent.click(button);
+    });
     expect(onBookMock).toHaveBeenCalledWith(doctor);
   });
 

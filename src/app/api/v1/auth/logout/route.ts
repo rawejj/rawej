@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { logger } from "@/utils/logger";
 import { authService } from "@/services/authService";
 import { cookies } from "next/headers";
+import { CONFIGS } from "@/constants/configs";
 
 interface User {
   id: string;
@@ -19,43 +20,28 @@ export async function POST(): Promise<NextResponse> {
   try {
     logger.info("User logout initiated", "AuthLogout");
 
-    // Get current session
-    const cookieStore = await cookies();
-    const sessionCookie = cookieStore.get("auth-session")?.value;
-
-    let user: User | null = null;
-
-    if (sessionCookie) {
-      try {
-        const session = JSON.parse(sessionCookie);
-        const { token, expiresAt }: { token: string; expiresAt: number } = session;
-
-        // Validate token is still valid by fetching user data
-        if (Date.now() <= expiresAt) {
-          user = await authService.fetchUser(token);
-          logger.info(`User ${user.id} logged out successfully`, "AuthLogout");
-        }
-      } catch (error) {
-        logger.warn(`Failed to validate session during logout: ${error}`, "AuthLogout");
-        // Continue with logout even if validation fails
-      }
-    }
-
     const response = NextResponse.json({
       success: true,
       message: "Logout successful",
-      user, // Return user data if available
     });
 
-    // Clear the auth session cookie
-    response.cookies.set("auth-session", "", {
+    // Clear the auth tokens
+    const appName = (CONFIGS.app.name || "Rawej").toLowerCase();
+    response.cookies.set(`${appName}_access_token`, "", {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",
       sameSite: "lax",
       maxAge: 0, // Expire immediately
     });
 
-    logger.info("Logout successful, session cleared", "AuthLogout");
+    response.cookies.set(`${appName}_refresh_token`, "", {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "lax",
+      maxAge: 0, // Expire immediately
+    });
+
+    logger.info("Logout successful, tokens cleared", "AuthLogout");
     return response;
   } catch (error) {
     logger.error(error, "AuthLogout");

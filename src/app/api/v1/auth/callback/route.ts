@@ -44,23 +44,16 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
     const user: User = await authService.fetchUser(token);
     logger.info(`User authenticated: ${user.id}`, "AuthCallback");
 
-
-    // Store user info and token in the session cookie
-    const sessionData = {
-      token,
-      user,
-      expiresAt: Date.now() + 3600 * 1000, // 1 hour
-    };
-
     const response = NextResponse.redirect(new URL(`/${lang}`, request.url)); // Redirect to language-specific home
-    response.cookies.set("auth-session", JSON.stringify(sessionData), {
+    const appName = (CONFIGS.app.name || "Rawej").toLowerCase();
+    response.cookies.set(`${appName}_access_token`, token, {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",
       sameSite: "lax",
       maxAge: 3600, // 1 hour
     });
 
-    logger.info("Auth callback successful, session set", "AuthCallback");
+    logger.info("Auth callback successful, token set", "AuthCallback");
     return response;
   } catch (error) {
     logger.error(error, "AuthCallback");

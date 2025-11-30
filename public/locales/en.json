@@ -28,7 +28,11 @@
     "booked": "Booked!",
     "back": "Back",
     "cancel": "Cancel",
-    "retry": "Retry"
+    "retry": "Retry",
+    "loading": "Loading...",
+    "processing": "Processing...",
+    "sending": "Sending...",
+    "verifying": "Verifying..."
   },
   "labels": {
     "select a date": "Select a Date",
@@ -97,6 +101,23 @@
     "mobile number": "Mobile Number",
     "enter mobile number": "Enter your mobile number",
     "submit": "Sign In",
-    "failed to sign in": "Failed to sign in. Please try again."
+    "failed to sign in": "Failed to sign in. Please try again.",
+    "send otp": "Send OTP",
+    "enter otp": "Enter the verification code.",
+    "otp code": "OTP Code",
+    "verify": "Verify",
+    "failed to send otp": "Failed to send OTP. Please try again.",
+    "failed to verify otp": "Failed to verify OTP. Please try again.",
+    "invalid otp": "Invalid OTP. Please try again.",
+    "phone number and otp required": "Phone number and OTP are required",
+    "invalid otp format": "Invalid OTP format",
+    "phone number and country code required": "Phone number and country code are required",
+    "invalid country code format": "Invalid country code format",
+    "invalid phone number format": "Invalid phone number format"
+  },
+  "dropdown": {
+    "select": "Select...",
+    "search": "Search",
+    "no options found": "No options found"
   }
 }

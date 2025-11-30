@@ -1,6 +1,9 @@
 import { NextResponse } from "next/server";
 import { logger } from "@/utils/logger";
 import { cookies } from "next/headers";
+import { httpClient } from "@/utils/http-client";
+import { CONFIGS } from "@/constants/configs";
+import { authService } from "@/services/authService";
 
 interface User {
   id: string;
@@ -9,46 +12,37 @@ interface User {
 }
 
 /**
- * GET /api/v1/auth/session
- * Returns current user session information
+ * GET /api/v1/auth/me
+ * Returns current user information
  *
- * @returns JSON response with session data or error
+ * @returns JSON response with user data or error
  */
 export async function GET(): Promise<NextResponse> {
   try {
+    const appName = (CONFIGS.app.name || "Rawej").toLowerCase();
     const cookieStore = await cookies();
-    const sessionCookie = cookieStore.get("auth-session")?.value;
+    const accessToken = cookieStore.get(`${appName}_access_token`)?.value;
 
-    if (!sessionCookie) {
+    if (!accessToken) {
       return NextResponse.json(
         { success: false, error: "No active session" },
         { status: 401 }
       );
     }
 
-    const session = JSON.parse(sessionCookie);
-    const { user, expiresAt }: { user: User; expiresAt: number } = session;
+    // Fetch user data from remote API
+    const userData = await authService.fetchUser(accessToken);
 
-    // Check if session is expired
-    if (Date.now() > expiresAt) {
-      logger.warn("Session expired", "AuthSession");
-      return NextResponse.json(
-        { success: false, error: "Session expired" },
-        { status: 401 }
-      );
-    }
-
-    logger.debug(`Session validated for user: ${user.id}`, "AuthSession");
+    logger.debug(`User data fetched for user: ${userData.id}`, "AuthMe");
 
     return NextResponse.json({
       success: true,
-      user,
-      expiresAt,
+      user: userData,
     });
   } catch (error) {
-    logger.error(error, "AuthSession");
+    logger.error(error, "AuthMe");
     return NextResponse.json(
-      { success: false, error: "Session validation failed" },
+      { success: false, error: "Failed to fetch user data" },
       { status: 500 }
     );
   }

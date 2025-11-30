@@ -4,9 +4,16 @@ import { logger } from "@/utils/logger";
 
 export interface User {
   id: string;
-  name: string;
+  uuid: string;
+  username: string;
   email: string;
-  // Add other user fields as needed
+  roles: string[];
+  countryCode: string;
+  mobile: string | null;
+  firstName: string | null;
+  lastName: string | null;
+  gender: string;
+  birthdate: string | null;
 }
 
 export class AuthService {
