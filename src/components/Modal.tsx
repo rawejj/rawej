@@ -1,49 +1,48 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
+
+type ModalType = "error" | "success" | "warning" | "info";
+
+type ModalVariant = "message" | "default";
+
+import "@/styles/Modal.css";
 
 interface ModalProps {
   show: boolean;
   onClose: () => void;
   children: React.ReactNode;
-  className?: string;
-  closeLabel?: string;
+  type?: ModalType;
+  variant?: ModalVariant;
 }
 
-const Modal: React.FC<ModalProps> = ({ show, onClose, children, className, closeLabel }) => {
+export default function Modal({ show, onClose, children, type = "info", variant = "default" }: ModalProps) {
+  const [isVisible, setIsVisible] = useState(false);
+
+  useEffect(() => {
+    if (show) {
+      // Delay to allow DOM to render before adding show class
+      const timer = setTimeout(() => setIsVisible(true), 10);
+      return () => clearTimeout(timer);
+    }
+  }, [show]);
+
+  let borderColor = "#0070f3", icon = "ℹ️";
+  if (type === "error") {
+    borderColor = "#e00"; icon = "❌";
+  } else if (type === "success") {
+    borderColor = "#0a0"; icon = "✅";
+  } else if (type === "warning") {
+    borderColor = "#f5a623"; icon = "⚠️";
+  }
+
   if (!show) return null;
+
   return (
-    <div
-      className="fixed inset-0 z-9999 flex items-center justify-center bg-black/50 backdrop-blur-md"
-      onClick={onClose}
-    >
-      <div
-        className={`w-full max-w-sm sm:max-w-md md:max-w-lg lg:max-w-xl mx-4 rounded-3xl bg-linear-to-br from-white via-white to-gray-50 dark:from-zinc-900 dark:via-zinc-900 dark:to-zinc-800 p-4 shadow-2xl shadow-purple-500/10 dark:shadow-pink-500/10 border border-gray-200/50 dark:border-zinc-700/50 animate-slide-up max-h-[85vh] overflow-y-auto relative ${className || ""}`}
-        onClick={e => e.stopPropagation()}
-      >
-        {closeLabel && (
-          <button
-            type="button"
-            aria-label={closeLabel}
-            onClick={onClose}
-            className="absolute top-4 rtl:left-4 ltr:right-4 z-10 p-2 rounded-full bg-white/80 dark:bg-zinc-900/80 border border-gray-200 dark:border-zinc-700 shadow hover:bg-red-100 dark:hover:bg-red-900/40 transition-colors"
-          >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              viewBox="0 0 20 20"
-              fill="currentColor"
-              className="w-5 h-5 text-red-500"
-            >
-              <path
-                fillRule="evenodd"
-                d="M10 8.586l4.95-4.95a1 1 0 111.414 1.414L11.414 10l4.95 4.95a1 1 0 01-1.414 1.414L10 11.414l-4.95 4.95a1 1 0 01-1.414-1.414L8.586 10l-4.95-4.95A1 1 0 115.05 3.636L10 8.586z"
-                clipRule="evenodd"
-              />
-            </svg>
-          </button>
-        )}
-        {children}
+    <div className={`modal-overlay ${isVisible ? 'show' : ''}`} onClick={onClose}>
+      <div className={`modal-content max-h-[85vh] ${isVisible ? 'show' : ''}`} style={variant === "message" ? { borderTop: `6px solid ${borderColor}` } : {}} onClick={(e) => e.stopPropagation()}>
+        <button className="modal-close" onClick={onClose} aria-label="Close">×</button>
+        {variant === "message" && <div className="modal-icon" style={{ fontSize: "2rem", marginBottom: "0.5rem" }}>{icon}</div>}
+        <div>{children}</div>
       </div>
     </div>
   );
-};
-
-export default Modal;
+}

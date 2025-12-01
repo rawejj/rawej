@@ -1,91 +1,193 @@
 import { logger } from "@/utils/logger";
-import { loadToken } from "./token-storage";
-import { fetchToken, refreshToken, isTokenValid } from "./auth";
+import { loadToken } from "@/utils/token-storage";
+import { fetchToken, refreshToken } from "@/utils/auth";
 import { CONFIGS } from "@/constants/configs";
+import { cookies } from "next/headers";
 
 export interface HttpClientOptions extends RequestInit {
   skipAuthRetry?: boolean;
+}
+
+/**
+ * Determines if the request should use token-based authentication
+ */
+function shouldUseTokenAuth(url: string): boolean {
+  return url.includes("/api/v1/users") || url.includes("/doctors");
+}
+
+/**
+ * Determines if the URL is an authentication endpoint
+ */
+function isAuthEndpoint(url: string): boolean {
+  return url.includes("/auth/token") || url.includes("/auth/refresh");
+}
+
+/**
+ * Loads access token from HTTP-only cookie
+ */
+async function loadTokenFromCookie(): Promise<string | null> {
+  try {
+    const appName = (CONFIGS.app.name || "Rawej").toLowerCase();
+    const cookieStore = await cookies();
+    const accessToken = cookieStore.get(`${appName}_access_token`)?.value;
+    return accessToken || null;
+  } catch (error) {
+    logger.error(error, "httpClient - loadTokenFromCookie");
+    return null;
+  }
+}
+
+/**
+ * Handles token-based authentication
+ * Loads from HTTP-only cookie for all endpoints
+ * Falls back to file storage only for /doctors endpoints
+ */
+async function handleTokenAuth(url: string): Promise<{ accessToken: string } | null> {
+  // Always try to load from HTTP-only cookie first
+  let accessToken = await loadTokenFromCookie();
+
+  // If no cookie token and this is a /doctors endpoint, try file storage
+  if (!accessToken && shouldUseTokenAuth(url)) {
+    const tokenData = loadToken();
+    accessToken = tokenData?.accessToken || null;
+  }
+
+  // If still no token and this is a /doctors endpoint, try to fetch new token
+  if (!accessToken && shouldUseTokenAuth(url) && !isAuthEndpoint(url)) {
+    try {
+      await fetchToken();
+      // After fetching, check cookie first, then file storage
+      accessToken = await loadTokenFromCookie();
+      if (!accessToken) {
+        const tokenData = loadToken();
+        accessToken = tokenData?.accessToken || null;
+      }
+      if (accessToken) {
+        return { accessToken };
+      }
+    } catch {
+      // Token fetch failed, proceed without token
+      return null;
+    }
+  }
+
+  return accessToken ? { accessToken } : null;
+}
+
+/**
+ * Attempts to refresh token and retry the request for doctor requests
+ */
+async function retryWithRefreshedToken(
+  url: string,
+  options: HttpClientOptions,
+  originalTokenData: { refreshToken: string } | null
+): Promise<Response | null> {
+  if (!originalTokenData?.refreshToken) {
+    return null;
+  }
+
+  try {
+    await refreshToken();
+    // After refresh, try to get new access token from cookie first
+    let newAccessToken = await loadTokenFromCookie();
+    
+    // If no cookie token and this is a /doctors endpoint, try file storage
+    if (!newAccessToken && shouldUseTokenAuth(url)) {
+      const tokenData = loadToken();
+      newAccessToken = tokenData?.accessToken || null;
+    }
+
+    if (newAccessToken) {
+      const retryHeaders = {
+        ...(options.headers || {}),
+        Authorization: `Bearer ${newAccessToken}`
+      };
+      const retryOptions = { ...options, headers: retryHeaders };
+      return await fetch(url, retryOptions);
+    }
+  } catch {
+    // Refresh failed, return null to use original response
+  }
+
+  return null;
+}
+
+/**
+ * Processes the HTTP response and extracts the data
+ */
+async function processResponse<T>(res: Response): Promise<T> {
+  if (!res.ok) {
+    const responseText = await res.text();
+    let message = responseText;
+
+    try {
+      const error = JSON.parse(responseText);
+      message = (error && typeof error === "object" && "message" in error)
+        ? (error.message as string)
+        : responseText;
+    } catch {
+      // Response is not JSON, use text directly
+    }
+
+    logger.error(
+      `HTTP error ${res.status}: ${message}`,
+      "httpClient"
+    );
+    throw new Error(`HTTP error ${res.status}: ${message || res.statusText}`);
+  }
+
+  const contentType = res.headers.get("content-type");
+  if (contentType?.includes("application/json")) {
+    return res.json();
+  }
+
+  return res.text() as unknown as T;
 }
 
 export async function httpClient<T = unknown>(
   url: string,
   options: HttpClientOptions = {}
 ): Promise<T> {
-  // During build/static generation, skip authentication entirely
+  // Skip authentication during build/static generation
   const isBuildTime = typeof window === 'undefined' && process.env.NEXT_PHASE === 'phase-production-build';
-  
-  // Disable SSL verification for all HTTPS requests in this context
+
+  // Configure SSL for development
   if (CONFIGS.disableSslVerification) {
     process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
   }
-  let tokenData = null;
-  // Only handle authentication if not during build time
+
+  // Determine authentication method
+  const useTokenAuth = !isBuildTime && shouldUseTokenAuth(url);
+
+  // Handle authentication - load token for all endpoints from cookie
+  let accessToken: string | null = null;
   if (!isBuildTime) {
-    tokenData = loadToken();
-    // Only fetch a new token if none exists, token is invalid, or this is not an auth endpoint
-    const isAuthEndpoint = url.includes("/auth/token") || url.includes("/auth/refresh");
-    if ((!tokenData || !isTokenValid(tokenData)) && !isAuthEndpoint) {
-      try {
-        await fetchToken();
-        tokenData = loadToken();
-      } catch {
-        // If token fetch fails, proceed without token (will likely 401)
-      }
+    const tokenData = await handleTokenAuth(url);
+    accessToken = tokenData?.accessToken || null;
+  }
+
+  // Prepare request headers
+  const headers = {
+    ...(options.headers || {}),
+    ...(accessToken && { Authorization: `Bearer ${accessToken}` })
+  };
+
+  // Make initial request
+  const reqOpts: RequestInit = { ...options, headers };
+  let response = await fetch(url, reqOpts);
+
+  // Retry with refreshed token if unauthorized (only for token-auth requests)
+  if (useTokenAuth && !options.skipAuthRetry && response.status === 401) {
+    const tokenData = loadToken();
+    const retryResponse = await retryWithRefreshedToken(url, options, tokenData);
+    if (retryResponse) {
+      response = retryResponse;
     }
   }
 
-  const baseHeaders = { ...(options?.headers || {}) };
-  if (!isBuildTime && tokenData?.accessToken) {
-    (baseHeaders as Record<string, string>)["Authorization"] =
-      `Bearer ${tokenData.accessToken}`;
-  }
-  let reqOpts: RequestInit = { ...options, headers: baseHeaders };
-  let res = await fetch(url, reqOpts);
-
-  // If unauthorized, try to refresh token and retry once (skip during build time)
-  if (!isBuildTime && !options.skipAuthRetry && res.status === 401 && tokenData?.refreshToken) {
-    try {
-      await refreshToken();
-      tokenData = loadToken();
-      if (tokenData?.accessToken) {
-        const retryHeaders = { ...(options?.headers || {}) };
-        (retryHeaders as Record<string, string>)["Authorization"] =
-          `Bearer ${tokenData.accessToken}`;
-        reqOpts = { ...options, headers: retryHeaders };
-        res = await fetch(url, reqOpts);
-      }
-    } catch {
-      // If refresh fails, proceed with original response
-    }
-  }
-
+  // Process and return response data
   try {
-    if (!res.ok) {
-      // Try to parse error as JSON, fallback to text
-      let error: unknown;
-      let message: string;
-      try {
-        error = await res.json();
-        message =
-          error && typeof error === "object" && "message" in error
-            ? (error.message as string)
-            : "";
-      } catch {
-        message = await res.text();
-      }
-      logger.error(
-        `HTTP error ${res.status}: ${typeof error === "string" ? error : JSON.stringify(error)}`,
-        "httpClient",
-      );
-      throw new Error(`HTTP error ${res.status}: ${message || res.statusText}`);
-    }
-
-    const contentType = res.headers.get("content-type");
-    if (contentType && contentType.includes("application/json")) {
-      return res.json();
-    }
-
-    return res.text() as unknown as T;
+    return await processResponse<T>(response);
   } catch (err) {
     logger.error(err, "httpClient");
     throw err;

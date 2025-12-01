@@ -4,10 +4,17 @@
  */
 
 export const CONFIGS = {
+  app: {
+    name: process.env.NEXT_PUBLIC_APP_NAME || "Rawej",
+    apiUrl: process.env.NEXT_PUBLIC_API_URL,
+  },
   // API Configuration
   enableMockFallback: process.env.ENABLE_MOCK_FALLBACK === "true",
-  meetApiUrl: process.env.MEET_API,
-  apiUrl: process.env.NEXT_PUBLIC_API_URL,
+  remoteApi: {
+    url: process.env.REMOTE_API_URL,
+    user: process.env.REMOTE_API_USER,
+    password: process.env.REMOTE_API_PASSWORD,
+  },
   disableSslVerification: process.env.APP_ENV === "development",
   
   // Cache Configuration

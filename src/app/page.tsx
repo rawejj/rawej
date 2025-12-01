@@ -26,7 +26,7 @@ export default async function Home() {
   let error: string | null = null;
   try {
     const res = await httpClient(
-      `${CONFIGS.apiUrl}/users?page=1&limit=${CONFIGS.pagination.doctorsPerPage}`,
+      `${CONFIGS.app.apiUrl}/users?page=1&limit=${CONFIGS.pagination.doctorsPerPage}`,
       {
         next: { tags: ["doctors"], revalidate: CONFIGS.isr.revalidateTime },
       },

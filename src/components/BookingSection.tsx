@@ -4,8 +4,11 @@ import { BookingDoctorGrid } from "@/components/BookingDoctorGrid";
 import { useBookingSection } from "@/hooks/useBookingSection";
 import { Doctor } from "@/types/doctor";
 import BookingModal from "@/components/BookingModal";
+import SignInModal from "@/components/SignInModal";
 import { useState } from "react";
 import dayjs from "dayjs";
+import Modal from "@/components/Modal";
+import { useTranslations } from "@/providers/TranslationsProvider";
 
 export default function BookingSection({
   doctors: initialDoctors,
@@ -29,6 +32,7 @@ export default function BookingSection({
     selectedDate,
     selectedTime,
     confirmed,
+    setConfirmed,
     error,
     modalLoading,
     setModalLoading,
@@ -44,13 +48,42 @@ export default function BookingSection({
   } = useBookingSection(initialDoctors, hasMoreProp);
 
   const [confirming, setConfirming] = useState(false);
+  // State for message modal
+  const [showMessageModal, setShowMessageModal] = useState(false);
+  const [messageModalText, setMessageModalText] = useState("");
+  const [messageModalType, setMessageModalType] = useState<"error" | "success" | "warning" | "info">("info");
+  // State for sign in modal
+  const [showSignInModal, setShowSignInModal] = useState(false);
+  const [pendingDoctor, setPendingDoctor] = useState<Doctor | null>(null);
+
+  const { t } = useTranslations();
 
   // Modal handlers
   const openModal = async (doctor: Doctor) => {
+    // Check authentication by calling /auth/me
+    try {
+      const response = await fetch("/api/v1/auth/me", {
+        method: "GET",
+        credentials: "include", // Include cookies
+      });
+      if (!response.ok) {
+        setPendingDoctor(doctor);
+        setShowSignInModal(true);
+        return;
+      }
+    } catch {
+      setPendingDoctor(doctor);
+      setShowSignInModal(true);
+      return;
+    }
+
     setSelectedDoctor(doctor);
     setShowModal(true);
     setSelectedDate(availableDates[0]?.value || "");
     setSelectedTime("");
+    setSelectedProductId(undefined);
+    setSelectedPriceId(undefined);
+    setConfirmed(false);
     // Optionally reset confirmation state
     if (doctor?.uuid) {
       await fetchProducts(doctor.uuid);
@@ -66,7 +99,9 @@ export default function BookingSection({
 
   const confirmBooking = async () => {
     if (!selectedDoctor || !selectedPriceId || !selectedDate || !selectedTime) {
-      alert("Please select all required fields.");
+      setMessageModalText(t("labels.please select all required fields"));
+      setMessageModalType("warning");
+      setShowMessageModal(true);
       return;
     }
     setConfirming(true);
@@ -94,7 +129,9 @@ export default function BookingSection({
       window.location.href = (await res.json()).redirectUrl;
     } catch (err: Error | unknown) {
       setConfirming(false);
-      alert("Payment error: " + (err instanceof Error ? err.message : String(err)));
+      setMessageModalText(t("labels.payment error") + (err instanceof Error ? err.message : String(err)));
+      setMessageModalType("error");
+      setShowMessageModal(true);
     }
   };
 
@@ -153,7 +190,38 @@ export default function BookingSection({
           setSelectedProductId(productId);
           setSelectedPriceId(priceId);
         }}
+        onCancelConfirming={() => setConfirming(false)}
         availableDates={availableDates}
+      />
+      {/* Reusable message modal */}
+      <Modal
+        show={showMessageModal}
+        onClose={() => setShowMessageModal(false)}
+        type={messageModalType}
+        variant="message"
+      >
+        <div>{messageModalText}</div>
+      </Modal>
+      {/* Sign In Modal */}
+      <SignInModal
+        show={showSignInModal}
+        onClose={() => setShowSignInModal(false)}
+        onSuccess={async () => {
+          if (pendingDoctor) {
+            setSelectedDoctor(pendingDoctor);
+            setShowModal(true);
+            setSelectedDate(availableDates[0]?.value || "");
+            setSelectedTime("");
+            setSelectedProductId(undefined);
+            setSelectedPriceId(undefined);
+            setConfirmed(false);
+            if (pendingDoctor.uuid) {
+              await fetchProducts(pendingDoctor.uuid);
+            }
+            setPendingDoctor(null);
+          }
+          setShowSignInModal(false);
+        }}
       />
       {/* Modal animation */}
       <style>{`

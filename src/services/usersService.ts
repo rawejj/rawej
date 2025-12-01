@@ -23,12 +23,12 @@ export class UsersService {
    * @returns Doctors API response from external source
    */
   async fetchDoctors(params: PaginationParams): Promise<unknown> {
-    if (!CONFIGS.meetApiUrl) {
-      throw new Error("MEET_API environment variable is not configured");
+    if (!CONFIGS.remoteApi.url) {
+      throw new Error("REMOTE_API_URL environment variable is not configured");
     }
   
     const { page, limit } = params;
-    const apiUrl = `${CONFIGS.meetApiUrl}/doctors?page=${page}&limit=${limit}`;
+    const apiUrl = `${CONFIGS.remoteApi.url}/doctors?page=${page}&limit=${limit}`;
     
     logger.debug(`Fetching doctors from ${apiUrl}`, "DoctorsAPI");
   
@@ -63,10 +63,10 @@ export class UsersService {
    * @returns Array of date slots
    */
   async fetchAvailability(uuid: string, type?: string): Promise<DateSlot[]> {
-    if (!CONFIGS.meetApiUrl) {
-      throw new Error("MEET_API environment variable is not configured");
+    if (!CONFIGS.remoteApi.url) {
+      throw new Error("REMOTE_API_URL environment variable is not configured");
     }
-    let apiUrl = `${CONFIGS.meetApiUrl}/meets/${uuid}/availability`;
+    let apiUrl = `${CONFIGS.remoteApi.url}/meets/${uuid}/availability`;
     if (type) {
       apiUrl += `?type=${encodeURIComponent(type)}`;
     }

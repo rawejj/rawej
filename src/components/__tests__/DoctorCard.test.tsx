@@ -3,6 +3,7 @@ import { render, screen, fireEvent } from "@testing-library/react";
 import { vi } from "vitest";
 import DoctorCard from "@/components/DoctorCard";
 import { TranslationsProvider } from "@/providers/TranslationsProvider";
+import { act } from "@testing-library/react";
 
 const mockTranslations = {
   "book appointment": "Book Appointment",
@@ -40,7 +41,7 @@ describe("DoctorCard", () => {
 
   it("renders default doctor image if image is missing", () => {
     renderWithTranslations(
-      <DoctorCard doctor={{ ...baseDoctor, image: "" }} onBook={() => {}} />,
+      <DoctorCard doctor={{ ...baseDoctor, image: "" }} onBook={async () => {}} />,
     );
     const img = screen.getByRole("img");
     expect(img).toHaveAttribute(
@@ -50,31 +51,33 @@ describe("DoctorCard", () => {
   });
 
   it("renders doctor name, specialty, and bio", () => {
-    renderWithTranslations(<DoctorCard doctor={doctor} onBook={() => {}} />);
+    renderWithTranslations(<DoctorCard doctor={doctor} onBook={async () => {}} />);
     expect(screen.getByText("Dr. Alice Smith")).toBeInTheDocument();
     expect(screen.getByText("Cardiology")).toBeInTheDocument();
     expect(screen.getByText("Expert in heart health.")).toBeInTheDocument();
   });
 
   it("shows call type badges at top right", () => {
-    renderWithTranslations(<DoctorCard doctor={doctor} onBook={() => {}} />);
+    renderWithTranslations(<DoctorCard doctor={doctor} onBook={async () => {}} />);
     expect(screen.getByText("Phone")).toBeInTheDocument();
     expect(screen.getByText("Video")).toBeInTheDocument();
     expect(screen.getByText("Text")).toBeInTheDocument();
   });
 
   it("renders Book Appointment button", () => {
-    renderWithTranslations(<DoctorCard doctor={doctor} onBook={() => {}} />);
+    renderWithTranslations(<DoctorCard doctor={doctor} onBook={async () => {}} />);
     expect(
       screen.getByRole("button", { name: /book appointment/i }),
     ).toBeInTheDocument();
   });
 
-  it("calls onBook when Book Appointment button is clicked", () => {
-    const onBookMock = vi.fn();
+  it("calls onBook when Book Appointment button is clicked", async () => {
+    const onBookMock = vi.fn().mockResolvedValue(undefined);
     renderWithTranslations(<DoctorCard doctor={doctor} onBook={onBookMock} />);
     const button = screen.getByRole("button", { name: /book appointment/i });
-    button.click();
+    await act(async () => {
+      fireEvent.click(button);
+    });
     expect(onBookMock).toHaveBeenCalledWith(doctor);
   });
 
@@ -89,7 +92,7 @@ describe("DoctorCard", () => {
       bio: "Skin care specialist.",
     };
     renderWithTranslations(
-      <DoctorCard doctor={doctorNoCall} onBook={() => {}} />,
+      <DoctorCard doctor={doctorNoCall} onBook={async () => {}} />,
     );
     expect(screen.queryByText("Phone")).not.toBeInTheDocument();
     expect(screen.queryByText("Video")).not.toBeInTheDocument();
@@ -108,7 +111,7 @@ describe("DoctorCard", () => {
       callTypes: [],
     };
     renderWithTranslations(
-      <DoctorCard doctor={doctorEmptyCall} onBook={() => {}} />,
+      <DoctorCard doctor={doctorEmptyCall} onBook={async () => {}} />,
     );
     expect(screen.queryByText("Phone")).not.toBeInTheDocument();
     expect(screen.queryByText("Video")).not.toBeInTheDocument();
@@ -130,7 +133,7 @@ describe("DoctorCard", () => {
     renderWithTranslations(
       <DoctorCard
         doctor={{ ...baseDoctor, callTypes: ["phone"] }}
-        onBook={() => {}}
+        onBook={async () => {}}
       />,
     );
     expect(screen.getByText("Phone")).toBeInTheDocument();
@@ -140,7 +143,7 @@ describe("DoctorCard", () => {
 
   it("renders correctly with no bio", () => {
     renderWithTranslations(
-      <DoctorCard doctor={{ ...baseDoctor, bio: "" }} onBook={() => {}} />,
+      <DoctorCard doctor={{ ...baseDoctor, bio: "" }} onBook={async () => {}} />,
     );
     // Should still render the card, but bio is empty
     expect(screen.getByText("Dr. Test")).toBeInTheDocument();
@@ -151,7 +154,7 @@ describe("DoctorCard", () => {
   it("renders default doctor image if image is undefined", () => {
     const doctorNoImage: Doctor = { ...baseDoctor, image: undefined };
     renderWithTranslations(
-      <DoctorCard doctor={doctorNoImage} onBook={() => {}} />,
+      <DoctorCard doctor={doctorNoImage} onBook={async () => {}} />,
     );
     const img = screen.getByRole("img");
     expect(img).toHaveAttribute(
@@ -164,7 +167,7 @@ describe("DoctorCard", () => {
     const doctorNoImage = { ...baseDoctor };
     delete doctorNoImage.image;
     renderWithTranslations(
-      <DoctorCard doctor={doctorNoImage} onBook={() => {}} />,
+      <DoctorCard doctor={doctorNoImage} onBook={async () => {}} />,
     );
     const img = screen.getByRole("img");
     expect(img).toHaveAttribute(
@@ -175,7 +178,7 @@ describe("DoctorCard", () => {
 
   it("falls back to default image on image load error", () => {
     renderWithTranslations(
-      <DoctorCard doctor={baseDoctor} onBook={() => {}} />,
+      <DoctorCard doctor={baseDoctor} onBook={async () => {}} />,
     );
     const img = screen.getByRole("img");
     fireEvent.error(img);

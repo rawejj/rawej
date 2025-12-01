@@ -72,7 +72,7 @@ const DateSelector: React.FC<DateSelectorProps> = ({
           return (
             <button
               key={day.value}
-              className={`px-4 py-3 rounded-2xl border-2 font-semibold transition-all duration-200 min-w-[110px] shadow-sm hover:shadow-md focus:outline-none focus:ring-2 focus:ring-purple-400 dark:focus:ring-pink-400 ${
+              className={`px-4 py-3 rounded-2xl border-2 font-semibold transition-all duration-200 min-w-[110px] shadow-sm hover:shadow-md focus:outline-none focus:ring-2 focus:ring-purple-400 dark:focus:ring-pink-400 cursor-pointer ${
                 selectedDate === day.value
                   ? "bg-linear-to-r from-purple-500 to-pink-400 text-white border-purple-500 scale-105 shadow-lg shadow-purple-500/25"
                   : "bg-white dark:bg-zinc-800 text-zinc-700 dark:text-zinc-200 border-gray-200 dark:border-zinc-600 hover:border-purple-300 dark:hover:border-purple-600 hover:bg-purple-50 dark:hover:bg-purple-900/20 hover:scale-102"

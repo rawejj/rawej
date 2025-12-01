@@ -1,14 +1,25 @@
 import Image from "next/image";
-import React from "react";
+import React, { useState } from "react";
 import { useTranslations } from "@/providers/TranslationsProvider";
 import { Doctor } from "@/types/doctor";
+import Button from "@/components/Button";
 interface DoctorCardProps {
   doctor: Doctor;
-  onBook: (doctor: Doctor) => void;
+  onBook: (doctor: Doctor) => Promise<void>;
 }
 
 const DoctorCard: React.FC<DoctorCardProps> = ({ doctor, onBook }) => {
   const { t } = useTranslations();
+  const [loading, setLoading] = useState(false);
+
+  const handleBook = async () => {
+    setLoading(true);
+    try {
+      await onBook(doctor);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
     <div className="relative rounded-3xl bg-white dark:bg-zinc-800 shadow-lg p-6 flex flex-col items-center transition-transform hover:scale-[1.03] hover:shadow-2xl">
@@ -56,12 +67,16 @@ const DoctorCard: React.FC<DoctorCardProps> = ({ doctor, onBook }) => {
         </span>
       </div>
       {/* First availability removed as per request */}
-      <button
-        className="w-full py-2 px-4 rounded-full bg-linear-to-r from-purple-500 to-pink-400 text-white font-bold shadow-md hover:from-pink-400 hover:to-purple-500 transition-colors"
-        onClick={() => onBook(doctor)}
+      <Button
+        onClick={handleBook}
+        loading={loading}
+        loadingText={t("buttons.loading", "Loading...")}
+        fullWidth
+        variant="primary"
+        className="rounded-full bg-linear-to-r from-purple-500 to-pink-400 hover:from-pink-400 hover:to-purple-500"
       >
         {t("book appointment")}
-      </button>
+      </Button>
     </div>
   );
 };

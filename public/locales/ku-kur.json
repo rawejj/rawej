@@ -28,7 +28,11 @@
     "booked": "Reservasyon kirin",
     "back": "Vegere",
     "cancel": "Bişkojkê",
-    "retry": "Dîsa biceribîne"
+    "retry": "Dîsa biceribîne",
+    "loading": "Bar dike...",
+    "processing": "Pêvajoyê...",
+    "sending": "Şandina...",
+    "verifying": "Kontrol dike..."
   },
   "labels": {
   "select a date": "Dîrokê hilbijêre",
@@ -43,7 +47,9 @@
   "evening": "Êvar",
   "no times": "Dem tune ye",
   "processing payment": "Pere tê hilberandin",
-  "no products available": "Hilber tune ne"
+  "no products available": "Hilber tune ne",
+  "please select all required fields": "Ji kerema xwe hemû qadên pêwîst hilbijêrin.",
+  "payment error": "Çewtiya pere: "
   },
   "weekdays": {
     "sun": "Yekşem",
@@ -89,5 +95,27 @@
         "description": "Ji bo şandina reklamên kesane têne bikaranîn."
       }
     }
+  },
+  "auth": {
+    "sign in": "Têketin",
+    "mobile number": "Hejmara Mobîl",
+    "enter mobile number": "Hejmara mobîla xwe binivîse",
+    "submit": "Têketin",
+    "failed to sign in": "Têketin serneket. Ji kerema xwe dîsa biceribîne.",
+    "send otp": "OTP bişîne",
+    "enter otp": "Koda ji hejmarê re hat şandin binivîse",
+    "otp code": "Koda OTP",
+    "verify": "Kontrol bike",
+    "failed to send otp": "Şandina koda OTP serneket. Ji kerema xwe dîsa biceribîne.",
+    "failed to verify otp": "Kontrolkirina koda OTP serneket. Ji kerema xwe dîsa biceribîne.",
+    "invalid otp": "Koda OTP nederbasdar e. Ji kerema xwe dîsa biceribîne.",
+    "phone number and country code required": "Hejmara telefonê û koda welatê pêwîst e",
+    "invalid country code format": "Formata koda welatê nederbasdar e",
+    "invalid phone number format": "Formata hejmara telefonê nederbasdar e"
+  },
+  "dropdown": {
+    "select": "Hilbijêre...",
+    "search": "Lê bigere",
+    "no options found": "Tu vebijark nehat dîtin"
   }
 }

@@ -25,10 +25,14 @@
   "buttons": {
     "confirm and pay": "تأیید و پرداخت",
     "confirm booking": "تأیید رزرو",
-    "booked": "رزرو شده",
+    "booked": "رزرو شد!",
     "back": "بازگشت",
     "cancel": "لغو",
-    "retry": "تلاش مجدد"
+    "retry": "تلاش مجدد",
+    "loading": "بارگذاری...",
+    "processing": "در حال پردازش...",
+    "sending": "در حال ارسال...",
+    "verifying": "در حال بررسی..."
   },
   "labels": {
     "select a date": "انتخاب تاریخ",
@@ -43,7 +47,9 @@
     "evening": "شب",
     "no times": "زمانی موجود نیست",
     "processing payment": "در حال پردازش پرداخت",
-    "no products available": "محصولی موجود نیست"
+    "no products available": "محصولی موجود نیست",
+    "please select all required fields": "لطفاً تمام فیلدهای مورد نیاز را انتخاب کنید.",
+    "payment error": "خطای پرداخت: "
   },
   "weekdays": {
     "sun": "یکشنبه",
@@ -89,5 +95,29 @@
         "description": "برای ارائه تبلیغات شخصی‌سازی شده استفاده می‌شود."
       }
     }
+  },
+  "auth": {
+    "sign in": "ورود",
+    "mobile number": "شماره موبایل",
+    "enter mobile number": "شماره موبایل خود را وارد کنید",
+    "submit": "ورود",
+    "failed to sign in": "ورود ناموفق بود. لطفا دوباره تلاش کنید.",
+    "send otp": "ارسال کد یکبار مصرف",
+    "enter otp": "کد ارسال شده را وارد کنید",
+    "otp code": "کد یکبار مصرف",
+    "verify": "تأیید",
+    "failed to send otp": "ارسال کد یکبار مصرف ناموفق بود. لطفا دوباره تلاش کنید.",
+    "failed to verify otp": "تأیید کد یکبار مصرف ناموفق بود. لطفا دوباره تلاش کنید.",
+    "invalid otp": "کد یکبار مصرف نامعتبر است. لطفا دوباره تلاش کنید.",
+    "phone number and otp required": "شماره تلفن و کد یکبار مصرف الزامی است",
+    "invalid otp format": "فرمت کد یکبار مصرف نامعتبر است",
+    "phone number and country code required": "شماره تلفن و کد کشور الزامی است",
+    "invalid country code format": "فرمت کد کشور نامعتبر است",
+    "invalid phone number format": "فرمت شماره تلفن نامعتبر است"
+  },
+  "dropdown": {
+    "select": "انتخاب کنید...",
+    "search": "جستجو",
+    "no options found": "هیچ گزینه‌ای یافت نشد"
   }
 }

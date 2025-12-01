@@ -23,7 +23,7 @@ interface PageParams {
  */
 async function fetchDoctors(): Promise<[Doctor[], string | null]> {
   try {
-    const apiUrl = CONFIGS.apiUrl;
+    const apiUrl = CONFIGS.app.apiUrl;
     
     if (!apiUrl) {
       const errorMsg = "NEXT_PUBLIC_API_URL is not configured";

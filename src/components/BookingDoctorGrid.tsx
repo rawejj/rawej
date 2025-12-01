@@ -8,7 +8,7 @@ interface BookingDoctorGridProps {
   loading: boolean;
   hasMore: boolean;
   observerRef: React.RefObject<HTMLDivElement | null>;
-  onBook: (doctor: Doctor) => void;
+  onBook: (doctor: Doctor) => Promise<void>;
   translations?: Record<string, string>;
 }
 
