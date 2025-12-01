@@ -89,7 +89,7 @@ export class OTPService {
         skipAuthRetry: true,
       });
 
-      logger.info(`OTP verification ${response.success ? 'successful' : 'failed'} for ${request.to}`, "OTPService");
+      logger.info(`OTP verification ${response.status.code === 0 ? 'successful' : 'failed'} for ${request.to}`, "OTPService");
       return response;
     } catch (error) {
       logger.error(error, "OTPService - verifyOTP");

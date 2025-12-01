@@ -12,7 +12,7 @@ import { fetchToken, refreshToken } from "@/utils/auth";
 import { cookies } from "next/headers";
 
 describe("HTTP Client", () => {
-  beforeEach(() => {
+  beforeEach(async () => {
     vi.clearAllMocks();
     delete process.env.NODE_TLS_REJECT_UNAUTHORIZED;
     process.env.APP_ENV = "prod";
@@ -26,7 +26,7 @@ describe("HTTP Client", () => {
       size: 0,
       [Symbol.iterator]: vi.fn(),
     };
-    vi.mocked(cookies).mockResolvedValue(mockCookieStore as unknown as any);
+    vi.mocked(cookies).mockResolvedValue(await (mockCookieStore as unknown as ReturnType<typeof cookies>));
     vi.stubGlobal("fetch", vi.fn());
   });
 

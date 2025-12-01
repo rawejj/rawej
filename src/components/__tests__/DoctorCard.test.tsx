@@ -167,7 +167,7 @@ describe("DoctorCard", () => {
     const doctorNoImage = { ...baseDoctor };
     delete doctorNoImage.image;
     renderWithTranslations(
-      <DoctorCard doctor={doctorNoImage} onBook={() => {}} />,
+      <DoctorCard doctor={doctorNoImage} onBook={async () => {}} />,
     );
     const img = screen.getByRole("img");
     expect(img).toHaveAttribute(
