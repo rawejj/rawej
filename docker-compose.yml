@@ -2,14 +2,11 @@ version: "3.8"
 
 services:
   app:
-    build:
-      context: .
-      dockerfile: .docker/Dockerfile
+    image: ${DOCKER_IMAGE:-your-dockerhub-username/rawej:latest}
     ports:
       - "3000:3000"
-    volumes:
-      - .:/app
-      - /app/node_modules
     environment:
-      - NODE_ENV=development
-    command: npm run dev
+      - NODE_ENV=production
+    restart: unless-stopped
+    volumes:
+      - ./storage:/app/storage
