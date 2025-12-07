@@ -28,7 +28,7 @@ export class UsersService {
     }
   
     const { page, limit } = params;
-    const apiUrl = `${CONFIGS.remoteApi.url}/doctors?page=${page}&limit=${limit}`;
+    const apiUrl = `${CONFIGS.remoteApi.url}/users/trappists?page=${page}&limit=${limit}`;
     
     logger.debug(`Fetching doctors from ${apiUrl}`, "DoctorsAPI");
   

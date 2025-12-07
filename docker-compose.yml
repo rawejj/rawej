@@ -5,8 +5,8 @@ services:
     image: ${DOCKER_IMAGE:-your-dockerhub-username/rawej:latest}
     ports:
       - "3000:3000"
-    environment:
-      - NODE_ENV=production
+    env_file:
+      - .env
     restart: unless-stopped
     volumes:
       - ./storage:/app/storage
