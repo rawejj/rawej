@@ -17,23 +17,22 @@ export default function GoogleAnalytics({ measurementId }: GoogleAnalyticsProps)
   const { preferences } = useCookieConsent();
 
   useEffect(() => {
-    // Only load Google Analytics if user has accepted analytics cookies
-    if (preferences?.analytics) {
-      // Load Google Analytics script
-      const script1 = document.createElement('script');
-      script1.async = true;
-      script1.src = `https://www.googletagmanager.com/gtag/js?id=${measurementId}`;
-      document.head.appendChild(script1);
+    // If analytics cookies are not accepted, disable Google Analytics
+    if (!preferences?.analytics) {
+      // Disable gtag if it exists
+      if (window.gtag) {
+        window.gtag('config', measurementId, { 'anonymize_ip': true });
+        console.log('Google Analytics disabled - analytics cookies not accepted');
+      }
+      return;
+    }
 
-      // Initialize gtag
-      const script2 = document.createElement('script');
-      script2.innerHTML = `
-        window.dataLayer = window.dataLayer || [];
-        function gtag(){dataLayer.push(arguments);}
-        gtag('js', new Date());
-        gtag('config', '${measurementId}');
-      `;
-      document.head.appendChild(script2);
+    // If analytics cookies are accepted, ensure gtag is properly configured
+    if (window.gtag) {
+      window.gtag('config', measurementId, { 'anonymize_ip': false });
+      console.log('Google Analytics enabled with measurement ID:', measurementId);
+    } else {
+      console.log('Google Analytics scripts not found in head - they should be loaded via layout.tsx');
     }
   }, [preferences?.analytics, measurementId]);
 
