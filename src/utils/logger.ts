@@ -28,30 +28,18 @@ function shouldLog(level: LogLevel): boolean {
   return LOG_LEVELS[level] >= LOG_LEVELS[currentLogLevel];
 }
 
-function getCallerLocation(): string | undefined {
-  const err = new Error();
-  if (!err.stack) return undefined;
-  const stackLines = err.stack.split("\n");
-  // The stack trace format is: Error\n at func (file:line:col)\n ...
-  // 0: Error, 1: this function, 2: Logger method, 3: actual caller
-  const callerLine = stackLines[4] || stackLines[3];
-  if (!callerLine) return undefined;
-  const match = callerLine.match(/\(([^)]+)\)/) || callerLine.match(/at ([^ ]+)/);
-  return match ? match[1] : undefined;
-}
-
 function writeLog(level: LogLevel, message: string, context?: string) {
   if (!shouldLog(level)) return;
 
   const timestamp = new Date().toISOString();
-  const location = getCallerLocation();
   const logEntry: Record<string, unknown> = {
     timestamp,
     level,
     message,
   };
-  if (context) logEntry.context = context;
-  if (location) logEntry.location = location;
+  if (context) {
+    logEntry.context = context;
+  }
 
   const logMessage = JSON.stringify(logEntry);
 
@@ -100,7 +88,7 @@ class Logger {
     let message = "";
     if (error instanceof Error) {
       message = error.message;
-      if (error.stack) message += `\nStack: ${error.stack}`;
+      // if (error.stack) message += `\nStack: ${error.stack}`;
     } else {
       message = JSON.stringify(error);
     }

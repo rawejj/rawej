@@ -1,8 +1,9 @@
-version: "3.8"
-
 services:
   app:
-    image: ${DOCKER_IMAGE:-your-dockerhub-username/rawej:latest}
+    container_name: rawej
+    build:
+      context: .
+      dockerfile: .docker/Dockerfile
     ports:
       - "3000:3000"
     env_file:
@@ -10,3 +11,5 @@ services:
     restart: unless-stopped
     volumes:
       - ./storage:/app/storage
+    extra_hosts:
+      - "api.psychometrist.local:host-gateway"

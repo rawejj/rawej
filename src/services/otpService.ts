@@ -42,13 +42,18 @@ export class OTPService {
    */
   async send(request: OTPSendRequest): Promise<OTPSendResponse> {
     if (!CONFIGS.remoteApi.url) {
-      throw new Error("REMOTE_API_URL environment variable is not configured");
+      const error = new Error("REMOTE_API_URL environment variable is not configured");
+      logger.error(`OTP send failed: ${error.message}`, "OTPService");
+      throw error;
     }
 
-    logger.debug(`Sending OTP to ${request.to}`, "OTPService");
+    const otpUrl = `${CONFIGS.remoteApi.url}/otp`;
+    logger.debug(`Sending OTP to ${request.to} with country code ${request.countryCode}`, "OTPService");
     
     try {
-      const response: OTPSendResponse = await httpClient<OTPSendResponse>(`${CONFIGS.remoteApi.url}/otp`, {
+      logger.debug(`Making HTTP request to ${otpUrl} with body: ${JSON.stringify(request)}`, "OTPService");
+      
+      const response: OTPSendResponse = await httpClient<OTPSendResponse>(otpUrl, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -57,10 +62,16 @@ export class OTPService {
         skipAuthRetry: true,
       });
 
-      logger.info(`OTP sent successfully to ${request.to}`, "OTPService");
+      logger.info(`OTP sent successfully to ${request.to}. Response: ${JSON.stringify(response)}`, "OTPService");
       return response;
     } catch (error) {
-      logger.error(error, "OTPService - sendOTP");
+      logger.error(`OTP send failed for ${request.to}. URL: ${otpUrl}. Request: ${JSON.stringify(request)}. Error: ${error}`, "OTPService");
+      
+      // Log additional error details if available
+      if (error instanceof Error) {
+        logger.error(`Error message: ${error.message}`, "OTPService");
+      }
+      
       throw error;
     }
   }
@@ -72,14 +83,18 @@ export class OTPService {
    */
   async verify(request: OTPVerifyRequest): Promise<OTPVerifyResponse> {
     if (!CONFIGS.remoteApi.url) {
-      throw new Error("REMOTE_API_URL environment variable is not configured");
+      const error = new Error("REMOTE_API_URL environment variable is not configured");
+      logger.error(`OTP verify failed: ${error.message}`, "OTPService");
+      throw error;
     }
 
     const verifyUrl = `${CONFIGS.remoteApi.url}/otp/verify`;
 
-    logger.debug(`Verifying OTP for ${request.to}`, "OTPService");
-
+    logger.debug(`Verifying OTP for ${request.to} with code length ${request.code.length}`, "OTPService");
+    
     try {
+      logger.debug(`Making HTTP request to ${verifyUrl} with body: ${JSON.stringify({ ...request, code: '[REDACTED]' })}`, "OTPService");
+      
       const response: OTPVerifyResponse = await httpClient<OTPVerifyResponse>(verifyUrl, {
         method: "POST",
         headers: {
@@ -89,10 +104,17 @@ export class OTPService {
         skipAuthRetry: true,
       });
 
-      logger.info(`OTP verification ${response.status.code === 0 ? 'successful' : 'failed'} for ${request.to}`, "OTPService");
+      const success = response.status.code === 0;
+      logger.info(`OTP verification ${success ? 'successful' : 'failed'} for ${request.to}. Status: ${response.status.code} - ${response.status.message}`, "OTPService");
       return response;
     } catch (error) {
-      logger.error(error, "OTPService - verifyOTP");
+      logger.error(`OTP verification failed for ${request.to}. URL: ${verifyUrl}. Request: ${JSON.stringify({ ...request, code: '[REDACTED]' })}. Error: ${error}`, "OTPService");
+      
+      // Log additional error details if available
+      if (error instanceof Error) {
+        logger.error(`Error message: ${error.message}`, "OTPService");
+      }
+      
       throw error;
     }
   }

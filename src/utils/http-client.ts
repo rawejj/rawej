@@ -12,7 +12,7 @@ export interface HttpClientOptions extends RequestInit {
  * Determines if the request should use token-based authentication
  */
 function shouldUseTokenAuth(url: string): boolean {
-  return url.includes("/api/v1/users") || url.includes("/doctors");
+  return url.includes("/users/trappists") || url.includes("/doctors");
 }
 
 /**
@@ -52,22 +52,27 @@ async function handleTokenAuth(url: string): Promise<{ accessToken: string } | n
     accessToken = tokenData?.accessToken || null;
   }
 
-  // If still no token and this is a /doctors endpoint, try to fetch new token
+  // If still no token and this is a /doctors endpoint, try to fetch new token (up to 3 attempts)
   if (!accessToken && shouldUseTokenAuth(url) && !isAuthEndpoint(url)) {
-    try {
-      await fetchToken();
-      // After fetching, check cookie first, then file storage
-      accessToken = await loadTokenFromCookie();
-      if (!accessToken) {
-        const tokenData = loadToken();
-        accessToken = tokenData?.accessToken || null;
+    let attempts = 0;
+    const maxAttempts = 3;
+    while (!accessToken && attempts < maxAttempts) {
+      try {
+        await fetchToken();
+        // After fetching, check cookie first, then file storage
+        accessToken = await loadTokenFromCookie();
+        if (!accessToken) {
+          const tokenData = loadToken();
+          accessToken = tokenData?.accessToken || null;
+        }
+        attempts++;
+      } catch (error) {
+        logger.error(`${url} - Attempt ${attempts + 1} failed: ${error}`, "httpClient - handleTokenAuth");
+        attempts++;
       }
-      if (accessToken) {
-        return { accessToken };
-      }
-    } catch {
-      // Token fetch failed, proceed without token
-      return null;
+    }
+    if (accessToken) {
+      return { accessToken };
     }
   }
 
@@ -129,10 +134,7 @@ async function processResponse<T>(res: Response): Promise<T> {
       // Response is not JSON, use text directly
     }
 
-    logger.error(
-      `HTTP error ${res.status}: ${message}`,
-      "httpClient"
-    );
+    logger.error(`Final error message: ${message}`, "httpClient");
     throw new Error(`HTTP error ${res.status}: ${message || res.statusText}`);
   }
 
@@ -178,10 +180,14 @@ export async function httpClient<T = unknown>(
 
   // Retry with refreshed token if unauthorized (only for token-auth requests)
   if (useTokenAuth && !options.skipAuthRetry && response.status === 401) {
+    logger.debug("Token expired, attempting refresh", "httpClient");
     const tokenData = loadToken();
     const retryResponse = await retryWithRefreshedToken(url, options, tokenData);
     if (retryResponse) {
       response = retryResponse;
+      logger.debug("Token refresh successful, retrying request", "httpClient");
+    } else {
+      logger.debug("Token refresh failed", "httpClient");
     }
   }
 
@@ -189,7 +195,7 @@ export async function httpClient<T = unknown>(
   try {
     return await processResponse<T>(response);
   } catch (err) {
-    logger.error(err, "httpClient");
+    logger.error(`${url} - ${err}`, "httpClient");
     throw err;
   }
 }

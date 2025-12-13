@@ -2,7 +2,7 @@ import { MetadataRoute } from "next";
 import { SUPPORTED_LANGUAGES } from "@/lib/constants";
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  const baseUrl = process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000";
+  const baseUrl = process.env.NEXT_PUBLIC_APP_URL || "https://rawej.com";
 
   const routes = SUPPORTED_LANGUAGES.map((lang) => ({
     url: `${baseUrl}/${lang}`,

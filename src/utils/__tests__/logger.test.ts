@@ -84,7 +84,6 @@ describe("logger", () => {
       const logOutput = vi.mocked(console.error).mock.calls[0][0];
       const logData = JSON.parse(logOutput as string);
       expect(logData.message).toContain("Test error");
-      expect(logData.message).toContain("Stack:");
     });
 
     it("handles non-Error objects by stringifying", () => {

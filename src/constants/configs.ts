@@ -15,7 +15,7 @@ export const CONFIGS = {
     user: process.env.REMOTE_API_USER,
     password: process.env.REMOTE_API_PASSWORD,
   },
-  disableSslVerification: process.env.APP_ENV === "development",
+  disableSslVerification: process.env.NODE_ENV === "development" || process.env.APP_ENV === "development",
   
   // Cache Configuration
   apiCacheRevalidate: parseInt(process.env.API_CACHE_REVALIDATE || "300", 10),

@@ -62,7 +62,7 @@ class ProductsService {
       
       return response.return.items;
     } catch (error) {
-      logger.error(error, "ProductsAPI - fetchProductsByUuid");
+      logger.error(`${apiUrl} ${error}`, "ProductsAPI - fetchProductsByUuid");
       throw error;
     }
   }

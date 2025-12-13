@@ -30,7 +30,7 @@ export class UsersService {
     const { page, limit } = params;
     const apiUrl = `${CONFIGS.remoteApi.url}/users/trappists?page=${page}&limit=${limit}`;
     
-    logger.debug(`Fetching doctors from ${apiUrl}`, "DoctorsAPI");
+    logger.debug(`Start Fetching doctors from ${apiUrl}`, "DoctorsAPI");
   
     try {
       const data = await httpClient<unknown>(apiUrl, {
@@ -51,7 +51,7 @@ export class UsersService {
       
       return data;
     } catch (error) {
-      logger.error(error, "DoctorsAPI - fetchDoctors");
+      logger.error(`${apiUrl} - ${error}`, "DoctorsAPI - fetchDoctors");
       throw error;
     }
   }
@@ -88,7 +88,7 @@ export class UsersService {
         : [];
       return meets;
     } catch (error) {
-      logger.error(error, "UsersService - fetchAvailability");
+      logger.error(`${apiUrl} ${error}`, "UsersService - fetchAvailability");
       throw error;
     }
   }
