@@ -49,7 +49,7 @@ export async function fetchToken(): Promise<string> {
     logger.info("Token fetched and saved", "Auth");
     return tokenData.accessToken;
   } catch (err) {
-    logger.error(err, "Auth - fetchToken");
+    logger.error(`${tokenUrl} - ${err}`, "Auth - fetchToken");
     throw err;
   }
 }
@@ -88,7 +88,7 @@ export async function refreshToken(): Promise<string> {
     logger.info("Access token refreshed and saved", "Auth");
     return newToken.accessToken;
   } catch (err) {
-    logger.error(err, "Auth - refreshAccessToken");
+    logger.error(`${refreshUrl} - ${err}`, "Auth - refreshAccessToken");
     clearToken();
     throw err;
   }

@@ -102,7 +102,8 @@
 /* Mobile and small devices: full width */
 @media (max-width: 768px) {
   .modal-overlay {
-    align-items: flex-end; /* slide up from bottom on mobile */
+    align-items: center; /* center vertically on mobile for better accessibility */
+    padding: 1rem 0; /* add padding to prevent touching edges */
   }
   .modal-content {
     max-width: 100vw;
@@ -111,7 +112,20 @@
     max-height: 90vh;
     border-radius: 16px 16px 0 0;
     padding: 1rem;
+    margin: 0 auto; /* center horizontally */
+    position: relative;
     animation: slideUp 0.3s ease-out;
+  }
+}
+
+/* Extra small screens: ensure modal is fully visible */
+@media (max-width: 480px) {
+  .modal-overlay {
+    padding: 0.5rem 0;
+  }
+  .modal-content {
+    max-height: 95vh;
+    padding: 0.75rem;
   }
 }
 

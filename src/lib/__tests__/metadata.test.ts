@@ -190,8 +190,8 @@ describe("Metadata Functions", () => {
 
       const metadata = await generateMetadata("en");
 
-      expect(metadata.openGraph?.url).toContain("localhost:3000/en");
-      expect(metadata.alternates?.canonical).toContain("localhost:3000/en");
+      expect(metadata.openGraph?.url).toContain("https://rawej.com/en");
+      expect(metadata.alternates?.canonical).toContain("https://rawej.com/en");
     });
 
     it("sets siteName from translation title", async () => {

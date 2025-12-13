@@ -30,7 +30,7 @@ export class AuthService {
       logger.info(`User info fetched successfully for user: ${user.id}`, "AuthService");
       return user;
     } catch (error) {
-      logger.error(error, "AuthService - fetchUser");
+      logger.error(`${meUrl} ${error}`, "AuthService - fetchUser");
       throw error;
     }
   }

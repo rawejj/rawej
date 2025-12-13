@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useCallback } from "react";
 import Modal from "@/components/Modal";
 import { useTranslations } from "@/providers/TranslationsProvider";
 import { useLocalization } from "@/providers/useLocalization";
@@ -74,17 +74,19 @@ export default function SignInModal({ show, onClose, onSuccess }: SignInModalPro
         setCountdown(120);
         setResendDisabled(true);
       } else {
-        setError(data.error || t("auth.failed to send otp", "Failed to send OTP. Please try again."));
+        console.error("OTP send failed:", data.error);
+        setError(t("auth.failed to send otp", "Failed to send OTP. Please try again."));
       }
-    } catch {
+    } catch (error) {
+      console.error("OTP send network error:", error);
       setError(t("auth.failed to send otp", "Failed to send OTP. Please try again."));
     } finally {
       setLoading(false);
     }
   };
 
-  const handleVerifyOTP = async (e: React.FormEvent) => {
-    e.preventDefault();
+  const handleVerifyOTP = useCallback(async (e?: React.FormEvent) => {
+    e?.preventDefault();
     setError(null);
     setLoading(true);
 
@@ -115,14 +117,21 @@ export default function SignInModal({ show, onClose, onSuccess }: SignInModalPro
         onClose();
         resetModal();
       } else {
-        setError(data.error || t("auth.invalid otp", "Invalid OTP. Please try again."));
+        setError(t("auth.invalid otp", "Invalid OTP. Please try again."));
       }
     } catch {
       setError(t("auth.failed to verify otp", "Failed to verify OTP. Please try again."));
     } finally {
       setLoading(false);
     }
-  };
+  }, [mobileNumber, otp, countryCode, t, onSuccess, onClose]);
+
+  // Auto-verify OTP when complete
+  useEffect(() => {
+    if (otp.length === 5 && !loading && step === "otp") {
+      handleVerifyOTP();
+    }
+  }, [otp, loading, step, handleVerifyOTP]);
 
   const resetModal = () => {
     setStep("phone");
@@ -230,8 +239,9 @@ export default function SignInModal({ show, onClose, onSuccess }: SignInModalPro
                 fullWidth
                 variant="primary"
                 className="flex-1"
+                disabled={otp.length === 5 || loading}
               >
-                {t("auth.verify", "Verify")}
+                {otp.length === 5 ? t("buttons.verifying", "Verifying...") : t("auth.verify", "Verify")}
               </Button>
             </div>
           </form>

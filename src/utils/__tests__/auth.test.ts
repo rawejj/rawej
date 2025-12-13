@@ -173,7 +173,10 @@ describe("Auth Utils", () => {
       vi.mocked(httpClientModule.httpClient).mockRejectedValue(error);
 
       await expect(fetchToken()).rejects.toThrow("Network error");
-      expect(vi.mocked(loggerModule.logger.error)).toHaveBeenCalledWith(error, "Auth - fetchToken");
+      expect(vi.mocked(loggerModule.logger.error)).toHaveBeenCalledWith(
+        "https://api.example.com/auth/token - Error: Network error",
+        "Auth - fetchToken"
+      );
     });
   });
 
@@ -294,8 +297,8 @@ describe("Auth Utils", () => {
       await expect(refreshToken()).rejects.toThrow();
 
       expect(vi.mocked(loggerModule.logger.error)).toHaveBeenCalledWith(
-        error,
-        "Auth - refreshAccessToken",
+        "https://api.example.com/auth/refresh-token - Error: Network error",
+        "Auth - refreshAccessToken"
       );
     });
   });
