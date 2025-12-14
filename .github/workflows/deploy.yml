@@ -33,5 +33,6 @@ jobs:
           script: |
             cd ${{ secrets.VPS_PATH }}
             export DOCKER_IMAGE=ghcr.io/rawejj/rawej:latest
+            echo ${{ secrets.GHCR_PAT }} | docker login ghcr.io -u ${{ github.actor }} --password-stdin
             docker-compose pull
             docker-compose up -d
