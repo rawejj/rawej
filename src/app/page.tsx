@@ -1,7 +1,6 @@
 import ErrorMessage from "@/components/ErrorMessage";
 import Footer from "@/components/Footer";
 import Header from "@/components/Header";
-import { httpClient } from "@/utils/http-client";
 import { DEFAULT_LANGUAGE } from "@/lib/constants";
 import { loadTranslations } from "@/lib/translations";
 import { TranslationsProvider } from "@/providers/TranslationsProvider";
@@ -9,49 +8,18 @@ import { CookieConsentProvider } from "@/providers/CookieConsentProvider";
 import GoogleAnalytics from "@/components/GoogleAnalytics";
 import GoogleSearchConsole from "@/components/GoogleSearchConsole";
 import { CONFIGS } from "@/constants/configs";
-import { logger } from "@/utils/logger";
-import { PaginatedResponse } from "@/utils/api-response";
-import { Doctor } from "@/types/doctor";
 import BookingSection from "@/components/BookingSection";
+import { fetchDoctors } from "@/lib/doctors";
 
-// Enable ISR: revalidate in the background
-export const revalidate = 60;
+export const dynamic = 'force-dynamic';
 
 export default async function Home() {
   // Always use default language (English)
   const translations = await loadTranslations(DEFAULT_LANGUAGE);
+  
+  // Fetch doctors server-side with ISR caching
+  const [doctors, error] = await fetchDoctors();
 
-  // Fetch doctors server-side with caching
-  let doctors: Doctor[] = [];
-  let error: string | null = null;
-  try {
-    const res = await httpClient(
-      `${CONFIGS.app.apiUrl}/users?page=1&limit=${CONFIGS.pagination.doctorsPerPage}`,
-      {
-        next: { tags: ["doctors"], revalidate: CONFIGS.isr.revalidateTime },
-      },
-    );
-    if (
-      typeof res === "object" &&
-      res !== null &&
-      "success" in res &&
-      "items" in res &&
-      Array.isArray((res as PaginatedResponse).items)
-    ) {
-      doctors = (res as PaginatedResponse).items as Doctor[];
-    } else {
-      throw new Error(
-        `Doctors items is not an array. Response: ${JSON.stringify(res)}`,
-      );
-    }
-  } catch (err) {
-    logger.error(err, "Doctors API fetch error");
-    if (err instanceof Error) {
-      error = err.message;
-    } else {
-      error = "Unknown error fetching doctors.";
-    }
-  }
   return (
     <TranslationsProvider translations={translations}>
       <CookieConsentProvider>

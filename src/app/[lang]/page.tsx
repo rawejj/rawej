@@ -1,75 +1,17 @@
 import ErrorMessage from "@/components/ErrorMessage";
 import Footer from "@/components/Footer";
-import { httpClient } from "@/utils/http-client";
 import { generateMetadata as generatePageMetadata } from "@/lib/metadata";
 import { LanguageKey } from "@/providers/LocalizationProvider";
 import { DEFAULT_LANGUAGE } from "@/lib/constants";
-import { logger } from "@/utils/logger";
 import { CONFIGS } from "@/constants/configs";
-import { PaginatedResponse } from "@/utils/api-response";
-import { Doctor } from "@/types/doctor";
 import BookingSection from "@/components/BookingSection";
 import { CookieConsentProvider } from "@/providers/CookieConsentProvider";
 import GoogleAnalytics from "@/components/GoogleAnalytics";
 import GoogleSearchConsole from "@/components/GoogleSearchConsole";
+import { fetchDoctors } from "@/lib/doctors";
 
 interface PageParams {
   params: Promise<{ lang: string }>;
-}
-
-/**
- * Fetches doctors from the API with error handling and caching
- * @returns Tuple of [doctors, error]
- */
-async function fetchDoctors(): Promise<[Doctor[], string | null]> {
-  try {
-    const apiUrl = CONFIGS.app.apiUrl;
-    
-    if (!apiUrl) {
-      const errorMsg = "NEXT_PUBLIC_API_URL is not configured";
-      logger.error(new Error(errorMsg), "HomePage - fetchDoctors");
-      return [[], errorMsg];
-    }
-
-    const url = `${apiUrl}/users?page=1&limit=${CONFIGS.pagination.doctorsPerPage}`;
-    logger.debug(`Fetching doctors from ${url}`, "HomePage");
-
-    const response = await httpClient<PaginatedResponse>(url, {
-      next: {
-        tags: ["doctors"],
-        revalidate: CONFIGS.isr.revalidateTime,
-      },
-    });
-
-    // Validate response structure
-    if (!response || typeof response !== "object") {
-      throw new Error("Invalid response format from doctors API");
-    }
-
-    if (!response.success) {
-      throw new Error("API returned unsuccessful response");
-    }
-
-    if (!Array.isArray(response.items)) {
-      throw new Error(
-        `Expected doctors items to be an array, got: ${typeof response.items}`
-      );
-    }
-
-    logger.info(
-      `Successfully fetched ${response.items.length} doctors`,
-      "HomePage"
-    );
-
-    return [response.items as Doctor[], null];
-  } catch (error) {
-    const errorMessage =
-      error instanceof Error ? error.message : "Unknown error fetching doctors";
-
-    logger.error(error, "HomePage - fetchDoctors");
-    
-    return [[], errorMessage];
-  }
 }
 
 /**
@@ -111,6 +53,8 @@ export async function generateMetadata({ params }: PageParams) {
  * - SEO metadata generation
  * - Responsive design with dark mode support
  */
+export const dynamic = 'force-dynamic';
+
 export default async function Home() {
   // Fetch doctors server-side with ISR caching
   const [doctors, error] = await fetchDoctors();
